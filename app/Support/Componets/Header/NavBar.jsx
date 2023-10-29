@@ -7,6 +7,8 @@ import { Satisfy } from 'next/font/google'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AiFillBank, AiOutlineBank, AiOutlineBell, AiOutlineGlobal, AiOutlineHome, AiOutlineMail, AiOutlinePlus, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai'
+import { useWindowSize } from '../../Hooks/useWindowSize'
+import Link from 'next/link'
 
 const font = Satisfy({
     weight: '400',
@@ -55,9 +57,11 @@ function NavBar() {
 
 
 
+    const windowSize = useWindowSize()
 
-    const url = NavBarVideoURL
-    const menuNames = ['Home', 'Search', 'Explore', 'Message', 'Post', 'Notifications', 'Bank', 'Profile']
+    const tabDeskMenu = ['Home', 'Search', 'Explore', 'Post', 'Notifications', 'Profile']
+    const menuMobile = ['Home', 'Explore', 'Post', 'Message', 'Profile']
+    const menuNames = (windowSize.width <= 462) ? menuMobile : tabDeskMenu
 
     return (
         <div className='md:h-screen h-10 bottom-0 md:top-0 w-screen fixed md:border-r border-t p-4 pt-10 text-white border-gray-700 bg-black md:w-[3rem] lg:w-[15rem]  flex flex-col overflow-hidden'>
@@ -78,7 +82,7 @@ function NavBar() {
                 {menuNames.map((name) => {
 
                     return (
-                        <div className='md:my-5 flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
+                        <Link href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5 flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
                             <div className='relative right-4 lg:right-0 trans group-hover:bg-gray-500 p-2 lg:shadow-md rounded-2xl'>
                                 {name == 'Home' && <AiOutlineHome size={24} />}
                                 {name == 'Search' && <AiOutlineSearch size={24} />}
@@ -92,7 +96,7 @@ function NavBar() {
                             <h1 className='md:relative opacity-0 absolute md:opacity-100'>{name}</h1>
 
 
-                        </div>
+                        </Link>
                     )
                 })
                 }
