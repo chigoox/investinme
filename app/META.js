@@ -5,13 +5,13 @@ import RawTools from '../public/Images/RawTools.jpeg';
 import RawWig from '../public/Images/RawWig.jpeg';
 
 
-export const siteName = 'Shop by 5 O\'clock'
-export const siteTag = 'For the Brave'
+export const siteName = 'Investa'
+export const siteTag = 'Follow and Invest'
 export const siteEmail = 'em.ed5productions@gmail.com'
 
 
 export const NavBarVideoURL = '7FjL6i04_uY'
-export const orderNumberPrefix = '5CK'
+export const orderNumberPrefix = '5BNK'
 export const category = ['Hoodies', 'Shorts']
 
 export const IGFeedURL = 'https://feeds.behold.so/JhZoahEX5QC6npL6BO7Y'

@@ -1,10 +1,10 @@
 import { CartWrapper } from '@/StateManager/CartContext'
 import { Inter, Jost } from 'next/font/google'
-import Footer from './Componets/Footer'
-import NavBar from './Componets/Header/NavBar'
 import { siteName, siteTag } from './META'
 import { UIProvider } from './UIProvider'
 import './globals.css'
+import NavBar from './Support/Componets/Header/NavBar'
+import Footer from './Support/Componets/Footer'
 
 
 const inter = Inter({ subsets: ['latin'] })

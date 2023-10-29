@@ -1,4 +1,4 @@
-import { addToDatabase } from '@/app/myCodes/Database';
+import { addToDatabase } from '@/app/Support/myCodes/Database';
 import { useEffect } from 'react';
 import { useAUTHListener } from './AUTHListener';
 
