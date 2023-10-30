@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen overflow-x-hidden flex-col items-center justify-evenly bg-black text-white">
-      <div className="grid grid-cols-1 gap-8">
+      <div className="grid grid-cols-1 gap-8 m-auto">
         <Post
           PostId={0}
           type={'vid'}
@@ -43,6 +43,21 @@ export default function Home() {
           desc={'This is a new post'}
           donations={500}
           comments={[{
+            user: 'aster',
+            commentLikes: 5,
+            comment: 'world is cool'
+          },
+          {
+            user: 'aster',
+            commentLikes: 5,
+            comment: 'world is cool'
+          },
+          {
+            user: 'aster',
+            commentLikes: 5,
+            comment: 'world is cool'
+          },
+          {
             user: 'aster',
             commentLikes: 5,
             comment: 'world is cool'

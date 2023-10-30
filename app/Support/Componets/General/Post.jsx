@@ -20,11 +20,11 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
             </div>
 
             {type == 'img' && <img className="h-[75%] w-full object-cover md:rounded-3xl" src={link} alt='' />}
-            {type == 'vid' && <video width={340} autoPlay playsinline muted loop className="h-[75%] object-fill w-full md:rounded-3xl" >
+            {type == 'vid' && <video width={340} playsinline autoplay loop muted className="h-[75%] object-fill w-full md:rounded-3xl" >
                 <source src={link} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>}
-            {type == 'str' && <div className="mt-24 md:rounded-3xl border h-[50%] overflow-hidden font-bold w-full border-b p-2">
+            {type == 'str' && <div className="mt-24 rounded-3xl border h-[50%] overflow-hidden font-bold w-full border-b p-4">
                 <h1 className="w-auto break-words" >{text}</h1>
             </div>}
 
@@ -52,12 +52,12 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
                 Show all {formatNumber(Object.keys(comments).length)} comments
             </Button>
 
-            <Modal isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 text-white">
+            <Modal scrollBehavior={'outside'} isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96 text-white ">
                 <ModalContent>
                     {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">comments</ModalHeader>
-                            <ModalBody>
+                            <ModalBody className="overflow-y-scroll hidescroll">
                                 {comments.map(({ user, commentLikes, comment }) => {
                                     return (
                                         <PostComment user={user} commentLikes={commentLikes} comment={comment} />
