@@ -20,7 +20,10 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
             </div>
 
             {type == 'img' && <img className="h-[75%] w-full object-cover" src={link} alt='' />}
-            {type == 'vid' && <video autoPlay muted loop className="h-[75%] object-fill w-full" src={link} alt='' />}
+            {type == 'vid' && <video autoPlay muted loop className="h-[75%] object-fill w-full" alt=''>
+                <source src={link} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>}
             {type == 'str' && <div className="mt-24 h-[50%] overflow-hidden font-bold w-full border-b p-2">
                 <h1 className="w-auto break-words" >{text}</h1>
             </div>}

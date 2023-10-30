@@ -16,6 +16,7 @@ export default function Home() {
           likes={100}
           donations={7000000}
           desc={'This is a new post'}
+          tags={['new', 'lifestyle', 'ok']}
           comments={[{
             user: 'ED5',
             commentLikes: 5,
