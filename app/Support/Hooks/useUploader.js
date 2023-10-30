@@ -1,8 +1,6 @@
 'use client'
-import React, { useState } from 'react'
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { STORAGE } from '@/Firebase';
-import { getBase64 } from '../myCodes/Util';
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { STORAGE } from "../../../Firebase";
 
 
 export async function useUploader(file, folder) {

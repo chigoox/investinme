@@ -3,11 +3,11 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Checkbox, CheckboxGroup
 import { message } from "antd"
 import { useEffect, useState } from "react"
 import { AiFillMinusCircle, AiFillPlusCircle } from "react-icons/ai"
-import { Uploader } from "../Componets/General/Uploader"
 import { category } from "../META"
-import { updateDatabaseItem } from "../myCodes/Database"
-import { createProduct } from "../myCodes/Stripe"
-import { createArray } from "../myCodes/Util"
+import { updateDatabaseItem } from "../Support/myCodes/Database"
+import { createProduct } from "../Support/myCodes/Stripe"
+import { createArray } from "../Support/myCodes/Util"
+import { Uploader } from "../Support/Componets/General/Uploader"
 
 
 

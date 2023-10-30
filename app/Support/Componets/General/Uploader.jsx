@@ -1,7 +1,7 @@
-import { useUploader } from '@/app/Support/Hooks/useUploader';
 import { Modal, Upload } from 'antd';
 import { useEffect, useState } from "react";
 import { AiOutlinePlusSquare } from "react-icons/ai";
+import { useUploader } from '../../Hooks/useUploader';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {

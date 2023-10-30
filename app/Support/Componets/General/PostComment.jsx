@@ -1,6 +1,7 @@
 import { Button } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import { formatNumber } from '../../myCodes/Util'
 
 const PostComment = ({ user, comment, commentLikes }) => {
     const [likedComment, setLikedComment] = useState(false)
@@ -13,7 +14,7 @@ const PostComment = ({ user, comment, commentLikes }) => {
                     <Button onPress={() => { setLikedComment(!likedComment) }} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {likedComment ? <AiFillHeart size={20} /> : <AiOutlineHeart size={20} />}
                     </Button>
-                    {commentLikes}
+                    {formatNumber(commentLikes)}
                 </div>
             </div>
         </div>

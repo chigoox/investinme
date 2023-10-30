@@ -1,14 +1,13 @@
 'use client'
-import { NavBarVideoURL, siteName } from '@/app/META'
-import useFilterEmptyCategory from '@/app/Support/Hooks/useFilterCategory'
-import useScrollPosition from '@/app/Support/Hooks/useScrollPosition'
 import { Satisfy } from 'next/font/google'
+import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AiFillBank, AiOutlineBank, AiOutlineBell, AiOutlineGlobal, AiOutlineHome, AiOutlineMail, AiOutlinePlus, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai'
-import { useWindowSize } from '../../Hooks/useWindowSize'
-import Link from 'next/link'
 import { useAUTHListener } from '../../../../StateManager/AUTHListener'
+import { useWindowSize } from '../../Hooks/useWindowSize'
+import { siteName } from '../../../META'
+import useScrollPosition from '../../Hooks/useScrollPosition'
 
 const font = Satisfy({
     weight: '400',
@@ -22,7 +21,6 @@ function NavBar() {
     const [navRoute, setNavRoute] = useState([])
     const user = useAUTHListener()
     const { push } = useRouter()
-    const category = useFilterEmptyCategory()
 
     let scrollPosition = 1
     scrollPosition = useScrollPosition()
@@ -64,7 +62,7 @@ function NavBar() {
     const menuNames = (windowSize.width <= 462) ? menuMobile : tabDeskMenu
 
     return (
-        <div className='md:h-screen h-10 bottom-0 md:top-0 w-screen fixed md:border-r border-t p-4 pt-10 text-white border-gray-700 bg-black md:w-[3rem] lg:w-[15rem]  flex flex-col overflow-hidden'>
+        <div className='md:h-screen h-10 bottom-0 md:top-0 w-screen z-[99999] fixed md:border-r border-t p-4 pt-10 text-white border-gray-700 bg-black md:w-[3rem] lg:w-[15rem]  flex flex-col overflow-hidden'>
 
             <div className={` center-col  absolute md:relative  opacity-0 md:opacity-100  mb-4 w-full font-bold text-2xl ${font.className}`}>
                 <h1 className='opacity-0 lg:opacity-100'>{siteName}</h1>

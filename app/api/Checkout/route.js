@@ -1,7 +1,8 @@
-import { siteName } from "@/app/META";
-import { isDev } from "@/app/myCodes/Util";
+
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { isDev } from "../../Support/myCodes/Util";
+import { siteName } from "../../META";
 
 
 

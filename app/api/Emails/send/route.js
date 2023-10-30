@@ -1,8 +1,9 @@
 
-import EmailOrderSuccessful from '@/app/Componets/emails/EmailOrderSuccessful';
-import { siteName } from '@/app/META';
+
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import EmailOrderSuccessful from "../../../Support/Componets/emails/EmailOrderSuccessful";
+import { siteName } from '../../../META';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
