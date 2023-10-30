@@ -1,5 +1,5 @@
-import { DATABASE } from "@/Firebase";
 import { arrayRemove, arrayUnion, deleteField, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { DATABASE } from "../../../Firebase";
 
 
 export async function addToDatabase(collection, Doc, field, data) {

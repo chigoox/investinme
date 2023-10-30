@@ -1,9 +1,7 @@
 'use client'
-import app from "@/Firebase"
-import { getAuth, signInAnonymously } from "firebase/auth"
 import { useEffect, useState } from "react"
-import { getRand, getRandTN } from "../myCodes/Util"
 import { fetchDocument } from "../myCodes/Database"
+import { getRandTN } from "../myCodes/Util"
 
 
 

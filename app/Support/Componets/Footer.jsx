@@ -4,7 +4,6 @@ import { Jost } from 'next/font/google'
 import Link from 'next/link'
 import { useState } from 'react'
 import { AiFillFacebook, AiFillInstagram, AiFillTwitterSquare, AiFillYoutube } from 'react-icons/ai'
-import { collectAndSendEmail } from './General/EmailCollector'
 import { siteName } from '@/app/META'
 
 const jost = Jost({

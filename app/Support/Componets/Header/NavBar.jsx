@@ -1,5 +1,4 @@
 'use client'
-import { useAUTHListener } from '@/StateManager/AUTHListener'
 import { NavBarVideoURL, siteName } from '@/app/META'
 import useFilterEmptyCategory from '@/app/Support/Hooks/useFilterCategory'
 import useScrollPosition from '@/app/Support/Hooks/useScrollPosition'
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { AiFillBank, AiOutlineBank, AiOutlineBell, AiOutlineGlobal, AiOutlineHome, AiOutlineMail, AiOutlinePlus, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai'
 import { useWindowSize } from '../../Hooks/useWindowSize'
 import Link from 'next/link'
+import { useAUTHListener } from '../../../../StateManager/AUTHListener'
 
 const font = Satisfy({
     weight: '400',
@@ -82,7 +82,7 @@ function NavBar() {
                 {menuNames.map((name) => {
 
                     return (
-                        <Link href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5 flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
+                        <Link key={name} href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5 flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
                             <div className='relative right-4 lg:right-0 trans group-hover:bg-gray-500 p-2 lg:shadow-md rounded-2xl'>
                                 {name == 'Home' && <AiOutlineHome size={24} />}
                                 {name == 'Search' && <AiOutlineSearch size={24} />}
