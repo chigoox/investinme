@@ -2,7 +2,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react"
 import { useState } from "react"
-import ReactPlayer from 'react-player'
+
 
 import React from 'react'
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart } from "react-icons/ai"
@@ -13,7 +13,6 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
     const [showComments, setShowComments] = useState(false)
     const [postLike, setPostLike] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
-
 
     return (
         <div className=" overflow-hidden   relative h-[40rem] rounde d-tl-[2.5rem] w-full">
@@ -26,8 +25,10 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
 
 
             {type == 'img' && <img className="h-[75%] w-full object-cover md:rounded-3xl" src={link} alt='' />}
-            {type == 'vid' && <ReactPlayer url={link} autoPlay loop muted playsinline className="h-[75%] object-fill w-full md:rounded-3xl" />
-            }
+            {type == 'vid' &&
+                <video autoPlay loop muted playsInline className="h-[75%] object-fill w-full md:rounded-3xl" >
+                    <source src={link} type="video/mp4" />
+                </video>}
             {type == 'str' && <div className="mt-24 rounded-3xl border h-[50%] overflow-hidden font-bold w-full border-b p-4">
                 <h1 className="w-auto break-words" >{text}</h1>
             </div>}

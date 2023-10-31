@@ -18,6 +18,7 @@ export default function Home() {
           donations={7000000}
           desc={'This is a new post'}
           tags={['new', 'lifestyle', 'ok']}
+          postOrigin={'UID'}
           comments={[{
             user: 'ED5',
             commentLikes: 5,

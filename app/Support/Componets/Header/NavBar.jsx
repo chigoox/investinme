@@ -2,12 +2,15 @@
 import { Satisfy } from 'next/font/google'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AiFillBank, AiOutlineBank, AiOutlineBell, AiOutlineGlobal, AiOutlineHome, AiOutlineMail, AiOutlinePlus, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai'
 import { useAUTHListener } from '../../../../StateManager/AUTHListener'
 import { useWindowSize } from '../../Hooks/useWindowSize'
 import { siteName } from '../../../META'
 import useScrollPosition from '../../Hooks/useScrollPosition'
+import { Button } from '@nextui-org/react'
+import NewPostMenu from './Componets/NewPostMenu'
+import CreatePost from '../General/CreatePost'
 
 const font = Satisfy({
     weight: '400',
@@ -15,42 +18,22 @@ const font = Satisfy({
 })
 
 function NavBar() {
-    const [showMobileMenu, setShowMobileMenu] = useState(false)
-    const [showCart, setShowCart] = useState(false)
-    const [showLogin, setShowLogin] = useState(false)
-    const [navRoute, setNavRoute] = useState([])
+
+    const [showNewPost, setShowNewPost] = useState(false)
+
+    const toggleNewPost = () => {
+        setShowNewPost(!showNewPost)
+    }
     const user = useAUTHListener()
-    const { push } = useRouter()
-
-    let scrollPosition = 1
-    scrollPosition = useScrollPosition()
-
-    const NoCart = usePathname().includes('Checkout')
-
-
-    useEffect(() => {
-
-    }, [])
 
 
 
 
-    const toggleMobileMenu = () => {
-        setShowMobileMenu(!showMobileMenu)
-        return (!showMobileMenu)
-    }
-    const toggleCart = () => {
-        setShowCart(!showCart)
-        return (!showCart)
-    }
-    const toggleLogin = () => {
-        if (user?.uid) {
-            push(`/User/${user.uid}`)
-        } else {
-            setShowLogin(!showLogin)
 
-        }
-    }
+
+
+
+
 
 
 
@@ -63,6 +46,9 @@ function NavBar() {
 
     return (
         <div className='md:h-screen h-10 bottom-0 md:top-0 w-screen z-[99999] fixed md:border-r border-t p-4 pt-10 text-white border-gray-700 bg-black md:w-[3rem] lg:w-[15rem]  flex flex-col overflow-hidden'>
+            <CreatePost showCreatePost={showNewPost} setShowCreatePost={setShowNewPost} />
+
+
 
             <div className={` center-col  absolute md:relative  opacity-0 md:opacity-100  mb-4 w-full font-bold text-2xl ${font.className}`}>
                 <h1 className='opacity-0 lg:opacity-100'>{siteName}</h1>
@@ -78,15 +64,36 @@ function NavBar() {
             <nav className={`trans h-auto flex md:flex-col justify-evenly  w-full md:w-fit top-0 absolute  md:relative`}>
 
                 {menuNames.map((name) => {
+                    if (name.includes('Post')) return (
 
-                    return (
-                        <Link key={name} href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5 flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
+                        <NewPostMenu screenWidth={windowSize.width} name={name} setShowNewPost={setShowNewPost} showNewPost={showNewPost} />
+
+                    )
+
+                    if (name.includes('Search')) return (
+                        <Button
+                            onPress={() => {
+
+
+
+
+                            }}
+                            className='md:my-5 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
+                            <div className='relative right-4 md:right-6  p-0  lg:right-4 trans group-hover:bg-gray-500 lg:shadow-md rounded-2xl'>
+                                {name == 'Search' && <AiOutlineSearch size={24} />}
+                            </div>
+                            <h1 className='md:relative  opacity-0 absolute md:opacity-100'>{name}</h1>
+
+
+
+                        </Button>
+                    )
+                    if (!name.includes('Post') && !name.includes('Search')) return (
+                        <Link key={name} href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5  flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
                             <div className='relative right-4 lg:right-0 trans group-hover:bg-gray-500 p-2 lg:shadow-md rounded-2xl'>
                                 {name == 'Home' && <AiOutlineHome size={24} />}
-                                {name == 'Search' && <AiOutlineSearch size={24} />}
                                 {name == 'Explore' && <AiOutlineGlobal size={24} />}
                                 {name == 'Message' && <AiOutlineMail size={24} />}
-                                {name == 'Post' && <AiOutlinePlus size={24} />}
                                 {name == 'Notifications' && <AiOutlineBell size={24} />}
                                 {name == 'Profile' && <AiOutlineUser size={24} />}
                                 {name == 'Bank' && <AiOutlineBank size={24} />}
