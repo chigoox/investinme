@@ -27,9 +27,9 @@ function ShippinInfo({ user, forCheckOut, event }) {
     })
     return (
         <div className={`center-col w-full fadeInRight  relative hidescroll ${forCheckOut ? 'h-[45rem] md:h-[50rem]' : 'h-auto'}`}>
-            <Card className={`${forCheckOut ? 'w-full' : 'w-3/4'} shadow-md shadow-black border-2 border-[#121212] h-auto bg-[#171717] center-col`}>
+            <Card className={`w-full shadow-md shadow-black border-2 border-[#121212] h-auto bg-[#171717] center-col`}>
                 <CardHeader className="font-bold  text-white bg-black-800 mb-4">
-                    <h1 className="text-center w-full">Add shipping Info</h1>
+                    <h1 className="text-center w-full">Post Info</h1>
                 </CardHeader>
                 <CardBody className="center-col hidescroll relative gap-2 text-black">
 
@@ -41,23 +41,24 @@ function ShippinInfo({ user, forCheckOut, event }) {
                     <Input type="text"
                         onChange={updateShippingInfo}
                         placements={'inside'}
-                        variant="flat"
+                        variant="bordered"
                         name="tags"
+
                         label={'tags'}
-                        className="w-64 m-auto"
+                        className="w-full  text-white  m-auto"
                     />
                     <TextArea type="text"
                         onChange={updateShippingInfo}
                         placements={'inside'}
-                        variant="flat"
-                        name="firstName"
-                        label={'First Name'}
-                        className="w-64 m-auto"
+                        variant="bordered"
+                        name="desc"
+                        label={'Descreption'}
+                        className="w-full text -white m-auto"
                     />
 
 
                 </CardBody>
-                <CardFooter className='p-2 bg-black-800'><Button className="w-3/4 m-auto mb-4" onPress={updateDatabase}>Update</Button></CardFooter>
+                <CardFooter className='p-2 bg-black-800'><Button className="w-3/4 m-auto mb-4" onPress={updateDatabase}>Post</Button></CardFooter>
             </Card>
 
 

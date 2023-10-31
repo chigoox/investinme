@@ -18,6 +18,8 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
     const [fileList, setFileList] = useState([]);
     const [fileListURL, setFileListURL] = useState([])
     const handleCancel = () => setPreviewOpen(false);
+    const [showPreview, setShowPreview] = useState(false)
+
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -30,6 +32,7 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
 
     const handleChange = async ({ file, fileList }) => {
         if (file.status === 'done') {
+            if (fileURL) setFileListURL(old => [...old, fileURL])
 
         } else if (file.status === 'error') {
             file.status = 'done'
@@ -45,13 +48,15 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
     }
 
     useEffect(() => {
+        fileListURL.reverse()
+        setShowPreview(fileListURL[0])
         setProductData(old => { return ({ ...old, img: fileListURL }) })
 
-    }, [fileList])
+    }, [fileList, fileListURL])
 
 
     const uploadButton = (
-        <div>
+        <div className=''>
             <AiOutlinePlusSquare color='white' size={24} />
             <div className='mt-8 text-white'>
                 Upload
@@ -59,27 +64,31 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
         </div>
     );
     return (
-        <div className=''>
-            <Upload
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                accept="image/*"
-                maxCount={limit ? limit : 8}
-                multiple
+        <div className=' flex flex-col items-center'>
+            <div>
+                <Upload
+                    className=' relative'
+                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                    listType="picture-card"
+                    fileList={fileList}
+                    onPreview={''}
+                    onChange={handleChange}
+                    accept="image/*"
+                    maxCount={limit ? limit : 8}
+                    multiple
 
-            >
-                {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-                <img
-                    alt="example"
-                    className='w-full p-0 object-cover'
-                    src={previewImage}
-                />
-            </Modal>
+                >
+                    {fileList.length >= 1 ? null : uploadButton}
+                </Upload>
+            </div>
+            <div className='w-96 overflow-y-scroll hidescroll  h-72 text-white rounded-3xl '>
+                <img className='w-full  object-cover' src={showPreview} alt="" />
+
+            </div>
+
+
+
+
         </div>
     );
 };

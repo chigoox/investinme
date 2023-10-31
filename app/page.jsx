@@ -13,7 +13,7 @@ export default function Home() {
         <Post
           PostId={0}
           type={'vid'}
-          link={'https://firebasestorage.googleapis.com/v0/b/investa-5.appspot.com/o/pexels-google-deepmind-18069236%20(Original).mp4?alt=media&token=9e74557c-2da0-48ff-859c-8d262b354621&_gl=1*nfwwem*_ga*NDk5NzE2OTI2LjE2OTcwMjEwMzg.*_ga_CW55HF8NVT*MTY5ODY1NzU2OC40MC4xLjE2OTg2NTgxNjcuNTUuMC4w'}
+          link={'https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/MPaEbz-/videoblocks-close-up-footage-of-unrecognizable-male-hands-holding-steering-wheel-of-expensive-auto-driving-in-evening_rr7ilij7___35f6a796aac3aed17dd2365aeb6e22ab__P360.mp4'}
           likes={100}
           donations={7000000}
           desc={'This is a new post'}
