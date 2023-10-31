@@ -8,7 +8,8 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen overflow-x-hidden flex-col items-center justify-evenly bg-black text-white">
-      <div className="grid grid-cols-1 gap-8 m-auto">
+
+      <div className="grid grid-cols-1 gap-8 mt-10">
         <Post
           PostId={0}
           type={'vid'}

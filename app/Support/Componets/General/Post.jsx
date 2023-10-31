@@ -2,6 +2,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react"
 import { useState } from "react"
+import ReactPlayer from 'react-player'
 
 import React from 'react'
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart } from "react-icons/ai"
@@ -13,17 +14,20 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
     const [postLike, setPostLike] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
 
+
     return (
         <div className=" overflow-hidden   relative h-[40rem] rounde d-tl-[2.5rem] w-full">
             <div className="bg-white h-20 w-20 absolute top-2 left-2 rounded-full">
 
             </div>
 
+
+
+
+
             {type == 'img' && <img className="h-[75%] w-full object-cover md:rounded-3xl" src={link} alt='' />}
-            {type == 'vid' && <video controls muted autoPlay loop playsInline preload="auto" width="100%" height="100%" className="h-[75%] object-fill w-full md:rounded-3xl" >
-                <source src={link} type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>}
+            {type == 'vid' && <ReactPlayer url={link} autoPlay loop muted playsinline className="h-[75%] object-fill w-full md:rounded-3xl" />
+            }
             {type == 'str' && <div className="mt-24 rounded-3xl border h-[50%] overflow-hidden font-bold w-full border-b p-4">
                 <h1 className="w-auto break-words" >{text}</h1>
             </div>}
@@ -52,7 +56,7 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
                 Show all {formatNumber(Object.keys(comments).length)} comments
             </Button>
 
-            <Modal scrollBehavior={'outside'} isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96 text-white ">
+            <Modal placement="auto" isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96 text-white bottom-12 ">
                 <ModalContent>
                     {() => (
                         <>
