@@ -7,9 +7,7 @@ import { AiFillBank, AiOutlineBank, AiOutlineBell, AiOutlineGlobal, AiOutlineHom
 import { useAUTHListener } from '../../../../StateManager/AUTHListener'
 import { useWindowSize } from '../../Hooks/useWindowSize'
 import { siteName } from '../../../META'
-import useScrollPosition from '../../Hooks/useScrollPosition'
 import { Button } from '@nextui-org/react'
-import NewPostMenu from './Componets/NewPostMenu'
 import CreatePost from '../General/CreatePost'
 
 const font = Satisfy({
@@ -26,6 +24,7 @@ function NavBar() {
     }
     const user = useAUTHListener()
 
+    const toggleShowNewPost = () => setShowNewPost(!showNewPost)
 
 
 
@@ -66,7 +65,18 @@ function NavBar() {
                 {menuNames.map((name) => {
                     if (name.includes('Post')) return (
 
-                        <NewPostMenu screenWidth={windowSize.width} name={name} setShowNewPost={setShowNewPost} showNewPost={showNewPost} />
+                        <Button
+                            onPress={toggleShowNewPost}
+
+                            className='md:my-5 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
+                            <div className='relative right-4 md:right-6  p-0  lg:right-4 trans group-hover:bg-gray-500 lg:shadow-md rounded-2xl'>
+                                <AiOutlinePlus size={24} />
+                            </div>
+                            <h1 className='md:relative  opacity-0 absolute md:opacity-100'>{name}</h1>
+
+
+
+                        </Button>
 
                     )
 

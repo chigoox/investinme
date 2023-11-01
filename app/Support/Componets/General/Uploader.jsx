@@ -2,6 +2,7 @@ import { Modal, Upload } from 'antd';
 import { useEffect, useState } from "react";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import { useUploader } from '../../Hooks/useUploader';
+import ImgCrop from 'antd-img-crop';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -11,7 +12,7 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-export const Uploader = ({ setProductData, folderName, limit }) => {
+export const Uploader = ({ setter, folderName, limit }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -19,7 +20,8 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
     const [fileListURL, setFileListURL] = useState([])
     const handleCancel = () => setPreviewOpen(false);
     const [showPreview, setShowPreview] = useState(false)
-
+    const [FileType, setFileType] = useState('')
+    console.log(FileType)
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -46,43 +48,53 @@ export const Uploader = ({ setProductData, folderName, limit }) => {
 
         setFileList(fileList)
     }
-
     useEffect(() => {
         fileListURL.reverse()
+        fileList.reverse()
+        setFileType(fileList[0]?.type)
         setShowPreview(fileListURL[0])
-        setProductData(old => { return ({ ...old, img: fileListURL }) })
+        setter(old => { return ({ ...old, img: fileListURL }) })
 
     }, [fileList, fileListURL])
 
 
     const uploadButton = (
-        <div className=''>
+        <div className='centeraa'>
             <AiOutlinePlusSquare color='white' size={24} />
-            <div className='mt-8 text-white'>
+            <div className=' text-white'>
                 Upload
             </div>
         </div>
     );
     return (
-        <div className=' flex flex-col items-center'>
+        <div className=' flex flex-col  items-center'>
             <div>
-                <Upload
-                    className=' relative'
-                    action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={''}
-                    onChange={handleChange}
-                    accept="image/*"
-                    maxCount={limit ? limit : 8}
-                    multiple
 
-                >
-                    {fileList.length >= 1 ? null : uploadButton}
-                </Upload>
+
+                <ImgCrop showGrid aspectSlider showReset aspect rotationSlider fillColor='red' >
+
+
+                    \\\\\<Upload
+                        className=' relative'
+                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                        fileList={fileList}
+                        showUploadList={false}
+                        onPreview={''}
+                        onChange={handleChange}
+                        accept="image/*, video/*"
+                        maxCount={limit ? limit : 8}
+                        multiple
+
+                    >
+                        {fileList.length >= limit ? null : uploadButton}
+                    </Upload>
+
+                </ImgCrop>
+
             </div>
-            <div className='w-96 overflow-y-scroll hidescroll  h-72 text-white rounded-3xl '>
-                <img className='w-full  object-cover' src={showPreview} alt="" />
+            <div className='w-96 overflow-y-scroll hidescroll   h-72  text-white rounded-3xl '>
+                {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
+                {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
 
             </div>
 
