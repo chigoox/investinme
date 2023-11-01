@@ -21,7 +21,6 @@ export const Uploader = ({ setter, folderName, limit }) => {
     const handleCancel = () => setPreviewOpen(false);
     const [showPreview, setShowPreview] = useState(false)
     const [FileType, setFileType] = useState('')
-    console.log(FileType)
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -34,11 +33,13 @@ export const Uploader = ({ setter, folderName, limit }) => {
 
     const handleChange = async ({ file, fileList }) => {
         if (file.status === 'done') {
+            setFileType(file.type)
+            const fileURL = await useUploader(file.originFileObj, folderName)
             if (fileURL) setFileListURL(old => [...old, fileURL])
 
         } else if (file.status === 'error') {
             file.status = 'done'
-
+            setFileType(file.type)
             const fileURL = await useUploader(file.originFileObj, folderName)
 
             if (fileURL) setFileListURL(old => [...old, fileURL])
@@ -66,15 +67,18 @@ export const Uploader = ({ setter, folderName, limit }) => {
             </div>
         </div>
     );
+
+    const checkFileType = () => { return FileType?.includes('video') ? false : true }
+    console.log(checkFileType(), FileType)
     return (
         <div className=' flex flex-col  items-center'>
             <div>
 
 
-                <ImgCrop showGrid aspectSlider showReset aspect rotationSlider fillColor='red' >
+                <ImgCrop beforeCrop={checkFileType} showGrid aspectSlider showReset aspect rotationSlider fillColor='red' >
 
 
-                    \\\\\<Upload
+                    <Upload
                         className=' relative'
                         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                         fileList={fileList}
