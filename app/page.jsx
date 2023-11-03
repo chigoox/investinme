@@ -9,7 +9,7 @@ export default async function Home() {
 
 
   let FEED = await fetchInOrder('Posts', 'IVA-0')
-  FEED = Object.values(FEED[0])
+  FEED = Object.values(FEED[0] || {})
   console.log(FEED)
 
 
