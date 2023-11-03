@@ -19,9 +19,8 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     const [comment, setComment] = useState('')
     const { state, dispatch } = useGlobalContext()
 
-    console.log(comments)
 
-    const commentUser = `comment${getRandTN(5)}`
+    const commentUser = `User-${getRandTN(5)}`
     const postComment = () => {
         updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
             ...postINFO, comments: [...postINFO.comments, {
@@ -55,7 +54,9 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
                 <h1 className="w-auto break-words" >{text}</h1>
             </div>}
 
-
+            <div className="p-2 overflow-x-scroll text-white  h-auto">
+                {desc}
+            </div>
 
             <div className="evenly">
                 <div className="flex gap-2 p-1">
@@ -71,9 +72,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
                     {formatNumber(donations)}
                 </div >
             </div>
-            <div className="p-2 overflow-x-scroll text-white  h-auto">
-                {desc}
-            </div>
+
             <div className="px-4">{ }</div>
             <Button onPress={() => { setShowComments(!showComments) }} className="px-2 w-full rounded-none p-0">
                 Show all {formatNumber(Object.keys(comments || {}).length)} comments
