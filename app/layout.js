@@ -6,7 +6,7 @@ import './CroperCss.css'
 
 import NavBar from './Support/Componets/Header/NavBar'
 import Footer from './Support/Componets/Footer'
-import { CartWrapper } from '../StateManager/CartContext'
+import {   GlobalWrapper } from '../StateManager/GlobalContext'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,11 +27,11 @@ export default async function RootLayout({ children }) {
       </head>
       <body className={jost.className}>
         <UIProvider>
-          <CartWrapper>
+          <GlobalWrapper>
             <NavBar />
               {children}
             <Footer />
-          </CartWrapper>
+          </GlobalWrapper>
         </UIProvider>
         </body>
     </html>
