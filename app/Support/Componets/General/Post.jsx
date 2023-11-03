@@ -5,14 +5,36 @@ import { useState } from "react"
 
 
 import React from 'react'
-import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart } from "react-icons/ai"
+import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai"
 import PostComment from "./PostComment"
-import { formatNumber } from "../../myCodes/Util";
+import { formatNumber, getRandTN } from "../../myCodes/Util";
+import { updateArrayDatabaseItem, updateDatabaseItem } from "../../myCodes/Database";
+import { postIDPrefix } from "../../../META";
+import { useGlobalContext } from "../../../../StateManager/GlobalContext";
 
-const Post = ({ type, likes, link, text, comments, desc, donations }) => {
+const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO }) => {
     const [showComments, setShowComments] = useState(false)
     const [postLike, setPostLike] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
+    const [comment, setComment] = useState('')
+    const { state, dispatch } = useGlobalContext()
+
+    console.log(comments)
+
+    const commentUser = `comment${getRandTN(5)}`
+    const postComment = () => {
+        updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
+            ...postINFO, comments: [...postINFO.comments, {
+                [commentUser]: {
+                    user: commentUser,
+                    comment: comment,
+                    commentLikes: 0
+                }
+            }]
+        })
+        dispatch({ type: "NEW_POST", value: {} })
+
+    }
 
     return (
         <div className=" overflow-hidden relative h-[40rem] rounde d-tl-[2.5rem] w-96">
@@ -49,7 +71,7 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
                     {formatNumber(donations)}
                 </div >
             </div>
-            <div className="p-2 overflow-x-scroll  h-auto">
+            <div className="p-2 overflow-x-scroll text-white  h-auto">
                 {desc}
             </div>
             <div className="px-4">{ }</div>
@@ -63,14 +85,18 @@ const Post = ({ type, likes, link, text, comments, desc, donations }) => {
                         <>
                             <ModalHeader className="flex flex-col gap-1">comments</ModalHeader>
                             <ModalBody className="overflow-y-scroll hidescroll">
-                                {comments.map(({ user, commentLikes, comment }) => {
+                                {comments?.map((commentt) => {
+                                    const aComment = Object.values(commentt)[0]
+                                    console.log(aComment)
+
                                     return (
-                                        <PostComment user={user} commentLikes={commentLikes} comment={comment} />
+                                        <PostComment user={aComment.user} commentLikes={aComment.commentLikes} comment={aComment.comment} />
                                     )
                                 })}
                             </ModalBody>
                             <ModalFooter className="text-black">
-                                <Input placeholder="add a comment" />
+                                <Input value={comment} onValueChange={(text) => { setComment(text) }} placeholder="add a comment" />
+                                <Button onPress={postComment} className="min-w-fit"><AiOutlineSend size={32} /></Button>
                             </ModalFooter>
                         </>
                     )}

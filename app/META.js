@@ -6,7 +6,7 @@ export const siteEmail = 'em.ed5productions@gmail.com'
 
 
 export const NavBarVideoURL = '7FjL6i04_uY'
-export const orderNumberPrefix = '5BNK'
+export const postIDPrefix = 'IVA'
 export const category = ['Hoodies', 'Shorts']
 
 export const IGFeedURL = 'https://feeds.behold.so/JhZoahEX5QC6npL6BO7Y'

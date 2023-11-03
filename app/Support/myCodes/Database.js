@@ -89,7 +89,6 @@ export async function fetchDocument2(collection, document, setterfunction) {
              data = [...data, doc.data()]
         });
 
-        console.log(data)
         return data
         
     }

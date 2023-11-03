@@ -15,8 +15,16 @@ export const GlobalReducer = (state, action) => {
           
          return {
             ...state,
-            lineItems: {...state.lineItems,  [action.value.priceID]:{...action.value, Qty: Number(actionQTY) + Number(stateQTY)}},
-            total: stateTotal + actionPrice,
+            
+         };
+      }
+
+      case "NEW_POST": {
+          
+         return {
+            ...state,
+            newPost: !state.newPost,
+            
          };
       }
       

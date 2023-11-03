@@ -1,23 +1,34 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useGlobalContext } from '../../../../StateManager/GlobalContext'
+import { fetchInOrder } from '../../myCodes/Database'
+import Post from '../General/Post'
 
 export const HomeFeed = () => {
+    const router = useRouter()
     const [data, setData] = useState([])
+    const { state, dispatch } = useGlobalContext()
+
 
 
     const getData = async () => {
         let FEED = await fetchInOrder('Posts', 'IVA-0')
-        console.log(FEED)
         FEED = Object.values(FEED[0] || {})
         setData(FEED)
         return FEED
     }
 
 
-    const router = useRouter()
-    router.refresh()
+
+
+    useEffect(() => {
+        router.refresh()
+        getData()
+    }, [state])
+
+
 
     return (
 
@@ -29,6 +40,8 @@ export const HomeFeed = () => {
                 data?.map((postInfo) => {
                     if (postInfo.id) return (
                         <Post
+                            postINFO={postInfo}
+                            id={postInfo.id}
                             key={postInfo.id}
                             PostId={postInfo.id}
                             type={postInfo.type}

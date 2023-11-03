@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 import { addToDatabase, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../myCodes/Database'
 import { Uploader } from './Uploader'
+import { useGlobalContext } from '../../../../StateManager/GlobalContext'
 
 const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const postDefault = {
@@ -20,6 +21,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     }
     const [pagePosition, setPagePosition] = useState(0)
     const [post, setPost] = useState(postDefault)
+    const { dispatch } = useGlobalContext()
 
 
     const handleCaption = (text) => {
@@ -49,6 +51,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
         setPagePosition(0)
         setPost(postDefault)
         setShowCreatePost(false)
+        dispatch({ type: "NEW_POST", value: {} })
     }
 
 
