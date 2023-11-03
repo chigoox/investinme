@@ -5,8 +5,7 @@ import { addToDatabase, fetchDocument, updateArrayDatabaseItem, updateDatabaseIt
 import { Uploader } from './Uploader'
 
 const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
-    const [pagePosition, setPagePosition] = useState(0)
-    const [post, setPost] = useState({
+    const postDefault = {
         post: { img: [''] },
         postType: 'undefined',
         tags: [],
@@ -18,7 +17,9 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
         creator: 'UID',
         timeStamp: new Date()
 
-    })
+    }
+    const [pagePosition, setPagePosition] = useState(0)
+    const [post, setPost] = useState(postDefault)
 
 
     const handleCaption = (text) => {
@@ -45,6 +46,9 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
         });
 
 
+        setPagePosition(0)
+        setPost(postDefault)
+        setShowCreatePost(false)
     }
 
 
@@ -61,7 +65,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
 
         </ModalHeader>
         <ModalBody className="overflow-y-scroll hidescroll">
-            <Uploader setter={setPost} limit={1} folderName={'Posts'} />
+            <Uploader post={post} setter={setPost} limit={1} folderName={'Posts'} />
         </ModalBody>
 
 

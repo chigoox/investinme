@@ -9,32 +9,29 @@ export default async function Home() {
 
 
   let FEED = await fetchInOrder('Posts', 'IVA-0')
-  FEED = Object.values(FEED[0] || {})
   console.log(FEED)
+  FEED = Object.values(FEED[0] || {})
 
 
   return (
     <main className="flex min-h-screen overflow-x-hidden flex-col items-center justify-evenly bg-black text-white">
       <div className="grid grid-cols-1 gap-8 mt-10">
-        {FEED?.sort((a, b) => {
-          return b?.id - a?.id
-        })
-          .map((postInfo) => {
-            if (postInfo.id) return (
-              <Post
-                key={postInfo.id}
-                PostId={postInfo.id}
-                type={postInfo.type}
-                link={postInfo?.post?.img[0]}
-                likes={postInfo.likes}
-                donations={postInfo.donations}
-                desc={postInfo.caption}
-                tags={postInfo.tags}
-                postOrigin={postInfo.creator}
-                comments={postInfo.comments}
-              />
-            )
-          })}
+        {FEED?.map((postInfo) => {
+          if (postInfo.id) return (
+            <Post
+              key={postInfo.id}
+              PostId={postInfo.id}
+              type={postInfo.type}
+              link={postInfo?.post?.img[0]}
+              likes={postInfo.likes}
+              donations={postInfo.donations}
+              desc={postInfo.caption}
+              tags={postInfo.tags}
+              postOrigin={postInfo.creator}
+              comments={postInfo.comments}
+            />
+          )
+        })}
 
 
 

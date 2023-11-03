@@ -12,7 +12,7 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-export const Uploader = ({ setter, folderName, limit, setPostType }) => {
+export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -61,7 +61,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType }) => {
 
         setter(old => { return ({ ...old, post: { img: fileListURL } }) })
 
-    }, [fileList, fileListURL])
+    }, [fileList, fileListURL, post])
 
 
     const uploadButton = (
