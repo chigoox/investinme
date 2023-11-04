@@ -1,16 +1,15 @@
 'use client'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react"
-import { useState } from "react"
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { useState } from "react";
 
 
-import React from 'react'
-import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai"
-import PostComment from "./PostComment"
-import { formatNumber, getRandTN } from "../../myCodes/Util";
-import { updateArrayDatabaseItem, updateDatabaseItem } from "../../myCodes/Database";
-import { postIDPrefix } from "../../../META";
+import React from 'react';
+import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { useGlobalContext } from "../../../../StateManager/GlobalContext";
+import { postIDPrefix } from "../../../META";
+import { updateDatabaseItem } from "../../myCodes/Database";
+import { formatNumber, getRandTN } from "../../myCodes/Util";
+import PostComment from "./PostComment";
 
 const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO }) => {
     const [showComments, setShowComments] = useState(false)
@@ -33,6 +32,21 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
         })
         dispatch({ type: "NEW_POST", value: {} })
 
+    }
+
+    const likePost = () => {
+        setPostLike(!postLike)
+
+        if (postLike == false) {
+            updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
+                ...postINFO, likes: [...postINFO.likes, 'xxx']
+            })
+            dispatch({ type: "NEW_POST", value: {} })
+        } else {
+            updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
+                ...postINFO, likes: [...postINFO.likes].filter((user) => user != 'xxx')
+            })
+        }
     }
 
     return (
@@ -60,16 +74,16 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
             <div className="evenly">
                 <div className="flex gap-2 p-1">
-                    <Button onPress={() => { setPostLike(!postLike) }} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
+                    <Button onPress={likePost} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {postLike ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
                     </Button>
-                    {formatNumber(likes)}
+                    {formatNumber(likes?.length)}
                 </div >
                 <div className="flex gap-2 p-1">
                     <Button onPress={() => { setPostDonation(!postDoantion) }} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {postDoantion ? <AiFillDollarCircle size={24} /> : <AiOutlineDollarCircle size={24} />}
                     </Button>
-                    {formatNumber(donations)}
+                    {formatNumber(donations?.length)}
                 </div >
             </div>
 
@@ -86,7 +100,6 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
                             <ModalBody className="overflow-y-scroll hidescroll">
                                 {comments?.map((commentt) => {
                                     const aComment = Object.values(commentt)[0]
-                                    console.log(aComment)
 
                                     return (
                                         <PostComment user={aComment.user} commentLikes={aComment.commentLikes} comment={aComment.comment} />

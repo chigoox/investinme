@@ -30,7 +30,7 @@ export default async function RootLayout({ children }) {
           <GlobalWrapper>
             <NavBar />
               {children}
-            <Footer />
+            
           </GlobalWrapper>
         </UIProvider>
         </body>

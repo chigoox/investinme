@@ -55,7 +55,7 @@ export function useAUTHListener(add = false, set, protectedPage) {
                 if (set) set()
                 if (protectedPage) push('/')
                 //initNoUser()
-                fetchDocument('User', GID).then((userDATA) => {
+                fetchDocument('Users', GID).then((userDATA) => {
                     if (userDATA?.ShippingInfo?.email) {
                         setUser({ gid: GID, email: userDATA?.ShippingInfo?.email })
                     } else {

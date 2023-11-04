@@ -12,8 +12,8 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
         tags: [],
         caption: '',
         id: 0,
-        like: 0,
-        doantions: 0,
+        likes: [],
+        doantions: [],
         comments: [],
         creator: 'UID',
         timeStamp: new Date()

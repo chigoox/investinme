@@ -21,7 +21,7 @@ function useLocalStorage(state, dispatch, initialGlobalState) {
   useEffect(() => {
     if (state !== initialGlobalState) {
       localStorage.setItem("Global", JSON.stringify(state));
-      if (user.uid || user.gid) addToDatabase('User', user?.uid ? user?.uid : user?.gid , 'global', { state })
+      if (user.uid || user.gid) addToDatabase('Users', user?.uid ? user?.uid : user?.gid , 'global', { state })
       
 
 
