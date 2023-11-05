@@ -28,15 +28,12 @@ export const HomeFeed = () => {
         getData()
     }, [state])
 
-    console.log(data)
 
 
     return (
 
 
         <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12">
-
-
             {
                 data?.map((postInfo) => {
                     if (postInfo.id) return (

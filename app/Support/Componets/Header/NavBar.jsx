@@ -24,7 +24,6 @@ function NavBar() {
     }
     const user = useAUTHListener()
     const path = usePathname()
-    console.log(path)
     const onLogin = !path.includes('login')
 
     const toggleShowNewPost = () => setShowNewPost(!showNewPost)
@@ -68,7 +67,7 @@ function NavBar() {
                 {menuNames.map((name) => {
                     if (name.includes('Post')) return (
 
-                        <Button
+                        <Button key={name}
                             onPress={toggleShowNewPost}
 
                             className='md:my-5  min-w-0 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
@@ -84,7 +83,7 @@ function NavBar() {
                     )
 
                     if (name.includes('Search')) return (
-                        <Button
+                        <Button key={name}
                             onPress={() => {
 
 

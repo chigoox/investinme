@@ -1,14 +1,19 @@
-import { Avatar, Card } from '@nextui-org/react'
+import { Avatar, Card, Skeleton } from '@nextui-org/react'
 import React from 'react'
 
 const UserAvatar = ({ user }) => {
     return (
-        <div className='w-full h-full center'>
-            <Avatar size='lg' src='' />
-            <Card className='w-32 h-fit absolute -right-24'>
-                <h1>{user?.username}</h1>
+        <div className=' h-full flex items-center gap-2'>
+            <Skeleton className='rounded-full' isLoaded={user.img}>
+                <Avatar size='lg' src={user.img} />
 
-            </Card>
+            </Skeleton>
+            <Skeleton className='rounded-full w-auto' isLoaded={user.uid}>
+                <Card className='w-auto bg-black center h-fit text-white bg-opacity-75  p-1'>
+                    <h1>${user?.uid}</h1>
+
+                </Card>
+            </Skeleton>
 
         </div>
     )

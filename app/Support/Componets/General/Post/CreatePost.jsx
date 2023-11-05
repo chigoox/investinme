@@ -25,7 +25,14 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const { dispatch } = useGlobalContext()
     const user = useAUTHListener()
 
-    console.log(user)
+
+    const userData = {
+        displayName: user?.displayName,
+        email: user?.email,
+        img: user?.photoURL ? user.photoURL : '',
+        uid: user?.uid
+
+    }
 
     const handleCaption = (text) => {
         setPost(old => {
@@ -44,7 +51,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
                     'img' :
                     'txt',
             id: postID,
-            creator: user
+            creator: { ...userData }
         })
         await updateDatabaseItem('MetaData', 'postMeta', 'postID', postID + 1)
 

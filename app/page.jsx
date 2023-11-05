@@ -1,5 +1,7 @@
 'use client'
-import { HomeFeed } from "./Support/Componets/HomePage/HomeFeed.jsx";
+
+import { HomeFeed } from "./Support/Componets/HomePage/HomeFeed_"
+
 
 
 export default function Home() {
@@ -11,6 +13,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen overflow-x-hidden flex-col items-center justify-evenly bg-black text-white">
       <HomeFeed />
+
 
 
 

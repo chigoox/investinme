@@ -18,7 +18,6 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     const { state, dispatch } = useGlobalContext()
     const user = useAUTHListener()
     const UID = getUID(user)
-    console.log(likes, '=>', id)
     const [postLike, setPostLike] = useState(likes.includes(UID))
 
     const postComment = async () => {
@@ -61,8 +60,8 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
 
     return (
-        <div className=" overflow-hidden rounded-lg relative h-[40rem] rounde d-tl-[2.5rem] w-96">
-            <div className="absolute top-2 left-2 rounded-full">
+        <div className=" overflow-hidden rounded-lg relative h-[40rem]  w-96">
+            <div className="absolute w-full  top-2 left-2 s">
                 <UserAvatar user={creator} />
             </div>
 
