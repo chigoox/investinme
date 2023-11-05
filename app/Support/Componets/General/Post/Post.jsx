@@ -1,19 +1,17 @@
 'use client'
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-
-
-import React from 'react';
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
-import { useGlobalContext } from "../../../../StateManager/GlobalContext";
-import { postIDPrefix } from "../../../META";
-import { updateArrayDatabaseItem, updateDatabaseItem } from "../../myCodes/Database";
-import { formatNumber, getRandTN } from "../../myCodes/Util";
+import { postIDPrefix } from "../../../../META";
+import { updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
 import PostComment from "./PostComment";
-import { useAUTHListener } from "../../../../StateManager/AUTHListener";
-import { getUID } from "../../myCodes/Auth";
+import { useGlobalContext } from "../../../../../StateManager/GlobalContext";
+import { getUID } from "../../../myCodes/Auth";
+import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
+import { formatNumber, getRandTN } from "../../../myCodes/Util";
+import UserAvatar from "../User/Avatar";
 
-const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO }) => {
+const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
     const [comment, setComment] = useState('')
@@ -23,8 +21,6 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     console.log(likes, '=>', id)
     const [postLike, setPostLike] = useState(likes.includes(UID))
 
-
-    const commentUser = `User-${getRandTN(5)}`
     const postComment = async () => {
         await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'comments', {
             [UID]: {
@@ -65,9 +61,9 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
 
     return (
-        <div className=" overflow-hidden relative h-[40rem] rounde d-tl-[2.5rem] w-96">
-            <div className="bg-white h-20 w-20 absolute top-2 left-2 rounded-full">
-
+        <div className=" overflow-hidden rounded-lg relative h-[40rem] rounde d-tl-[2.5rem] w-96">
+            <div className="absolute top-2 left-2 rounded-full">
+                <UserAvatar user={creator} />
             </div>
 
 

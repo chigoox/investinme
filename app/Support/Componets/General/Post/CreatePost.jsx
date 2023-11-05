@@ -1,9 +1,10 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { addToDatabase, addToDoc, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../myCodes/Database'
-import { Uploader } from './Uploader'
-import { useGlobalContext } from '../../../../StateManager/GlobalContext'
+import { addToDatabase, addToDoc, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../../myCodes/Database'
+import { Uploader } from '../Uploader'
+import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
+import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
 
 const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const postDefault = {
@@ -22,7 +23,9 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const [pagePosition, setPagePosition] = useState(0)
     const [post, setPost] = useState(postDefault)
     const { dispatch } = useGlobalContext()
+    const user = useAUTHListener()
 
+    console.log(user)
 
     const handleCaption = (text) => {
         setPost(old => {
@@ -40,7 +43,8 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
                 post?.postType?.includes('image') ?
                     'img' :
                     'txt',
-            id: postID
+            id: postID,
+            creator: user
         })
         await updateDatabaseItem('MetaData', 'postMeta', 'postID', postID + 1)
 

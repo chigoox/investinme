@@ -65,11 +65,15 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
 
 
     const uploadButton = (
-        <div className='center border-4 rounded-full w-40 h-40 border-dotted p-4'>
-            <AiOutlinePlusSquare color='white' size={24} />
-            <div className=' text-white'>
-                Upload
+        <div>
+            <div className='center overflow-hidden relative mt-24 border-4 rounded-full w-40 h-40 bg-black-800 hover:bg-black hover:scale-[1.1] trans-slow  border-dotted p-4'>
+                <AiOutlinePlusSquare color='white' size={24} />
+                <div className=' text-white'>
+                    Upload
+                </div>
+
             </div>
+
         </div>
     );
 
@@ -99,6 +103,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
                         accept="image/*, video/*"
                         maxCount={limit ? limit : 8}
                         multiple
+
 
                     >
                         {fileList.length >= limit ? null : uploadButton}

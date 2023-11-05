@@ -1,9 +1,9 @@
 'use client'
-import React, { useState } from 'react';
-import { Card, Spacer, Button, Text, Input, Row, Checkbox } from '@nextui-org/react';
+import { Button, Card, Input, Spacer } from '@nextui-org/react';
 import { MailCheckIcon } from 'lucide-react';
+import React, { useState } from 'react';
 import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { signUp } from '@/app/Support/myCodes/Auth';
+import { signUp } from '../../../myCodes/Auth';
 
 
 function RegisterCard({ toggleRegister }) {
@@ -11,8 +11,8 @@ function RegisterCard({ toggleRegister }) {
     const toggleVisibility = () => setIsVisible(!isVisible)
     const [credentials, setCredentials] = useState({ password: '', email: '' })
     const signup = () => {
-
-        if (credentials.password === credentials.passwordMatch && password.length > 5) {
+        console.log('first')
+        if (credentials.password === credentials.passwordMatch && credentials.password.length >= 5) {
             (async () => {
                 try {
                     await signUp(credentials.email, credentials.password).then(() => {
@@ -28,7 +28,6 @@ function RegisterCard({ toggleRegister }) {
             throw new error('Password must be 5 Characters or do not match')
         }
     }
-
 
 
     return (

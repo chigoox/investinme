@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '../../../../StateManager/GlobalContext'
 import { fetchInOrder } from '../../myCodes/Database'
-import Post from '../General/Post'
+import Post from '../General/Post/Post'
 
 export const HomeFeed = () => {
     const router = useRouter()
@@ -53,6 +53,7 @@ export const HomeFeed = () => {
                             tags={postInfo.tags}
                             postOrigin={postInfo.creator}
                             comments={postInfo.comments}
+                            creator={postInfo.creator}
                         />
                     )
                 })

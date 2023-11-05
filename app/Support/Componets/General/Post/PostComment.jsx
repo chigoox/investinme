@@ -1,7 +1,7 @@
 import { Button } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
-import { formatNumber } from '../../myCodes/Util'
+import { formatNumber } from '../../../myCodes/Util'
 
 const PostComment = ({ user, comment, commentLikes }) => {
     const [likedComment, setLikedComment] = useState(false)

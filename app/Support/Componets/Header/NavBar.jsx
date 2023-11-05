@@ -8,7 +8,7 @@ import { useAUTHListener } from '../../../../StateManager/AUTHListener'
 import { useWindowSize } from '../../Hooks/useWindowSize'
 import { siteName } from '../../../META'
 import { Button } from '@nextui-org/react'
-import CreatePost from '../General/CreatePost'
+import CreatePost from '../General/Post/CreatePost'
 
 const font = Satisfy({
     weight: '400',
@@ -23,6 +23,9 @@ function NavBar() {
         setShowNewPost(!showNewPost)
     }
     const user = useAUTHListener()
+    const path = usePathname()
+    console.log(path)
+    const onLogin = !path.includes('login')
 
     const toggleShowNewPost = () => setShowNewPost(!showNewPost)
 
@@ -44,7 +47,7 @@ function NavBar() {
     const menuNames = (windowSize.width <= 462) ? menuMobile : tabDeskMenu
 
     return (
-        <div className='md:h-screen h-10 bottom-0 md:top-0 w-screen z-[99999] fixed md:border-r border-t p-4 pt-10 text-white border-gray-700 bg-black md:w-[3rem] lg:w-[15rem]  flex flex-col overflow-hidden'>
+        <div className={`md:h-screen h-10 bottom-0 md:top-0 w-screen z-[99999] fixed  p-4 pt-10 text-white x  ${!onLogin ? ' opacity-0' : 'opacity-100'} md:w-[3rem] lg:w-[15rem]  bg-black border-gray-700 md:border-r border-t flex flex-col overflow-hidden`}>
             <CreatePost showCreatePost={showNewPost} setShowCreatePost={setShowNewPost} />
 
 
@@ -60,7 +63,7 @@ function NavBar() {
 
 
 
-            <nav className={`trans h-auto flex md:flex-col justify-evenly  w-full md:w-fit top-0 absolute  md:relative`}>
+            {onLogin && <nav className={`trans h-auto flex md:flex-col justify-evenly  w-full md:w-fit top-0 absolute  md:relative`}>
 
                 {menuNames.map((name) => {
                     if (name.includes('Post')) return (
@@ -68,11 +71,11 @@ function NavBar() {
                         <Button
                             onPress={toggleShowNewPost}
 
-                            className='md:my-5 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
+                            className='md:my-5  min-w-0 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
                             <div className='relative right-4 md:right-6  p-0  lg:right-4 trans group-hover:bg-gray-500 lg:shadow-md rounded-2xl'>
                                 <AiOutlinePlus size={24} />
                             </div>
-                            <h1 className='md:relative  opacity-0 absolute md:opacity-100'>{name}</h1>
+                            <h1 className='md:relative bottom-0 opacity-0 absolute md:opacity-100'>{name}</h1>
 
 
 
@@ -88,8 +91,8 @@ function NavBar() {
 
 
                             }}
-                            className='md:my-5 overflow-visible flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
-                            <div className='relative right-4 md:right-6  p-0  lg:right-4 trans group-hover:bg-gray-500 lg:shadow-md rounded-2xl'>
+                            className='md:my-5 overflow-visible  flex justify-start    bg-opacity-0 text-white   group lg:hover:bg-gray-700 rounded-2xl trans'>
+                            <div className='relative  right-4 md:right-6  p-0  lg:right-4 trans group-hover:bg-gray-500 lg:shadow-md rounded-2xl'>
                                 {name == 'Search' && <AiOutlineSearch size={24} />}
                             </div>
                             <h1 className='md:relative  opacity-0 absolute md:opacity-100'>{name}</h1>
@@ -118,7 +121,7 @@ function NavBar() {
 
 
 
-            </nav>
+            </nav>}
 
 
 

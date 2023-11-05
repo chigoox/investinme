@@ -1,11 +1,11 @@
 'use client'
 
-import { checkLoggedinUser, logIn, loginWith } from '@/app/Support/myCodes/Auth';
-import { Button, Card, Input, Spacer } from '@nextui-org/react';
 import { MailCheckIcon } from 'lucide-react';
 import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible, AiOutlineCloseCircle, AiOutlineFacebook, AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 import RegisterCard from './RegisterCard';
+import { checkLoggedinUser, logIn, loginWith } from '../../../myCodes/Auth';
+import { Button, Card, Input, Spacer } from '@nextui-org/react';
 
 
 
@@ -50,7 +50,7 @@ function LoginCard({ toggleLogin }) {
 
   return (
     <div className='fixed z-[99999]  top-20  md:scale-100 scale-110 m-auto'>
-      <Card className='w-64 border h-auto p-4 fadeInUp' variant="bordered">
+      <Card className='w-64  bg-gradient-to-t from-[#1d8c1d] to-[#82f182] h-auto p-4 fadeInUp' variant="bordered">
         <div className='gap-1 mb-4 w-full center'>
           <Button onClick={() => {
             signIn("google")
@@ -58,9 +58,7 @@ function LoginCard({ toggleLogin }) {
           <Button onClick={() => {
             signIn("facebook")
           }} className='p-0 bg-black-800 text-white'><AiOutlineFacebook size={32} /></Button>
-          <Button onClick={() => {
-            signIn("github")
-          }} className='p-0 bg-black-800 text-white'><AiOutlineGithub size={32} /></Button>
+
         </div>
 
 
@@ -94,18 +92,16 @@ function LoginCard({ toggleLogin }) {
 
         <br />
         <Button onPress={signIn} className='w-1/2 m-auto font-bold text-white bg-black-800'>Login</Button>
-        <div className='center gap-0.5 font-light'>
+        <div className='center gap-0.5 font-light text-white'>
           <span className='text-xs'>Don't have an account? click</span><button onClick={toggleRegister} className='text-xs text-blue-600 font-bold'>here</button>
         </div>
         <div className='center gap-0.5 font-light'>
-          <span className='text-xs'>Forgot Password? click</span><button className='text-xs text-blue-600 font-bold'>here</button>
+          <span className='text-xs text-white'>Forgot Password? click</span><button className='text-xs text-blue-600 font-bold'>here</button>
         </div>
       </Card>
 
       {openRegister && <RegisterCard toggleRegister={toggleRegister} />}
-      <div className='center mt-2 fadeInBottom'>
-        <Button onPress={toggleLogin} className='m-auto min-w-0'><AiOutlineCloseCircle size={32} /></Button>
-      </div>
+
     </div>
   )
 }
