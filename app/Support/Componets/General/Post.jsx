@@ -1,53 +1,68 @@
 'use client'
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import React from 'react';
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { useGlobalContext } from "../../../../StateManager/GlobalContext";
 import { postIDPrefix } from "../../../META";
-import { updateDatabaseItem } from "../../myCodes/Database";
+import { updateArrayDatabaseItem, updateDatabaseItem } from "../../myCodes/Database";
 import { formatNumber, getRandTN } from "../../myCodes/Util";
 import PostComment from "./PostComment";
+import { useAUTHListener } from "../../../../StateManager/AUTHListener";
+import { getUID } from "../../myCodes/Auth";
 
 const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO }) => {
     const [showComments, setShowComments] = useState(false)
-    const [postLike, setPostLike] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
     const [comment, setComment] = useState('')
     const { state, dispatch } = useGlobalContext()
+    const user = useAUTHListener()
+    const UID = getUID(user)
+    console.log(likes, '=>', id)
+    const [postLike, setPostLike] = useState(likes.includes(UID))
 
 
     const commentUser = `User-${getRandTN(5)}`
-    const postComment = () => {
-        updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
-            ...postINFO, comments: [...postINFO.comments, {
-                [commentUser]: {
-                    user: commentUser,
-                    comment: comment,
-                    commentLikes: 0
-                }
-            }]
-        })
+    const postComment = async () => {
+        await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'comments', {
+            [UID]: {
+                user: UID,
+                comment: comment,
+                commentLikes: []
+            }
+        }
+        )
         dispatch({ type: "NEW_POST", value: {} })
+        setComment('')
 
     }
 
-    const likePost = () => {
-        setPostLike(!postLike)
+
+
+    const likePost = async () => {
 
         if (postLike == false) {
-            updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
-                ...postINFO, likes: [...postINFO.likes, 'xxx']
-            })
+            updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
             dispatch({ type: "NEW_POST", value: {} })
         } else {
-            updateDatabaseItem('Posts', 'AllPosts', `${postIDPrefix}-${id}`, {
-                ...postINFO, likes: [...postINFO.likes].filter((user) => user != 'xxx')
-            })
+            updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
+
         }
+
+
+        dispatch({ type: "NEW_POST", value: {} })
+        setPostLike(!postLike)
+
     }
+
+    useEffect(() => {
+
+
+
+    }, [])
+
 
     return (
         <div className=" overflow-hidden relative h-[40rem] rounde d-tl-[2.5rem] w-96">
@@ -75,7 +90,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
             <div className="evenly">
                 <div className="flex gap-2 p-1">
                     <Button onPress={likePost} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
-                        {postLike ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
+                        {likes.includes(UID) ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
                     </Button>
                     {formatNumber(likes?.length)}
                 </div >

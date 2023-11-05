@@ -14,8 +14,8 @@ export const HomeFeed = () => {
 
 
     const getData = async () => {
-        let FEED = await fetchInOrder('Posts', 'IVA-0')
-        FEED = Object.values(FEED[0] || {})
+        let FEED = await fetchInOrder('Posts', 'id')
+        FEED = Object.values(FEED || {})
         setData(FEED)
         return FEED
     }
@@ -24,16 +24,17 @@ export const HomeFeed = () => {
 
 
     useEffect(() => {
-        router.refresh()
+        //router.refresh()
         getData()
     }, [state])
 
+    console.log(data)
 
 
     return (
 
 
-        <div className="grid grid-cols-1  gap-8 mt-10">
+        <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12">
 
 
             {

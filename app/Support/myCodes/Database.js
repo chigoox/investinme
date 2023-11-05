@@ -16,6 +16,19 @@ console.log(collection, Doc, field, data)
 
 }
 
+export async function addToDoc(collection, Doc,  data) {
+console.log(collection, Doc, data)
+   if (Doc){
+    try {
+     await setDoc(doc(DATABASE, collection, Doc), 
+         {...data}, { merge: true });
+   } catch (error) {
+    console.log(error.message)
+   }
+   }
+
+}
+
 
 
 export async function updateDatabaseItem(collection, Doc, Field, Value) {
@@ -26,6 +39,9 @@ export async function updateDatabaseItem(collection, Doc, Field, Value) {
 }
 
 export async function updateArrayDatabaseItem(collection, Doc, Field, Value, remove) {
+console.log 
+    if (typeof Value[0] == 'Array') Value = Value[0]
+    
     await updateDoc(doc(DATABASE, collection, Doc), {
         [Field]: !remove ? arrayUnion(Value) : arrayRemove(Value)
     });
@@ -85,10 +101,9 @@ export async function fetchDocument2(collection, document, setterfunction) {
 
         let data = []
         snapShot.forEach((doc) => {
-        
              data = [...data, doc.data()]
         });
 
-        return data
+        return data.sort((a,b) => b.id - a.id )
         
     }

@@ -1,8 +1,8 @@
 'use client'
 import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
-import app, { AUTH } from "@/Firebase";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import app, { AUTH } from "../../../Firebase";
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app)

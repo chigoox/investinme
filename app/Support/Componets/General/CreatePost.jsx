@@ -1,7 +1,7 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@nextui-org/react'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { addToDatabase, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../myCodes/Database'
+import { addToDatabase, addToDoc, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../myCodes/Database'
 import { Uploader } from './Uploader'
 import { useGlobalContext } from '../../../../StateManager/GlobalContext'
 
@@ -31,8 +31,8 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     }
 
     const submitPost = async () => {
-        const { postID } = await fetchDocument('Posts', 'PostMeta')
-        await addToDatabase('Posts', 'AllPosts', `IVA-${postID}`, {
+        const { postID } = await fetchDocument('MetaData', 'postMeta')
+        await addToDoc('Posts', `IVA-${postID}`, {
             ...post,
             link: post?.post?.img[0],
             type: post?.postType?.includes('video') ?
@@ -42,9 +42,10 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
                     'txt',
             id: postID
         })
-        await updateDatabaseItem('Posts', 'PostMeta', 'postID', postID + 1)
+        await updateDatabaseItem('MetaData', 'postMeta', 'postID', postID + 1)
+
         post?.tags?.forEach(async tag => {
-            await updateArrayDatabaseItem('Posts', 'PostMeta', 'tags', tag)
+            await updateArrayDatabaseItem('MetaData', 'postMeta', 'tags', tag)
         });
 
 
@@ -102,8 +103,8 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
 
             </div>
             <div className='overflow-x-scroll flex gap-4 items-center w-full border-y p-1 hidescroll'>
-                {[1, 2, 3, 4, 5, 6].map(() => {
-                    return (<div className='bg-white relative border-2 h-24 w-24 flex-shrink-0  border-black rounded-2xl'>
+                {[1, 2, 3, 4, 5, 6].map((i) => {
+                    return (<div key={i} className='bg-white relative border-2 h-24 w-24 flex-shrink-0  border-black rounded-2xl'>
 
 
                         <div className='bg-black m-auto w-full text-center absolute bottom-4'>FilterName</div>
