@@ -41,9 +41,9 @@ export default function ProtectedRoute() {
 
     }, [UID])
 
-    const followers = 2345
-    const donations = 523456
-    const following = 765523456
+    const followers = userData?.followers.length
+    const donations = userData?.donations.length
+    const following = userData?.following.length
 
     return (
         <div className="w- min-h-screen bg-black text-white">
