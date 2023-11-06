@@ -6,6 +6,7 @@ import UserAvatar from "../Support/Componets/General/User/Avatar";
 import { formatNumber } from "../Support/myCodes/Util";
 import { Edit } from "lucide-react";
 import EditProfile from "../Support/Componets/General/User/EditProfile";
+import { avatar } from "@nextui-org/react";
 
 
 
@@ -20,6 +21,8 @@ const getUID = (user) => {
 export default function ProtectedRoute() {
     const [user, setUser] = useState({})
     const [userData, setUserData] = useState()
+    const [editProfile, setEditProfile] = useState(false)
+    const toggleEdit = () => setEditProfile(!editProfile)
     const UID = getUID(user)
 
 
@@ -34,14 +37,14 @@ export default function ProtectedRoute() {
     const followers = 2345
     const donations = 523456
     const following = 765523456
-
+    console.log(userData?.UserInfo?.avatarURL)
 
     return (
         <div className="w- min-h-screen bg-black text-white">
             <AUTHListener protectedPage={true} set={setUser} />
-            <EditProfile />
+            {editProfile && <EditProfile toggleEdit={toggleEdit} />}
             <div className="p-4 center gap-2">
-                <UserAvatar user={user} size={'lg'} noLable />
+                <UserAvatar user={{ img: userData?.UserInfo?.avatarURL }} size={'lg'} noLable />
                 <div className=" center-col h-full text-white font-bold">
                     <h1>{formatNumber(followers)}</h1>
                     <h1>Followers</h1>
@@ -62,7 +65,7 @@ export default function ProtectedRoute() {
             <div className="bg-black-800 h-auto relative">
 
 
-                <button className="absolute -bottom-5 right-2">
+                <button onClick={toggleEdit} className="absolute -bottom-5 right-2">
                     <Edit color="white" />
                 </button>
 

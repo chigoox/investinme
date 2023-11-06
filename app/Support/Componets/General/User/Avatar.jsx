@@ -2,6 +2,7 @@ import { Avatar, Card, Skeleton } from '@nextui-org/react'
 import React from 'react'
 
 const UserAvatar = ({ user, size = 'lg', forthis = 'profile', noLable }) => {
+    console.log(user)
     return (
         <div className={`${forthis == 'profile' ? 'flex-col' : 'flex '} h-full  items-center gap-2`}>
             <Skeleton className='rounded-full w-fit' isLoaded={user.img}>

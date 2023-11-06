@@ -4,18 +4,20 @@ import TextArea from 'antd/es/input/TextArea'
 import React, { useState } from 'react'
 import { addToDatabase } from '../../../myCodes/Database'
 import { Uploader } from '../Uploader'
+import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
 
-function EditProfile({ user, forCheckOut, event }) {
+function EditProfile({ forCheckOut, event, toggleEdit }) {
     const [profileInfo, setProfileInfo] = useState({})
     const [showTerms, setShowTerms] = useState(false)
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const user = useAUTHListener()
 
-    const updateShippingInfo = async ({ target }) => {
+    const updateprofile = async ({ target }) => {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
-
+    console.log(profileInfo)
     const updateDatabase = (() => {
-        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'ShippingInfo', profileInfo)
+        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, avatarURL: profileInfo.post.img[0] })
         if (forCheckOut && Object.keys(profileInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
         ) {
             console.log('first')
@@ -35,7 +37,7 @@ function EditProfile({ user, forCheckOut, event }) {
                     <Uploader inCricle={true} setter={setProfileInfo} limit={1} folderName={'Profile'} />
 
                     <TextArea type="text"
-                        onChange={updateShippingInfo}
+                        onChange={updateprofile}
                         placements={'outside'}
                         name="bio"
                         label={'bio'}
@@ -59,7 +61,10 @@ function EditProfile({ user, forCheckOut, event }) {
 
 
                 </CardBody>
-                <CardFooter className='p-2  bg-black-800'><Button className="w-3/4 m-auto mb-4" onPress={updateDatabase}>Edit</Button></CardFooter>
+                <CardFooter className='p-2  bg-black-800'>
+                    <Button className="w-3/4 m-auto mb-4" onPress={updateDatabase}>Edit</Button>
+                    <Button className="w-12 m-auto mb-4" onPress={toggleEdit}>close</Button>
+                </CardFooter>
             </Card>
 
 
