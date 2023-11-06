@@ -21,7 +21,7 @@ function AUTHListener({ add = false, set, protectedPage }) {
             } else {
                 // User is signed out
                 if (set) set()
-                if (protectedPage) push('/')
+                if (protectedPage) push('/login')
             }
         });
     }, [])
@@ -53,7 +53,7 @@ export function useAUTHListener(add = false, set, protectedPage) {
             } else {
                 // User is signed out
                 if (set) set()
-                if (protectedPage) push('/')
+                if (protectedPage) push('/login')
                 //initNoUser()
                 fetchDocument('Users', GID).then((userDATA) => {
                     if (userDATA?.ShippingInfo?.email) {

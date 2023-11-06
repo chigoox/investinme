@@ -56,7 +56,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
     }
     const getCreatorData = () => {
-        fetchDocument('Users', creator.uid, setCreatorData)
+        fetchDocument('Users', creator, setCreatorData)
     }
     useEffect(() => {
         getCreatorData()

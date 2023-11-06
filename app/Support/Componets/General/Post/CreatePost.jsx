@@ -26,10 +26,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const user = useAUTHListener()
 
 
-    const userData = {
-        uid: user?.uid || user?.gid || ''
-
-    }
+    const userData = user?.uid || user?.gid || ''
 
     const handleCaption = (text) => {
         setPost(old => {
@@ -48,7 +45,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
                     'img' :
                     'txt',
             id: postID,
-            creator: { ...userData }
+            creator: userData
         })
         await updateDatabaseItem('MetaData', 'postMeta', 'postID', postID + 1)
 
