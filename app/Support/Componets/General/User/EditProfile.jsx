@@ -46,7 +46,7 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
 
     return (
-        <div className={`center-col w-full absolute  z-[99] hidescroll h-[50rem]`}>
+        <div className={`center-col w-full md:w-3/4 absolute  z-[99] hidescroll h-[50rem]`}>
             <Card className={`w-full shadow-md shadow-black border-2 border-[#121212] h-auto bg-[#171717] center-col`}>
                 <CardHeader className="font-bold  text-white bg-black-800 mb-4">
                     <h1 className="text-center w-full">Edit Info</h1>

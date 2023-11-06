@@ -7,6 +7,7 @@ import { formatNumber } from "../Support/myCodes/Util";
 import { Edit, Edit2Icon, FileEditIcon } from "lucide-react";
 import EditProfile from "../Support/Componets/General/User/EditProfile";
 import { Button, Skeleton, avatar } from "@nextui-org/react";
+import { initFollowing } from "../Support/myCodes/DatabaseUtils";
 
 
 
@@ -27,7 +28,7 @@ export default function ProtectedRoute() {
     const getData = async () => {
         if (UID) await fetchDocument('Users', UID, setUserData)
     }
-    console.log(postData)
+
     const getPostData = async () => {
         if (UID) setPostData(await FetchThisDocs('Posts', 'creator', '==', UID, 'id'))
     }
@@ -41,6 +42,7 @@ export default function ProtectedRoute() {
 
 
 
+
     const followers = userData?.followers?.length
     const donations = userData?.donations?.length
     const following = userData?.following?.length
@@ -49,6 +51,7 @@ export default function ProtectedRoute() {
     useEffect(() => {
         getData()
         getPostData()
+        initFollowing(user)
 
 
     }, [UID])

@@ -49,6 +49,7 @@ export function useAUTHListener(add = false, set, protectedPage) {
                 if (set) set(user)
                 if (add) addUIDToList(user.uid)
                 if (add) addEmailToList(user.email)
+
                 setUser(user)
             } else {
                 // User is signed out

@@ -8,6 +8,7 @@ import { checkLoggedinUser, logIn, logOut, loginWith } from '../../../myCodes/Au
 import { Button, Card, Input, Spacer } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { addToDatabase, fetchDocument } from '../../../myCodes/Database';
+import { initFollowing } from '../../../myCodes/DatabaseUtils';
 
 
 
@@ -31,15 +32,8 @@ function LoginCard({ }) {
       case 'google':
         await logOut()
         await loginWith('google').then(async (user) => {
-          console.log(user)
-          try {
-            const fetch = await fetchDocument('Users', user.uid)
-            if (fetch.followers == undefined) addToDatabase('Users', user.uid, 'followers', [])
-            if (fetch.following == undefined) addToDatabase('Users', user.uid, 'following', [])
-            if (fetch.donations == undefined) addToDatabase('Users', user.uid, 'donations', [])
-          } catch (error) {
-            console.log(error.message)
-          }
+
+          initFollowing(user)
 
           toggleLogin()
           return
@@ -48,7 +42,8 @@ function LoginCard({ }) {
 
       case 'facebook':
         await logOut()
-        await loginWith('facebook').then((user) => {
+        await loginWith('facebook').then(async (user) => {
+          await initFollowing(user)
           toggleLogin()
           return
         })
