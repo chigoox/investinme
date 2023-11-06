@@ -27,10 +27,10 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
 
 
     const userData = {
-        displayName: user?.displayName,
-        email: user?.email,
+        displayName: user?.displayName || '',
+        email: user?.email || '',
         img: user?.photoURL ? user.photoURL : '',
-        uid: user?.uid
+        uid: user?.uid || ''
 
     }
 
