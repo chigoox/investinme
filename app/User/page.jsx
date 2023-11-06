@@ -78,18 +78,18 @@ export default function ProtectedRoute() {
                 </Skeleton>
 
             </div>
-            <div className="px-4 flex gap-4">
+            <div className="px-4 w-full md:w-96 m-auto flex gap-4">
                 <h1 className="text-white text-2xl font-extabold">{user?.displayName?.toUpperCase()}</h1>
                 <button onClick={toggleEdit}>
                     <FileEditIcon />
                 </button>
             </div>
-            <div className="bg-black-800 px-2  h-auto relative">
+            <div className="bg-black-800 px-2 w-full md:w-[30rem] lg:w-[26rem] m-auto  h-auto relative">
                 {userData?.UserInfo?.bio}
 
             </div>
 
-            <div className="grid grid-cols-3 h-auto max-h-96 overflow-y-scroll hidescroll gap-1 p-1 ">
+            <div className="grid grid-cols-3 w-full md:w-[30rem] lg:w-[26rem] m-auto h-auto max-h-96 overflow-y-scroll hidescroll gap-1 p-1 ">
                 {postData?.map((post) => {
                     return (
                         <Skeleton isLoaded={post?.link} className="h-[7.8rem] overflow-hidden rounded-lg relative m-auto w-[7.8rem]">

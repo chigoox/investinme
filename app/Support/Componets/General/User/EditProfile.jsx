@@ -7,10 +7,11 @@ import { Uploader } from '../Uploader'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
 import { UpdateUser } from '../../../myCodes/Auth'
 import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
+import { getRandTN } from '../../../myCodes/Util'
 
 function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
     const user = useAUTHListener()
-    const { displayName, gender, address, avatarURL } = userData?.UserInfo
+    const { displayName, gender, address, avatarURL } = userData?.UserInfo || { displayName: `User${getRandTN(5)}`, gender: 'other', address: '', avatarURL: 'none' }
     const [profileInfo, setProfileInfo] = useState({ displayName: user.displayName, gender: gender, avatarURL: user.photoURL })
 
 
