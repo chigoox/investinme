@@ -44,7 +44,7 @@ export default function ProtectedRoute() {
             <AUTHListener protectedPage={true} set={setUser} />
             {editProfile && <EditProfile toggleEdit={toggleEdit} />}
             <div className="p-4 center gap-2">
-                <UserAvatar user={{ img: userData?.UserInfo?.avatarURL }} size={'lg'} noLable />
+                <UserAvatar user={{ img: userData?.UserInfo?.avatarURL, bio: userData?.UserInfo?.bio }} size={'lg'} noLable />
                 <div className=" center-col h-full text-white font-bold">
                     <h1>{formatNumber(followers)}</h1>
                     <h1>Followers</h1>
@@ -68,6 +68,7 @@ export default function ProtectedRoute() {
                 <button onClick={toggleEdit} className="absolute -bottom-5 right-2">
                     <Edit color="white" />
                 </button>
+                <div>{userData?.UserInfo?.bio}</div>
 
             </div>
 
