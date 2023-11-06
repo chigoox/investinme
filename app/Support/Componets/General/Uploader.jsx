@@ -1,8 +1,9 @@
-import { Modal, Upload } from 'antd';
+import { Upload } from 'antd';
+import ImgCrop from 'antd-img-crop';
 import { useEffect, useState } from "react";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import { useUploader } from '../../Hooks/useUploader';
-import ImgCrop from 'antd-img-crop';
+import { Skeleton } from '@nextui-org/react';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -113,11 +114,15 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                 </ImgCrop>
 
             </div>
-            {FileType && <div className={`${inCricle ? 'rounded-full h-32 w-32' : 'rounded-3xl w-96 h-72'}  overflow-y-scroll hidescroll    text-white  `}>
-                {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
-                {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
+            {
+                FileType && <div className={`${inCricle ? 'rounded-full h-32 w-32' : 'rounded-3xl w-96 h-72'}  overflow-y-scroll hidescroll    text-white  `}>
+                    <Skeleton className='w-full border-2 h-full' isLoaded={showPreview}>
+                        {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
+                        {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
 
-            </div>}
+                    </Skeleton>
+                </div>
+            }
 
 
 
