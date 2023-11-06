@@ -6,18 +6,22 @@ import { AiFillEye, AiFillEyeInvisible, AiOutlineCloseCircle, AiOutlineFacebook,
 import RegisterCard from './RegisterCard';
 import { checkLoggedinUser, logIn, loginWith } from '../../../myCodes/Auth';
 import { Button, Card, Input, Spacer } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 
 
 
 
-function LoginCard({ toggleLogin }) {
+function LoginCard({ }) {
   const [isVisible, setIsVisible] = useState(false)
   const [openRegister, setOpenRegister] = useState(false)
   const toggleVisibility = () => setIsVisible(!isVisible)
   const toggleRegister = () => setOpenRegister(!openRegister)
   const [credentials, setCredentials] = useState({ password: '', email: '' })
-
+  const { push } = useRouter()
   const signIn = async (provider) => {
+    const toggleLogin = () => {
+      push('/')
+    }
 
     switch (provider) {
       case 'google':
@@ -35,10 +39,13 @@ function LoginCard({ toggleLogin }) {
         break;
 
       default:
-        await logIn(credentials.email, credentials.password).then(() => {
+        await logIn(credentials.email, credentials.password).then((user) => {
+          console.log(user)
           checkLoggedinUser()
-          toggleLogin()
+          if (user?.uid) toggleLogin()
 
+        }).catch((e) => {
+          console.log(e)
         })
         break;
     }

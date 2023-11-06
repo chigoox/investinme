@@ -1,10 +1,9 @@
 'use client'
 import { FacebookAuthProvider, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-
+import {  updateProfile } from "firebase/auth";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import app, { AUTH } from "../../../Firebase";
 
-const provider = new GoogleAuthProvider();
 const auth = getAuth(app)
 
 
@@ -76,9 +75,23 @@ const user = await createUserWithEmailAndPassword(auth, email, password)
             });
     }
 
+export const UpdateUser = (displayName, photoURL, phone) =>{
+const createData = {
+  displayName: displayName? displayName : null,
+  photoURL: photoURL? photoURL : null,
+  phoneNumber: phone? phone : null
+}
+
+  updateProfile(auth.currentUser, createData).catch((error) => {
+  // An error occurred
+  // ...
+});
+}
+
 const logIn = async (email, password) => {
-  signInWithEmailAndPassword(auth, email, password)
+  return signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
+    console.log('first')
     // Signed in 
     const user = userCredential.user;
     console.log(userCredential)

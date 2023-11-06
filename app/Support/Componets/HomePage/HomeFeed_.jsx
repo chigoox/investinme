@@ -7,7 +7,6 @@ import { fetchInOrder } from '../../myCodes/Database'
 import Post from '../General/Post/Post'
 
 export const HomeFeed = () => {
-    const router = useRouter()
     const [data, setData] = useState([])
     const { state, dispatch } = useGlobalContext()
 
@@ -48,9 +47,8 @@ export const HomeFeed = () => {
                             donations={postInfo.donations}
                             desc={postInfo.caption}
                             tags={postInfo.tags}
-                            postOrigin={postInfo.creator}
                             comments={postInfo.comments}
-                            creator={postInfo.creator}
+                            creator={postInfo?.creator}
                         />
                     )
                 })

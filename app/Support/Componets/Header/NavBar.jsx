@@ -101,7 +101,7 @@ function NavBar() {
                         </Button>
                     )
                     if (!name.includes('Post') && !name.includes('Search')) return (
-                        <Link key={name} href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User/uid' : `${name}`}`} className='md:my-5  flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
+                        <Link key={name} href={`/${(name == 'Home') ? '' : (name == 'Profile') ? 'User' : name}`} className='md:my-5  flex items-center gap-2 group lg:hover:bg-gray-700 rounded-2xl trans'>
                             <div className='relative right-4 lg:right-0 trans group-hover:bg-gray-500 p-2 lg:shadow-md rounded-2xl'>
                                 {name == 'Home' && <AiOutlineHome size={24} />}
                                 {name == 'Explore' && <AiOutlineGlobal size={24} />}

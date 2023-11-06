@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import AUTHListener from "../../StateManager/AUTHListener";
+import AUTHListener, { useAUTHListener } from "../../StateManager/AUTHListener";
 import { fetchDocument, fetchInOrder } from "../Support/myCodes/Database";
 import UserAvatar from "../Support/Componets/General/User/Avatar";
 import { formatNumber } from "../Support/myCodes/Util";
@@ -19,17 +19,24 @@ const getUID = (user) => {
 
 
 export default function ProtectedRoute() {
-    const [user, setUser] = useState({})
     const [userData, setUserData] = useState()
     const [editProfile, setEditProfile] = useState(false)
-    const toggleEdit = () => setEditProfile(!editProfile)
+    const _userData = userData?.UserInfo
+
+    const getData = async () => {
+        await fetchDocument('Users', UID, setUserData)
+    }
+    const toggleEdit = (fetch) => {
+        setEditProfile(!editProfile)
+        if (fetch) getData()
+    }
+    const user = useAUTHListener(null, null, true)
     const UID = getUID(user)
 
 
 
-
     useEffect(() => {
-        fetchDocument('Users', UID, setUserData)
+        getData()
 
 
     }, [UID])
@@ -37,14 +44,12 @@ export default function ProtectedRoute() {
     const followers = 2345
     const donations = 523456
     const following = 765523456
-    console.log(userData?.UserInfo?.avatarURL)
 
     return (
         <div className="w- min-h-screen bg-black text-white">
-            <AUTHListener protectedPage={true} set={setUser} />
-            {editProfile && <EditProfile toggleEdit={toggleEdit} />}
+            {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             <div className="p-4 center gap-2">
-                <UserAvatar user={{ img: userData?.UserInfo?.avatarURL, bio: userData?.UserInfo?.bio }} size={'lg'} noLable />
+                <UserAvatar user={_userData} size={'lg'} noLable />
                 <div className=" center-col h-full text-white font-bold">
                     <h1>{formatNumber(followers)}</h1>
                     <h1>Followers</h1>
@@ -59,16 +64,14 @@ export default function ProtectedRoute() {
                 </div>
 
             </div>
-            <div>
-                <h1 className="text-white">{user?.displayName}</h1>
+            <div className="px-4">
+                <h1 className="text-white text-2xl font-extabold">{user?.displayName?.toUpperCase()}</h1>
             </div>
-            <div className="bg-black-800 h-auto relative">
+            <div className="bg-black-800 px-2  h-auto relative">
+                {userData?.UserInfo?.bio}
 
 
-                <button onClick={toggleEdit} className="absolute -bottom-5 right-2">
-                    <Edit color="white" />
-                </button>
-                <div>{userData?.UserInfo?.bio}</div>
+
 
             </div>
 

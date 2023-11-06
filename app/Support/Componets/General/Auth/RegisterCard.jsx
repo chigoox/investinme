@@ -17,7 +17,7 @@ function RegisterCard({ toggleRegister }) {
             (async () => {
                 try {
                     await signUp(credentials.email, credentials.password).then((user) => {
-                        console.log(user)
+                        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { followers: [], following: [], donations: [] })
                         push(`/User/edit`)
                         toggleRegister()
 

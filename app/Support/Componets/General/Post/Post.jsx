@@ -3,7 +3,7 @@ import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader
 import { useEffect, useState } from "react";
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { postIDPrefix } from "../../../../META";
-import { updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
+import { fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
 import PostComment from "./PostComment";
 import { useGlobalContext } from "../../../../../StateManager/GlobalContext";
 import { getUID } from "../../../myCodes/Auth";
@@ -19,6 +19,10 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     const user = useAUTHListener()
     const UID = getUID(user)
     const [postLike, setPostLike] = useState(likes.includes(UID))
+    const [creatorData, setCreatorData] = useState({})
+
+    const _creatorData = creatorData?.UserInfo
+
 
     const postComment = async () => {
         await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'comments', {
@@ -51,9 +55,11 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
         setPostLike(!postLike)
 
     }
-
+    const getCreatorData = () => {
+        fetchDocument('Users', creator.uid, setCreatorData)
+    }
     useEffect(() => {
-
+        getCreatorData()
 
 
     }, [])
@@ -62,7 +68,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     return (
         <div className=" overflow-hidden rounded-lg relative h-[40rem]  w-96">
             <div className="absolute w-full  top-2 left-2 s">
-                <UserAvatar user={creator} />
+                <UserAvatar user={_creatorData} />
             </div>
 
 

@@ -5,17 +5,20 @@ import React, { useState } from 'react'
 import { addToDatabase } from '../../../myCodes/Database'
 import { Uploader } from '../Uploader'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
+import { UpdateUser } from '../../../myCodes/Auth'
+import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
 
-function EditProfile({ forCheckOut, event, toggleEdit }) {
-    const [profileInfo, setProfileInfo] = useState({})
-    const [showTerms, setShowTerms] = useState(false)
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
+    const { displayName, gender, address } = userData?.UserInfo || { displayName: '', gender: '', address: '' }
+    const [profileInfo, setProfileInfo] = useState({ displayName: displayName, gender: gender })
     const user = useAUTHListener()
+
+
+
 
     const updateprofile = async ({ target }) => {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
-    console.log(profileInfo)
     const updateDatabase = (() => {
         addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, avatarURL: profileInfo.post.img[0] })
         if (forCheckOut && Object.keys(profileInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
@@ -23,8 +26,16 @@ function EditProfile({ forCheckOut, event, toggleEdit }) {
             console.log('first')
             forCheckOut(profileInfo, event)
         }
+        UpdateUser(profileInfo?.displayName, profileInfo?.post?.img[0], profileInfo?.post?.phoneNumber)
+
+        toggleEdit('fetch')
+
+
 
     })
+
+
+
     return (
         <div className={`center-col w-full absolute  z-[99] hidescroll h-[50rem]`}>
             <Card className={`w-full shadow-md shadow-black border-2 border-[#121212] h-auto bg-[#171717] center-col`}>
@@ -34,10 +45,11 @@ function EditProfile({ forCheckOut, event, toggleEdit }) {
                 <CardBody className="hidescroll overflow-y-scroll relative gap-2 text-black">
 
 
-                    <Uploader inCricle={true} setter={setProfileInfo} limit={1} folderName={'Profile'} />
-
+                    <div className='relative bottom-5'><Uploader inCricle={true} setter={setProfileInfo} limit={1} folderName={'Profile'} /></div>
+                    <Input value={profileInfo.displayName} name='displayName' onChange={updateprofile} label={'username'} placeholder='@' variant='flat' labelPlacement='inside' />
                     <TextArea type="text"
                         onChange={updateprofile}
+                        defaultValue={userData?.UserInfo?.bio}
                         placements={'outside'}
                         name="bio"
                         label={'bio'}
@@ -47,7 +59,8 @@ function EditProfile({ forCheckOut, event, toggleEdit }) {
                     />
                     <Select
                         label="Select an Gender"
-                        className="max-w-xs text-black"
+                        className="max-w-xs text-black m-auto"
+                        selectedKeys={[profileInfo.gender]}
                         onSelectionChange={(selection) => {
                             setProfileInfo(o => ({ ...o, gender: selection.currentKey }))
                         }}
@@ -58,6 +71,9 @@ function EditProfile({ forCheckOut, event, toggleEdit }) {
                             </SelectItem>
                         ))}
                     </Select>
+                    <Input type='number' defaultValue={`${user?.PhoneNumber}`} name='phoneNumber' onChange={updateprofile} label={'Phone'} placeholder='Phone number' variant='flat' labelPlacement='inside' />
+                    <Input name='address' value={profileInfo.address} onChange={updateprofile} label={'Address'} placeholder='Adress' variant='flat' labelPlacement='inside' />
+
 
 
                 </CardBody>
