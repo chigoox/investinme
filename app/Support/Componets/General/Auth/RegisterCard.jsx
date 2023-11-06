@@ -4,19 +4,23 @@ import { MailCheckIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { signUp } from '../../../myCodes/Auth';
+import { useRouter } from 'next/navigation';
 
 
 function RegisterCard({ toggleRegister }) {
     const [isVisible, setIsVisible] = useState(false)
     const toggleVisibility = () => setIsVisible(!isVisible)
     const [credentials, setCredentials] = useState({ password: '', email: '' })
+    const { push } = useRouter()
     const signup = () => {
-        console.log('first')
         if (credentials.password === credentials.passwordMatch && credentials.password.length >= 5) {
             (async () => {
                 try {
-                    await signUp(credentials.email, credentials.password).then(() => {
+                    await signUp(credentials.email, credentials.password).then((user) => {
+                        console.log(user)
+                        push(`/User/edit`)
                         toggleRegister()
+
 
                     })
                 } catch (error) {

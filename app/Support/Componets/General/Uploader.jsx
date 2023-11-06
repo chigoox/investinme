@@ -12,7 +12,7 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
+export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricle }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
@@ -84,10 +84,11 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
 
 
                 <ImgCrop beforeCrop={checkFileType} showGrid aspectSlider showReset aspect rotationSlider
-                    modalClassName={`text-black `}
+                    modalClassName={`text-black z-[999999999] `}
                     fillColor='black'
                     modalOk={'OK'}
                     modalTitle='Crop post'
+                    cropShape={inCricle ? 'round' : 'rect'}
 
 
                 >
@@ -112,11 +113,11 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post }) => {
                 </ImgCrop>
 
             </div>
-            <div className='w-96 overflow-y-scroll hidescroll   h-72  text-white rounded-3xl '>
+            {FileType && <div className={`${inCricle ? 'rounded-full h-32 w-32' : 'rounded-3xl w-96 h-72'}  overflow-y-scroll hidescroll    text-white  `}>
                 {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
                 {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
 
-            </div>
+            </div>}
 
 
 

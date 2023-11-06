@@ -15,7 +15,7 @@ const getUID = (user) => {
 
 
 const signUp = async (email, password) => {
-createUserWithEmailAndPassword(auth, email, password)
+const user = await createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed up 
     const user = userCredential.user;
@@ -26,6 +26,7 @@ createUserWithEmailAndPassword(auth, email, password)
     const errorMessage = error.message;
     return errorMessage
   });
+  return user.user
 }
 
   const loginWith = async (provider) => {
