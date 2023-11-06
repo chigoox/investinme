@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { signUp } from '../../../myCodes/Auth';
 import { useRouter } from 'next/navigation';
+import { addToDatabase } from '../../../myCodes/Database';
 
 
 function RegisterCard({ toggleRegister }) {
@@ -18,7 +19,7 @@ function RegisterCard({ toggleRegister }) {
                 try {
                     await signUp(credentials.email, credentials.password).then((user) => {
                         addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { followers: [], following: [], donations: [] })
-                        push(`/User/edit`)
+                        push(`/User`)
                         toggleRegister()
 
 

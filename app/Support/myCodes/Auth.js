@@ -52,7 +52,7 @@ const user = await createUserWithEmailAndPassword(auth, email, password)
         }
         
 
-        signInWithPopup(auth,  returnProvider(provider))
+        return signInWithPopup(auth,  returnProvider(provider))
         .then((result) => {
           const thisProvider = (provider == 'google') ? GoogleAuthProvider :
                                 (provider == 'facebook') ? FacebookAuthProvider : null
@@ -62,9 +62,10 @@ const user = await createUserWithEmailAndPassword(auth, email, password)
                 const token = credential.accessToken;
                 // The signed-in user info.
                 const user = result.user;
+                return user
+                
                 // IdP data available using getAdditionalUserInfo(result)
                 // ...
-                console.log(user)
             }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;

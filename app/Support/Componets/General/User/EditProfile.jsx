@@ -1,7 +1,7 @@
 'use client'
 import { Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem, useDisclosure } from '@nextui-org/react'
 import TextArea from 'antd/es/input/TextArea'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { addToDatabase } from '../../../myCodes/Database'
 import { Uploader } from '../Uploader'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
@@ -9,9 +9,10 @@ import { UpdateUser } from '../../../myCodes/Auth'
 import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
 
 function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
-    const { displayName, gender, address } = userData?.UserInfo || { displayName: '', gender: '', address: '' }
-    const [profileInfo, setProfileInfo] = useState({ displayName: displayName, gender: gender })
     const user = useAUTHListener()
+    const { displayName, gender, address, avatarURL } = userData?.UserInfo
+    const [profileInfo, setProfileInfo] = useState({ displayName: user.displayName, gender: gender, avatarURL: user.photoURL })
+
 
 
 
@@ -20,7 +21,7 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
     const updateDatabase = (() => {
-        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, avatarURL: profileInfo.post.img[0] })
+        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, avatarURL: profileInfo.post.img[0] || user.photoURL })
         if (forCheckOut && Object.keys(profileInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
         ) {
             console.log('first')
@@ -33,6 +34,13 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
 
     })
+
+
+    useEffect(() => {
+
+        setProfileInfo(o => ({ ...o, displayName: user.displayName, gender: gender, avatarURL: user.photoURL }))
+    }, [user])
+
 
 
 

@@ -4,9 +4,10 @@ import { MailCheckIcon } from 'lucide-react';
 import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible, AiOutlineCloseCircle, AiOutlineFacebook, AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 import RegisterCard from './RegisterCard';
-import { checkLoggedinUser, logIn, loginWith } from '../../../myCodes/Auth';
+import { checkLoggedinUser, logIn, logOut, loginWith } from '../../../myCodes/Auth';
 import { Button, Card, Input, Spacer } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import { addToDatabase, fetchDocument } from '../../../myCodes/Database';
 
 
 
@@ -23,24 +24,40 @@ function LoginCard({ }) {
       push('/')
     }
 
+
+
+
     switch (provider) {
       case 'google':
-        await loginWith('google').then(() => {
+        await logOut()
+        await loginWith('google').then(async (user) => {
+          console.log(user)
+          try {
+            const fetch = await fetchDocument('Users', user.uid)
+            if (fetch.followers == undefined) addToDatabase('Users', user.uid, 'followers', [])
+            if (fetch.following == undefined) addToDatabase('Users', user.uid, 'following', [])
+            if (fetch.donations == undefined) addToDatabase('Users', user.uid, 'donations', [])
+          } catch (error) {
+            console.log(error.message)
+          }
+
           toggleLogin()
           return
         })
         break;
 
       case 'facebook':
-        await loginWith('facebook').then(() => {
+        await logOut()
+        await loginWith('facebook').then((user) => {
           toggleLogin()
           return
         })
         break;
 
       default:
+        await logOut()
         await logIn(credentials.email, credentials.password).then((user) => {
-          console.log(user)
+
           checkLoggedinUser()
           if (user?.uid) toggleLogin()
 

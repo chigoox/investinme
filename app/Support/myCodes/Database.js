@@ -82,12 +82,14 @@ export async function fetchDocument2(collection, document, setterfunction) {
    }
 }
 
- export const FetchThisDoc = async (datacollection, value, opp, key, orderby) => {
+ export const FetchThisDocs = async (datacollection, value, opp, key, orderby) => {
         const ref = collection(DATABASE, `${datacollection}`)
         const qry =  query(ref, where(`${value}`, `${opp}`, `${key}`), orderBy(`${orderby}`))
         const snapShot = await getDocs(qry)
-        const data = snapShot.forEach((doc) => {
-            return doc
+        let data = []
+        snapShot.forEach((doc) => {
+            console.log(doc)
+            data = [...data, doc.data()]
         });
         return data
     }
@@ -107,3 +109,4 @@ export async function fetchDocument2(collection, document, setterfunction) {
         return data.sort((a,b) => b.id - a.id )
         
     }
+    

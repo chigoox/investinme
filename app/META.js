@@ -1,7 +1,7 @@
 
 
 export const siteName = 'Investa'
-export const siteTag = 'Follow and Invest'
+export const siteTag = 'Follow. Share. Invest.'
 export const siteEmail = 'em.ed5productions@gmail.com'
 
 
