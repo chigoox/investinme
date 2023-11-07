@@ -34,12 +34,12 @@ const PostComment = ({ user, comment, commentLikes }) => {
                 </div>
                 <h1 className=" py-4 px-2 text-sm">{comment}</h1>
             </div>
-            <UserAvatar size='sm' user={_user} />
+            <UserAvatar forthis={'comment'} size='sm' user={_user} />
         </div>
     ) :
         (
             <div className=" flex ">
-                <UserAvatar size='sm' user={_user} />
+                <UserAvatar forthis={'comment'} size='sm' user={_user} />
                 <div className='flex between  '>
                     <h1 className=" py-4 px-2 text-sm">{comment}</h1>
                     <div className="flex gap-2 p-1">

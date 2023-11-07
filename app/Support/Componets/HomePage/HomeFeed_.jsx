@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '../../../../StateManager/GlobalContext'
 import { fetchInOrder } from '../../myCodes/Database'
 import Post from '../General/Post/Post'
+import { initFollowing } from '../../myCodes/DatabaseUtils'
 
 export const HomeFeed = () => {
     const [data, setData] = useState([])
     const { state, dispatch } = useGlobalContext()
+
 
 
 
@@ -25,7 +27,12 @@ export const HomeFeed = () => {
     useEffect(() => {
         //router.refresh()
         getData()
+
     }, [state])
+
+    useEffect(() => {
+        initFollowing()
+    }, [])
 
 
 

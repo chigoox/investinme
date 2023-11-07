@@ -84,13 +84,14 @@ export async function fetchDocument2(collection, document, setterfunction) {
 
  export const FetchThisDocs = async (datacollection, value, opp, key, orderby) => {
         const ref = collection(DATABASE, `${datacollection}`)
-        const qry =  query(ref, where(`${value}`, `${opp}`, `${key}`), orderBy(`${orderby}`))
+        const qry = orderby ? query(ref, where(`${value}`, `${opp}`, `${key}`),orderBy(`${orderby}`)) : query(ref, where(`${value}`, `${opp}`, `${key}`)) 
         const snapShot = await getDocs(qry)
         let data = []
         snapShot.forEach((doc) => {
-            console.log(doc)
+            console.log(doc.data())
             data = [...data, doc.data()]
         });
+        console.log(data)
         return data
     }
 

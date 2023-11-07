@@ -1,4 +1,4 @@
-'use client'
+
 
 import { HomeFeed } from "./Support/Componets/HomePage/HomeFeed_"
 
