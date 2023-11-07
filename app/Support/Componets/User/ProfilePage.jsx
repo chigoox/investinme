@@ -30,7 +30,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const { state, dispatch } = useGlobalContext()
 
 
-    console.log(otherUserData?.followers)
+
     const getData = async () => {
         if (UID) await fetchDocument('Users', UID, setUserData)
     }
@@ -97,15 +97,41 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
     useEffect(() => {
         const run = async () => {
-            getOtherUserData()
             await getData()
             await getPostData()
             if (userData && userData?.followers == undefined) await initFollowing(user)
         }
+
+
         run()
 
 
     }, [UID, state, otherUserData])
+
+    useEffect(() => {
+        if (getOtherUserData) getOtherUserData()
+
+    }, [state])
+
+
+    useEffect(() => {
+        otherUserData?.followers.forEach(follower => {
+
+            if (followed == false && follower[userData?.uid]) {
+                console.log('first')
+                setFollowed(true)
+            }
+        })
+
+    }, [userData, otherUserData])
+
+
+
+
+
+
+
+
 
     return (
         <div className="w- min-h-screen bg-black text-white">
@@ -135,7 +161,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                             </Skeleton>
                         </div>
                         <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">
-                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-800' : ''} w-full flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
+                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-800 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
                             <div className="flex w-full h-8 gap-2 flex-shrink-0">
                                 <Button className="w-full h-full">Send</Button>
                                 {otherUserData && <Button className="w-full h-full">Request</Button>}
