@@ -9,7 +9,7 @@ const UserAvatar = ({ user, size = 'sm', forthis, noLable }) => {
 
             </Skeleton>
             {!noLable && <Skeleton className='rounded-full w-auto' isLoaded={user?.displayName}>
-                <Card className={`${forthis == 'profile' ? 'w-32 text-sm' : 'w-auto'} bg-black  center h-fit text-white bg-opacity-75 overflow-hidden p-1`}>
+                <Card className={`${forthis == 'profile' ? 'w-32 text-sm' : 'w-auto'} bg-black  center h-fit text-white bg-opacity-75 overflow-hidden p-1 px-3`}>
                     {true && <h1>${user?.displayName}</h1>}
 
                 </Card>

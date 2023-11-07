@@ -8,6 +8,7 @@ import { Edit, Edit2Icon, FileEditIcon } from "lucide-react";
 import EditProfile from "../Support/Componets/General/User/EditProfile";
 import { Button, Skeleton, avatar } from "@nextui-org/react";
 import { initFollowing } from "../Support/myCodes/DatabaseUtils";
+import { useGlobalContext } from "../../StateManager/GlobalContext";
 
 
 
@@ -24,7 +25,7 @@ export default function ProtectedRoute() {
     const [postData, setPostData] = useState()
     const [editProfile, setEditProfile] = useState(false)
     const _userData = userData?.UserInfo
-
+    const { state } = useGlobalContext()
     const getData = async () => {
         if (UID) await fetchDocument('Users', UID, setUserData)
     }
@@ -54,7 +55,7 @@ export default function ProtectedRoute() {
         initFollowing(user)
 
 
-    }, [UID])
+    }, [UID, state])
 
     return (
         <div className="w- min-h-screen bg-black text-white">
@@ -87,17 +88,22 @@ export default function ProtectedRoute() {
                     <FileEditIcon />
                 </button>
             </div>
-            <div className="bg-black-800 px-2 w-full md:w-[30rem] lg:w-[26rem] m-auto  h-auto relative">
+            <div className="bg-black-800 px-2 w-full md:w-[30rem] p-2 rounded shadow-md shadow-[#0b230b] lg:w-[26rem] m-auto  h-auto relative">
                 {userData?.UserInfo?.bio}
 
             </div>
 
-            <div className="grid grid-cols-3 w-full md:w-[30rem] lg:w-[26rem] m-auto h-auto max-h-96 overflow-y-scroll hidescroll gap-1 p-1 ">
+            <div className="grid mt-4 grid-cols-3 w-full md:w-[30rem] lg:w-[26rem] m-auto h-auto max-h-96 overflow-y-scroll hidescroll gap-1 p-1 ">
                 {postData?.map((post) => {
                     return (
                         <Skeleton isLoaded={post?.link} className="h-[7.8rem] overflow-hidden rounded-lg relative m-auto w-[7.8rem]">
                             <button className="h-[7.8rem] w-[7.8rem] bg-white">
-                                <img className="object-cover h-[7.8rem] w-[7.8em]" src={post.link} alt="" />
+
+                                {post?.type == 'img' && <img className="object-cover h-[7.8rem] w-[7.8em]" src={post.link} alt="" />}
+                                {post?.type == 'vid' &&
+                                    <video loop muted playsInline control className="object-cover h-[7.8rem] w-[7.8em]" >
+                                        <source src={post?.link} type="video/mp4" />
+                                    </video>}
                             </button>
                         </Skeleton>
                     )
