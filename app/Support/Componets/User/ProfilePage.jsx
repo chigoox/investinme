@@ -161,7 +161,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                             </Skeleton>
                         </div>
                         <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">
-                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-800 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
+                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-600 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
                             <div className="flex w-full h-8 gap-2 flex-shrink-0">
                                 <Button className="w-full h-full">Send</Button>
                                 {otherUserData && <Button className="w-full h-full">Request</Button>}
@@ -173,7 +173,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                 </div>
 
             </div>
-            <div className="px-4 w-full md:w-96 m-auto flex gap-4">
+            <div className="px-4 w-full md:w-96   m-auto center gap-4">
                 <h1 className="text-white text-2xl font-extabold">{(_otherUserData || _userData)?.displayName.toUpperCase()}</h1>
                 {!otherUserData && <button onClick={toggleEdit}>
                     <FileEditIcon />

@@ -22,13 +22,13 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
     const updateDatabase = (() => {
-        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, avatarURL: profileInfo.post.img[0] || user.photoURL })
+        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, displayName: profileInfo.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), avatarURL: profileInfo.post.img[0] || user.photoURL })
         if (forCheckOut && Object.keys(profileInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
         ) {
             console.log('first')
             forCheckOut(profileInfo, event)
         }
-        UpdateUser(profileInfo?.displayName, profileInfo?.post?.img[0], profileInfo?.post?.phoneNumber)
+        UpdateUser(profileInfo?.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), profileInfo?.post?.img[0], profileInfo?.post?.phoneNumber)
 
         toggleEdit('fetch')
 
@@ -39,7 +39,7 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
     useEffect(() => {
 
-        setProfileInfo(o => ({ ...o, displayName: user.displayName, gender: gender, avatarURL: user.photoURL }))
+        setProfileInfo(o => ({ ...o, displayName: user.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), gender: gender, avatarURL: user.photoURL }))
     }, [user])
 
 
