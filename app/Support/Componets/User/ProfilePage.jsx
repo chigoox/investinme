@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import AUTHListener, { useAUTHListener } from "../../../../StateManager/AUTHListener";
-import { FetchThisDocs, fetchDocument, fetchInOrder } from "../../../Support/myCodes/Database";
+import { FetchThisDocs, fetchDocument, fetchInOrder, updateArrayDatabaseItem } from "../../../Support/myCodes/Database";
 import UserAvatar from "../../../Support/Componets/General/User/Avatar";
 import { formatNumber } from "../../../Support/myCodes/Util";
 import { Edit, Edit2Icon, FileEditIcon } from "lucide-react";
@@ -20,13 +20,17 @@ const getUID = (user) => {
 }
 
 
-export default function ProfilePage({ forthis, otherUserData }) {
+export default function ProfilePage({ forthis, otherUserData, getOtherUserData }) {
+    const [followed, setFollowed] = useState(false)
     const [userData, setUserData] = useState()
     const [postData, setPostData] = useState()
     const [editProfile, setEditProfile] = useState(false)
     const _userData = userData?.UserInfo
     const _otherUserData = otherUserData?.UserInfo
-    const { state } = useGlobalContext()
+    const { state, dispatch } = useGlobalContext()
+
+
+    console.log(otherUserData?.followers)
     const getData = async () => {
         if (UID) await fetchDocument('Users', UID, setUserData)
     }
@@ -39,10 +43,50 @@ export default function ProfilePage({ forthis, otherUserData }) {
     }
     const user = useAUTHListener(null, null, true)
     const UID = getUID(user)
-    console.log(postData)
+
+    const updateFollowing = async () => {
+        if (!followed) {
+            await updateArrayDatabaseItem('Users', otherUserData?.uid, 'followers', {
+                [UID]: {
+                    user: UID,
+
+                }
+            })
+            await updateArrayDatabaseItem('Users', UID, 'following', {
+                [otherUserData?.uid]: {
+                    user: otherUserData?.uid,
+
+                }
+
+            })
+            //setFollowed(true)
+            dispatch({ type: "NEW_POST", value: {} })
+        } else {
+            await updateArrayDatabaseItem('Users', otherUserData?.uid, 'followers', {
+                [UID]: {
+                    user: UID,
+
+                }
+            }, true)
+            await updateArrayDatabaseItem('Users', UID, 'following', {
+                [otherUserData?.uid]: {
+                    user: otherUserData?.uid,
+
+                }
+            }, true)
+            //setFollowed(false)
+            dispatch({ type: "NEW_POST", value: {} })
+
+        }
+    }
+    const follow = async () => {
+        setFollowed(!followed)
+        updateFollowing()
+    }
 
 
-    console.log(otherUserData?.uid || UID)
+
+
 
 
 
@@ -52,9 +96,13 @@ export default function ProfilePage({ forthis, otherUserData }) {
     if (followers == undefined) getData()
 
     useEffect(() => {
-        getData()
-        getPostData()
-        initFollowing(user)
+        const run = async () => {
+            getOtherUserData()
+            await getData()
+            await getPostData()
+            if (userData && userData?.followers == undefined) await initFollowing(user)
+        }
+        run()
 
 
     }, [UID, state, otherUserData])
@@ -62,33 +110,48 @@ export default function ProfilePage({ forthis, otherUserData }) {
     return (
         <div className="w- min-h-screen bg-black text-white">
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
-            <div className="p-4 center gap-2">
-                <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />
-                <Skeleton className="h-14 rounded" isLoaded={followers >= 0}>
-                    <div className=" center-col h-full text-white font-bold">
-                        <h1>{formatNumber(followers)}</h1>
-                        <h1>Followers</h1>
+            <div className="p-4  relative ">
+                <div className="flex-wrap center gap-2">
+                    <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />
+                    <div className="center-col gap-2">
+                        <div className="center gap-2">
+                            <Skeleton className="h-12 mb-1 rounded" isLoaded={followers >= 0}>
+                                <div className=" center-col h-full text-white font-bold">
+                                    <h1>{formatNumber(followers)}</h1>
+                                    <h1>Followers</h1>
+                                </div>
+                            </Skeleton>
+                            <Skeleton className="h-12 mb-1 rounded" isLoaded={following >= 0}>
+                                <div className=" center-col h-full text-white font-bold">
+                                    <h1>{formatNumber(following)}</h1>
+                                    <h1>Following</h1>
+                                </div>
+                            </Skeleton>
+                            <Skeleton className="h-12 mb-1 rounded" isLoaded={followers >= 0}>
+                                <div className=" center-col h-full text-white font-bold">
+                                    <h1>${formatNumber(donations)}</h1>
+                                    <h1>Donations</h1>
+                                </div>
+                            </Skeleton>
+                        </div>
+                        <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">
+                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-800' : ''} w-full flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
+                            <div className="flex w-full h-8 gap-2 flex-shrink-0">
+                                <Button className="w-full h-full">Send</Button>
+                                {otherUserData && <Button className="w-full h-full">Request</Button>}
+
+                            </div>
+                        </div>
                     </div>
-                </Skeleton>
-                <Skeleton className="h-14 rounded" isLoaded={following >= 0}>
-                    <div className=" center-col h-full text-white font-bold">
-                        <h1>{formatNumber(following)}</h1>
-                        <h1>Following</h1>
-                    </div>
-                </Skeleton>
-                <Skeleton className="h-14 rounded" isLoaded={followers >= 0}>
-                    <div className=" center-col h-full text-white font-bold">
-                        <h1>${formatNumber(donations)}</h1>
-                        <h1>Donations</h1>
-                    </div>
-                </Skeleton>
+
+                </div>
 
             </div>
             <div className="px-4 w-full md:w-96 m-auto flex gap-4">
                 <h1 className="text-white text-2xl font-extabold">{(_otherUserData || _userData)?.displayName.toUpperCase()}</h1>
-                <button onClick={toggleEdit}>
+                {!otherUserData && <button onClick={toggleEdit}>
                     <FileEditIcon />
-                </button>
+                </button>}
             </div>
             <div className="bg-black-800 px-2 w-full md:w-[30rem] p-2 rounded shadow-md shadow-[#0b230b] lg:w-[26rem] m-auto  h-auto relative">
                 {(_otherUserData || _userData)?.bio}
@@ -103,7 +166,7 @@ export default function ProfilePage({ forthis, otherUserData }) {
 
                                 {post?.type == 'img' && <img className="object-cover h-[7.8rem] w-[7.8em]" src={post.link} alt="" />}
                                 {post?.type == 'vid' &&
-                                    <video loop muted playsInline control className="object-cover h-[7.8rem] w-[7.8em]" >
+                                    <video loop muted playsInline control={'true'} className="object-cover h-[7.8rem] w-[7.8em]" >
                                         <source src={post?.link} type="video/mp4" />
                                     </video>}
                             </button>

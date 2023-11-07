@@ -88,10 +88,8 @@ export async function fetchDocument2(collection, document, setterfunction) {
         const snapShot = await getDocs(qry)
         let data = []
         snapShot.forEach((doc) => {
-            console.log(doc.data())
             data = [...data, doc.data()]
         });
-        console.log(data)
         return data
     }
 

@@ -25,7 +25,7 @@ function UserPage() {
 
 
     return (
-        <ProfilePage forthis={'userPage'} otherUserData={otherUserData[0]} />
+        <ProfilePage forthis={'userPage'} otherUserData={otherUserData[0]} getOtherUserData={getData} />
     )
 }
 
