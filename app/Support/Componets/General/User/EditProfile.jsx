@@ -22,13 +22,14 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
     const updateDatabase = (() => {
-        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, displayName: profileInfo.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), avatarURL: profileInfo.post.img[0] || user.photoURL })
+        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, displayName: profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), avatarURL: profileInfo.post.img[0] || user.photoURL })
+        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'displayName', profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'))
         if (forCheckOut && Object.keys(profileInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
         ) {
             console.log('first')
             forCheckOut(profileInfo, event)
         }
-        UpdateUser(profileInfo?.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), profileInfo?.post?.img[0], profileInfo?.post?.phoneNumber)
+        UpdateUser(profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), profileInfo?.post?.img[0], profileInfo?.post?.phoneNumber)
 
         toggleEdit('fetch')
 
@@ -39,7 +40,7 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
     useEffect(() => {
 
-        setProfileInfo(o => ({ ...o, displayName: user.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, ''), gender: gender, avatarURL: user.photoURL }))
+        setProfileInfo(o => ({ ...o, displayName: user?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), gender: gender, avatarURL: user.photoURL }))
     }, [user])
 
 
@@ -56,7 +57,7 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
                     <div className='relative bottom-5'><Uploader inCricle={true} setter={setProfileInfo} limit={1} folderName={'Profile'} /></div>
                     <Input value={profileInfo.displayName} name='displayName' onChange={updateprofile} label={'username'} placeholder='@' variant='flat' labelPlacement='inside' />
-                    <div className='text-white text-center'>@{profileInfo.displayName.replace(/[^\w ]/g, '').replace(/\s+/g, '_')}</div>
+                    <div className='text-white text-center'>@{profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_')}</div>
                     <TextArea type="text"
                         onChange={updateprofile}
                         defaultValue={userData?.UserInfo?.bio}
