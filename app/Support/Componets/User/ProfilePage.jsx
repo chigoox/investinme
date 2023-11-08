@@ -44,6 +44,8 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const user = useAUTHListener(null, null, true)
     const UID = getUID(user)
 
+    console.log(user)
+
     const updateFollowing = async () => {
         if (!followed) {
             await updateArrayDatabaseItem('Users', otherUserData?.uid, 'followers', {
@@ -99,6 +101,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         const run = async () => {
             await getData()
             await getPostData()
+            console.log(user)
             if (userData && userData?.followers == undefined) await initFollowing(user)
         }
 
