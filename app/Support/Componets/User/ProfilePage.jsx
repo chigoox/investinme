@@ -44,7 +44,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const user = useAUTHListener(null, null, true)
     const UID = getUID(user)
 
-    console.log(user)
 
     const updateFollowing = async () => {
         if (!followed) {
@@ -198,6 +197,9 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                                     <video loop muted playsInline control={'true'} className="object-cover h-[7.8rem] w-[7.8em]" >
                                         <source src={post?.link} type="video/mp4" />
                                     </video>}
+                                {post?.type == 'txt' && <div className="center bg-black-800 text-white h-[7.8rem] w-[7.8em]">
+                                    <h1>{post.link}</h1>
+                                </div>}
                             </button>
                         </Skeleton>
                     )
