@@ -22,6 +22,7 @@ function LoginCard({ }) {
   const { push } = useRouter()
   const signIn = async (provider) => {
     const toggleLogin = () => {
+      initFollowing()
       push('/')
     }
 
