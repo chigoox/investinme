@@ -74,14 +74,14 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
 
         </ModalHeader>
         <ModalBody className="overflow-y-scroll hidescroll">
-            <Uploader post={post} setter={setPost} limit={1} folderName={'Posts'} />
+            <Uploader submitPost={submitPost} handleCaption={handleCaption} forthis={'post'} post={post} setter={setPost} limit={1} folderName={'Posts'} />
         </ModalBody>
 
 
     </div>)
     const postHeader = (
         <ModalHeader className="between top-2  text-center absolute w-[21.3rem] gap-1">
-            {post?.post?.img[0]?.includes('http') &&
+            {(post?.post?.img[0]?.includes('http') || post?.postType == 'txt') &&
                 <button onClick={() => {
                     if (pagePosition >= 1) setPagePosition(o => o - 1)
                 }}>
@@ -138,7 +138,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const page = [UploadPost, EditPost, sharePost]
 
     useEffect(() => {
-        if (post?.post?.img[0]?.includes('https') && pagePosition == 0) setPagePosition(1)
+        if ((post?.post?.img[0]?.includes('https') || post?.postType == 'txt') && pagePosition == 0) setPagePosition(1)
     }, [post])
 
     return (

@@ -66,7 +66,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
 
     return (
-        <div className=" overflow-hidden rounded-lg relative h-[40rem]  w-96">
+        <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
                 <UserAvatar user={_creatorData} />
             </div>
@@ -80,12 +80,18 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
                 <video autoPlay loop muted playsInline className="h-[75%] object-cover w-full md:rounded-lg" >
                     <source src={link} type="video/mp4" />
                 </video>}
-            {type == 'str' && <div className="mt-24 rounded-lg border h-[50%] overflow-hidden font-bold w-full border-b p-4">
-                <h1 className="w-auto break-words" >{text}</h1>
+            {type == 'txt' && <div className="mt-24 rounded-lg  h-fit overflow-hidden font-bold w-full  px-8">
+                <h1 className="w-auto break-words" >{link}</h1>
             </div>}
 
-            <div className="p-2 overflow-x-scroll text-white  h-auto">
+            {type != 'txt' && <div className="p-2 overflow-x-scroll text-white  h-auto">
                 {desc}
+            </div>}
+
+            <div className="px-4 center ">
+                <Button onPress={() => { setShowComments(!showComments) }} className="px-2 w-fit m-auto rounded-none p-0 bg-none bg-opacity-0 text-white" >
+                    Show all {formatNumber(Object.keys(comments || {}).length)} comments
+                </Button>
             </div>
 
             <div className="evenly">
@@ -103,10 +109,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
                 </div >
             </div>
 
-            <div className="px-4">{ }</div>
-            <Button onPress={() => { setShowComments(!showComments) }} className="px-2 w-full rounded-none p-0">
-                Show all {formatNumber(Object.keys(comments || {}).length)} comments
-            </Button>
+
 
             <Modal placement="auto" isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96 text-white bottom-12 ">
                 <ModalContent>
