@@ -5,6 +5,7 @@ import { formatNumber } from '../../../myCodes/Util'
 import UserAvatar from '../User/Avatar'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
 import { fetchDocument } from '../../../myCodes/Database'
+import { getUID } from '../../../myCodes/Auth'
 
 const PostComment = ({ user, comment, commentLikes }) => {
     const [commenter, setCommenter] = useState({})
@@ -13,13 +14,17 @@ const PostComment = ({ user, comment, commentLikes }) => {
         setCommenter(_user)
 
     }
-    const UID = useAUTHListener().uid
+    const UID = getUID(useAUTHListener())
     const _user = commenter?.UserInfo
+
+    console.log(UID)
     useEffect(() => {
         getData()
 
 
     }, [user])
+
+
 
     const [likedComment, setLikedComment] = useState(false)
     return UID == user ? (
@@ -33,12 +38,12 @@ const PostComment = ({ user, comment, commentLikes }) => {
                 </div>
                 <h1 className=" py-4 px-2 text-sm">{comment}</h1>
             </div>
-            <UserAvatar forthis={'comment'} size='sm' user={_user} />
+            <UserAvatar gustName={user} forthis={'comment'} size='sm' user={_user} />
         </div>
     ) :
         (
             <div className=" flex ">
-                <UserAvatar forthis={'comment'} size='sm' user={_user} />
+                <UserAvatar forthis={'comment'} gustName={user} size='sm' user={_user} />
                 <div className='flex between  '>
                     <h1 className=" py-4 px-2 text-sm">{comment}</h1>
                     <div className="flex gap-2 p-1">

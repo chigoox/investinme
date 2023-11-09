@@ -15,7 +15,7 @@ export const HomeFeed = () => {
 
 
     const getData = async () => {
-        let FEED = await fetchInOrder('Posts', 'id')
+        let FEED = await fetchInOrder('Posts', 'timeStamp')
         FEED = Object.values(FEED || {})
         setData(FEED)
         return FEED

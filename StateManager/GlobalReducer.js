@@ -1,7 +1,8 @@
 import { filterObject } from "../app/Support/myCodes/Util";
 
 export const initialGlobalState = {
-   newPost: false
+   newPost: false,
+   
 };
 export const GlobalReducer = (state, action) => {
    

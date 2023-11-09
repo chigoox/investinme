@@ -68,7 +68,7 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
-                <UserAvatar user={_creatorData} />
+                <UserAvatar user={_creatorData} gustName={creator} />
             </div>
 
 

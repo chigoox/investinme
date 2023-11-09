@@ -5,6 +5,7 @@ import { addToDatabase, addToDoc, fetchDocument, updateArrayDatabaseItem, update
 import { Uploader } from '../Uploader'
 import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
+import { serverTimestamp } from 'firebase/firestore'
 
 const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
     const postDefault = {
@@ -17,7 +18,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
         doantions: [],
         comments: [],
         creator: 'UID',
-        timeStamp: new Date()
+        timeStamp: serverTimestamp()
 
     }
     const [pagePosition, setPagePosition] = useState(0)
@@ -27,6 +28,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost }) => {
 
 
     const userData = user?.uid || user?.gid || ''
+
 
     const handleCaption = (text) => {
         setPost(old => {

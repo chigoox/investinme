@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import ProfilePage from '../Support/Componets/User/ProfilePage'
 import { usePathname } from 'next/navigation'
 import { FetchThisDocs } from '../Support/myCodes/Database'
+import { useAUTHListener } from '../../StateManager/AUTHListener'
 
 function UserPage() {
     const [otherUserData, setOtherUserData] = useState([{ followers: [], following: [], donations: [], UserInfo: { displayName: 'No User Found', bio: 'No user found!' } }])
-
     const pageOwner = usePathname().replace('/', '').replace(/\s+/g, '')
     const getData = async () => {
         const Onwer = await FetchThisDocs('Users', 'displayName', '==', pageOwner)
@@ -14,19 +14,22 @@ function UserPage() {
 
     }
 
+    const user = useAUTHListener()
 
 
     useEffect(() => {
         getData()
 
 
+
     }, [])
 
 
 
-    return (
+    return (user.uid == otherUserData[0].uid) ?
+        <ProfilePage forthis={'profilePage'} />
+        :
         <ProfilePage forthis={'userPage'} otherUserData={otherUserData[0]} getOtherUserData={getData} />
-    )
 }
 
 export default UserPage
