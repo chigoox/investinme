@@ -51,6 +51,7 @@ export const HomeFeed = () => {
                             type={postInfo.type}
                             link={postInfo?.post?.img[0]}
                             likes={postInfo.likes}
+                            likesCount={postInfo.likesCount}
                             donations={postInfo.donations}
                             desc={postInfo.caption}
                             tags={postInfo.tags}

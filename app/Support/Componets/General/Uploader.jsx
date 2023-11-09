@@ -136,7 +136,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                             showUploadList={false}
                             onPreview={''}
                             onChange={handleChange}
-                            accept="image/*, video/*"
+                            accept="image/*"
                             maxCount={limit ? limit : 8}
                             multiple
 

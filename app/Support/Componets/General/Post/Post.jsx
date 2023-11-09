@@ -11,7 +11,7 @@ import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
 import { formatNumber, getRandTN } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
 
-const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO, creator }) => {
+const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
     const [comment, setComment] = useState('')
@@ -44,9 +44,12 @@ const Post = ({ id, type, likes, link, text, comments, desc, donations, postINFO
 
         if (postLike == false) {
             updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
+            updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length + 1)
             dispatch({ type: "NEW_POST", value: {} })
         } else {
             updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
+            updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length - 1)
+
 
         }
 
