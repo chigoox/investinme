@@ -104,14 +104,13 @@ function page() {
 
 
     const getData = async () => {
-        let FEED = await fetchInOrder('Posts', 'likesCount')
+        let FEED = await fetchInOrder('Posts', 'likesCount', 40)
         FEED = Object.values(FEED || {})
         setData(FEED)
         return FEED
     }
 
 
-    console.log(data)
 
     useEffect(() => {
         //router.refresh()
