@@ -82,7 +82,7 @@ export async function fetchDocument2(collection, document, setterfunction) {
    }
 }
 
- export const FetchThisDocs = async (datacollection, value, opp, key, orderby, limit) => {
+ export const FetchThisDocs = async (datacollection, value, opp, key, orderby) => {
         const ref = collection(DATABASE, `${datacollection}`)
         const qry = orderby ? query(ref, where(`${value}`, `${opp}`, `${key}`),orderBy(`${orderby}`)) : query(ref, where(`${value}`, `${opp}`, `${key}`)) 
         const snapShot = await getDocs(qry)
@@ -97,7 +97,7 @@ export async function fetchDocument2(collection, document, setterfunction) {
 
      export const fetchInOrder = async (datacollection, orderby, _limit) => {
         const ref = collection(DATABASE, datacollection)
-        const qry = query(ref, orderBy(orderby, 'desc'), _limit ? limit(_limit) : null)
+        const qry = _limit ? query(ref, orderBy(orderby, 'desc'), limit(_limit)) : query(ref, orderBy(orderby, 'desc')) 
         const snapShot = await getDocs(qry)
 
         let data = []
