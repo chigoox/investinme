@@ -97,7 +97,7 @@ export async function fetchDocument2(collection, document, setterfunction) {
 
      export const fetchInOrder = async (datacollection, orderby) => {
         const ref = collection(DATABASE, datacollection)
-        const qry = query(ref, orderBy(orderby))
+        const qry = query(ref, orderBy(orderby, 'desc'))
         const snapShot = await getDocs(qry)
 
         let data = []
@@ -105,7 +105,7 @@ export async function fetchDocument2(collection, document, setterfunction) {
              data = [...data, doc.data()]
         });
 
-        return data.sort((a,b) => b.id - a.id )
+        return data
         
     }
     

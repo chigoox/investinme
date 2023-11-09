@@ -11,7 +11,7 @@ export const HomeFeed = () => {
     const [data, setData] = useState([])
     const { state, dispatch } = useGlobalContext()
 
-
+    //sort data b ID desc  .sort((a, b) => b.id - a.id)
 
 
     const getData = async () => {

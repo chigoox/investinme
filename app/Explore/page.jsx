@@ -27,12 +27,12 @@ function page() {
     */
     const PostInside = ({ type, link }) => {
         return (<div className='h-full  center-col overflow-hidden'>
-            {type == 'img' && <img className="h-full w-full object-cover md:rounded-lg" src={link} alt='' />}
+            {type == 'img' && <img className="h-full w-full object-cover rounded-xl" src={link} alt='' />}
             {type == 'vid' &&
-                <video autoPlay loop muted playsInline className="h-full object-cover w-full md:rounded-lg" >
+                <video autoPlay loop muted playsInline className="h-full object-cover w-full rounded-xl" >
                     <source src={link} type="video/mp4" />
                 </video>}
-            {type == 'txt' && <div className="rounded-lg  h-fit overflow-hidden font-bold w-full  px-8">
+            {type == 'txt' && <div className="rounded-xl  h-fit overflow-hidden font-bold w-full  px-8">
                 <h1 className="w-auto break-words" >{link}</h1>
             </div>}
         </div>)
@@ -125,7 +125,7 @@ function page() {
     return (
         <main className='bg-gradient-to-t via-black  from-black h-screen to-[#030012] flex min-h-screen w-screen  overflow-x-hidden flex-col items-center justify-center text-white'>
 
-            <div className='flex flex-wrap  mb-12 trans md:px-20 lg:px-40 xl:px-32 py-4 w-full   h-full border   lg:ml-60 overflow-y-scroll overflow-hidden  '>
+            <div className='flex flex-wrap  mb-12 trans md:px-20 lg:px-40 xl:px-32 py-4 w-full   h-full    lg:ml-60 overflow-y-scroll overflow-hidden  '>
                 {data.map((postInfo) => {
 
                     console.log(postInfo.likesCount)
