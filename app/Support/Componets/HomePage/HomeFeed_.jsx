@@ -26,6 +26,7 @@ export const HomeFeed = () => {
 
     const getFollowingsPost = async () => {
         const userData = await fetchDocument('Users', UID)
+        console.log(userData)
         const following = userData.following
         following?.forEach(async (item) => {
             console.log('first')
@@ -51,7 +52,7 @@ export const HomeFeed = () => {
     const user = useAUTHListener()
     const UID = getUID(user)
 
-
+    console.log(postData, followingPostData)
 
 
 
@@ -59,6 +60,7 @@ export const HomeFeed = () => {
         //router.refresh()
         console.log(user?.email)
         if (user?.email) {
+            console.log('second')
             setPostData([])
             getFollowingsPost()
         } else {

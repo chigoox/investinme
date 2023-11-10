@@ -126,7 +126,6 @@ function page() {
 
 
 
-    console.log(data)
 
 
     useEffect(() => {

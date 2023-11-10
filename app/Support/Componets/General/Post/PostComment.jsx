@@ -17,7 +17,6 @@ const PostComment = ({ user, comment, commentLikes }) => {
     const UID = getUID(useAUTHListener())
     const _user = commenter?.UserInfo
 
-    console.log(UID)
     useEffect(() => {
         getData()
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 const UserAvatar = ({ user, size = 'sm', forthis, noLable, gustName }) => {
     const [loadGust, setLoadGust] = useState(false)
     return (
-        <Link href={`/${user?.displayName?.replace(/\s+/g, '') || gustName}`} className={`${forthis == 'profile' ? 'flex-col' : 'flex '} ${forthis == 'comment' ? 't' : 'flex '} h-full z-50 w-fit relative items-center gap-2`}>
+        <Link href={`/${user?.displayName?.replace(/\s+/g, '') || gustName}`} className={`${forthis == 'profile' ? 'flex-col' : 'flex '} ${forthis == 'comment' ? 't' : 'flex '} h-full z-[99] w-fit relative items-center gap-2`}>
             <Skeleton className='rounded-full w-fit' isLoaded={user?.avatarURL || (() => {
                 setTimeout(() => {
                     setLoadGust(true)

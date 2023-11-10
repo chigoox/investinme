@@ -11,7 +11,7 @@ function PostView({ showPostView, setShowPostView, allPosts, currentPost }) {
     return (
 
 
-        <Modal isOpen={showPostView} isDismissable backdrop={'opaque'} onOpenChange={() => { setShowPostView(false) }} placement='auto' scrollBehavior='inside' className={`h-[90%] w-full bg-black ${{
+        <Modal isOpen={showPostView} backdrop={'opaque'} onOpenChange={() => { setShowPostView(false) }} placement='auto' scrollBehavior='inside' className={`h-[90%] w-full bg-black ${{
             backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20"
         }}`}>
             <ModalContent>
