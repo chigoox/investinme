@@ -25,7 +25,6 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
     const [FileType, setFileType] = useState('')
 
 
-    console.log(post)
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
@@ -169,18 +168,18 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
                 {selectedPostType == 'Text' &&
                     <div className='mt-12 center-col'>
-                        <Textarea rows={3} className='h-40 w-72' onValueChange={(text) => {
+                        <Textarea rows={3} className='h-auto max-h-40 w-72 ' onValueChange={(text) => {
                             handleCaption(text)
                             setter(old => { return ({ ...old, post: { img: [text] } }) })
 
 
                         }} />
 
-                        <h1 className='flex gap-2'>{post?.tags?.map((tag) => {
+                        <div className='flex flex-wrap gap-2 h-auto max-h-40 overflow-y-scroll hidescroll my-2'>{[...new Set(post?.tags)]?.map((tag) => {
                             return (
-                                <div>{tag}</div>
+                                <div className='text-white '>{tag}</div>
                             )
-                        })}</h1>
+                        })}</div>
 
                         <Button onPress={() => {
                             setter(old => { return ({ ...old, postType: 'txt' }) })
@@ -188,7 +187,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                             submitPost()
 
                         }} className='w-3/4'>
-
+                            Post
                         </Button>
                     </div>
 

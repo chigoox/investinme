@@ -176,7 +176,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
             </div>
             <div className="px-4 w-full md:w-96   m-auto center gap-4">
-                <h1 className="text-white text-2xl font-extabold">{(_otherUserData || _userData)?.displayName.toUpperCase()}</h1>
+                <h1 className="text-white text-2xl font-extabold">{(_otherUserData || _userData)?.displayName?.toUpperCase()}</h1>
                 {!otherUserData && <button onClick={toggleEdit}>
                     <FileEditIcon />
                 </button>}

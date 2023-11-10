@@ -3,32 +3,64 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '../../../../StateManager/GlobalContext'
-import { fetchInOrder } from '../../myCodes/Database'
+import { FetchThisDocs, FetchThisDocs2, fetchDocument, fetchInOrder } from '../../myCodes/Database'
 import Post from '../General/Post/Post'
 import { initFollowing } from '../../myCodes/DatabaseUtils'
+import { useAUTHListener } from '../../../../StateManager/AUTHListener'
+import { getUID } from '../../myCodes/Auth'
 
 export const HomeFeed = () => {
-    const [data, setData] = useState([])
+    const [postData, setPostData] = useState([])
     const { state, dispatch } = useGlobalContext()
 
-    //sort data b ID desc  .sort((a, b) => b.id - a.id)
+    //sort postData b ID desc  .sort((a, b) => b.id - a.id)
 
 
-    const getData = async () => {
+    const getAllPosts = async () => {
+        console.log('first')
         let FEED = await fetchInOrder('Posts', 'timeStamp')
         FEED = Object.values(FEED || {})
-        setData(FEED)
+        setPostData(FEED)
         return FEED
     }
+
+    const getFollowingsPost = async () => {
+        const userData = await fetchDocument('Users', UID)
+        const following = userData.following
+        following?.forEach(async (item) => {
+
+            const newPosts = await FetchThisDocs('Posts', 'creator', '==', Object.keys(item)[0], 'timeStamp')
+            setPostData(oldPosts => {
+                return (
+                    [...oldPosts, ...newPosts].sort((a, b) => b.timeStamp - a.timeStamp)
+                )
+            })
+
+
+
+
+
+
+
+
+
+
+        })
+    }
+
+    const user = useAUTHListener()
+    const UID = getUID(user)
+
 
 
 
 
     useEffect(() => {
         //router.refresh()
-        getData()
+        if (user?.gid) getAllPosts()
+        if (user?.uid) getFollowingsPost()
 
-    }, [state])
+    }, [state, UID, user])
 
     useEffect(() => {
         initFollowing()
@@ -41,7 +73,7 @@ export const HomeFeed = () => {
 
         <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12">
             {
-                data?.map((postInfo) => {
+                postData?.map((postInfo) => {
                     if (postInfo.id) return (
                         <Post
                             postINFO={postInfo}

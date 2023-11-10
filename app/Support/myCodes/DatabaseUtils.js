@@ -12,7 +12,6 @@ updateArrayDatabaseItem('Admin', 'Users', 'allUIDs', UID)
 
 
 export const initFollowing = async (user) => {
-  console.log(user)
     try {
         const data = await fetchDocument('Users', user?.uid)
         if(data?.global){

@@ -84,7 +84,18 @@ export async function fetchDocument2(collection, document, setterfunction) {
 
  export const FetchThisDocs = async (datacollection, value, opp, key, orderby) => {
         const ref = collection(DATABASE, `${datacollection}`)
-        const qry = orderby ? query(ref, where(`${value}`, `${opp}`, `${key}`),orderBy(`${orderby}`)) : query(ref, where(`${value}`, `${opp}`, `${key}`)) 
+        const qry = orderby ? query(ref, where(`${value}`, `${opp}`, `${key}`),orderBy(`${orderby}`, 'desc')) : query(ref, where(`${value}`, `${opp}`, `${key}`)) 
+        const snapShot = await getDocs(qry)
+        let data = []
+        snapShot.forEach((doc) => {
+            data = [...data, doc.data()]
+        });
+        return data
+    }
+
+    export const FetchThisDocs2 = async (datacollection, value1, opp1, key1, value2, opp2, key2, orderby) => {
+        const ref = collection(DATABASE, `${datacollection}`)
+        const qry = orderby ? query(ref, where(`${value1}`, `${opp1}`, `${key1}`), where(`${value2}`, `${opp2}`, `${key2}`),orderBy(`${orderby}`, 'desc')) : query(ref, where(`${value1}`, `${opp1}`, `${key1}`), where(`${value2}`, `${opp2}`, `${key2}`)) 
         const snapShot = await getDocs(qry)
         let data = []
         snapShot.forEach((doc) => {

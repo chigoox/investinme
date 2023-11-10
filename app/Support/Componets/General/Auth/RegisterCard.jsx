@@ -1,11 +1,12 @@
 'use client'
 import { Button, Card, Input, Spacer } from '@nextui-org/react';
-import { MailCheckIcon } from 'lucide-react';
+import { MailCheckIcon, UserIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { AiFillCloseCircle, AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { signUp } from '../../../myCodes/Auth';
 import { useRouter } from 'next/navigation';
 import { addToDatabase } from '../../../myCodes/Database';
+import { message } from 'antd';
 
 
 function RegisterCard({ toggleRegister }) {
@@ -18,14 +19,21 @@ function RegisterCard({ toggleRegister }) {
             (async () => {
                 try {
                     await signUp(credentials.email, credentials.password).then((user) => {
-                        addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { followers: [], following: [], donations: [] })
-                        push(`/User`)
+                        addToDatabase('Users', user.uid, 'uid', user.uid)
+                        addToDatabase('Users', user.uid, 'displayName', credentials?.displayName)
+                        addToDatabase('Users', user.uid, 'followers', [])
+                        addToDatabase('Users', user.uid, 'following', [])
+                        addToDatabase('Users', user.uid, 'donations', [])
+                        message.success('Account Created!', [500])
+
+                        push(`/Profile`)
                         toggleRegister()
 
 
                     })
                 } catch (error) {
                     console.log(error.message)
+                    message.error(error.message, [500])
 
                 }
             })()
@@ -38,6 +46,17 @@ function RegisterCard({ toggleRegister }) {
     return (
         <div className='fixed z-[99999] top-16 '>
             <Card variant="bordered" className='fadeInBottom h-auto w-64 p-4 bg-black '>
+                <Input
+                    onChange={({ target }) => { setCredentials(prvState => ({ ...prvState, displayName: target.value })) }}
+
+                    className='w-full text-black'
+                    type="text"
+                    label="@UserName"
+                    labelPlacement={'inside'}
+                    endContent={<UserIcon color='black' />}
+                />
+                <Spacer y={2} />
+
                 <Input
                     onChange={({ target }) => { setCredentials(prvState => ({ ...prvState, email: target.value })) }}
 

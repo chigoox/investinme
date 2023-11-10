@@ -4,27 +4,10 @@ import { getRand } from "../Support/myCodes/Util";
 import { useGlobalContext } from '../../StateManager/GlobalContext';
 import { fetchInOrder } from '../Support/myCodes/Database';
 import Post from '../Support/Componets/General/Post/Post';
+import { Skeleton } from '@nextui-org/react';
 
 function page() {
-    /* 
-    
-    <Post
-                                postINFO={postInfo}
-                                id={postInfo.id}
-                                key={postInfo.id}
-                                PostId={postInfo.id}
-                                type={postInfo.type}
-                                link={postInfo?.post?.img[0]}
-                                likes={postInfo.likes}
-                                likesCount={postInfo.likesCount}
-                                donations={postInfo.donations}
-                                desc={postInfo.caption}
-                                tags={postInfo.tags}
-                                comments={postInfo.comments}
-                                creator={postInfo?.creator}
-                            />
-    
-    */
+
     const PostInside = ({ type, link }) => {
         return (<div className='h-full  center-col overflow-hidden'>
             {type == 'img' && <img className="h-full w-full object-cover rounded-xl" src={link} alt='' />}
@@ -42,7 +25,7 @@ function page() {
         const { type, link } = postInfo
 
         return (
-            <div className=' overflow-hidden flex-shrink-0 bg-black-800 mx-auto my-auto   lg:h-36 md:h-32 h-24 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <div className=' overflow-hidden flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-black-800 mx-auto my-auto   lg:h-36 md:h-32 h-24 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
             </div>
         )
@@ -52,7 +35,7 @@ function page() {
     const Size2 = ({ postInfo }) => {
         const { type, link } = postInfo
         return (
-            <div className='flex-shrink-0  bg-green-500 mx-auto mt-2 mb-2 lg:h-60 m-auto  md:h-48 h-32 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow  bg-green-500 mx-auto mt-2 mb-2 lg:h-60 m-auto  md:h-48 h-32 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
 
             </div>
@@ -61,7 +44,7 @@ function page() {
     const Size3 = ({ postInfo }) => {
         const { type, link } = postInfo
         return (
-            <div className='flex-shrink-0 bg-blue-500 mx-auto my-auto overflow-hidden m-auto lg:h-52 md:h-40 h-36  lg:w-52 md:w-48 w-32 rounded-xl'>
+            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-blue-500 mx-auto my-auto overflow-hidden m-auto lg:h-52 md:h-40 h-36  lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
 
             </div>
@@ -71,7 +54,7 @@ function page() {
     const Size4 = ({ postInfo }) => {
         const { type, link } = postInfo
         return (
-            <div className='flex-shrink-0 bg-stone-600 mx-auto mt-2 mb-2 overflow-hidden m-auto lg:h-64 md:h-52 h-48 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-stone-600 mx-auto mt-2 mb-2 overflow-hidden m-auto lg:h-64 md:h-52 h-48 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
 
             </div>
@@ -80,7 +63,7 @@ function page() {
     const Size5 = ({ postInfo }) => {
         const { type, link } = postInfo
         return (
-            <div className='flex-shrink-0 bg-purple-700 mx-auto mt-1 mb-1 lg:h-72 md:h-64 h-52 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-purple-700 mx-auto mt-1 mb-1 lg:h-72 md:h-64 h-52 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
 
             </div>
@@ -90,7 +73,7 @@ function page() {
     const Size6 = ({ postInfo }) => {
         const { type, link } = postInfo
         return (
-            <div className=' flex-shrink-0 bg-emerald-700 my-1 m-auto overflow-hidden lg:h-[20rem] md:h-52 h-48  lg:w-96 md:w-48 w-32 rounded-xl'>
+            <div className=' flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-emerald-700 my-1 m-auto overflow-hidden lg:h-[20rem] md:h-52 h-48  lg:w-96 md:w-48 w-32 rounded-xl'>
                 <PostInside link={link} type={type} />
 
             </div>

@@ -9,6 +9,7 @@ import { Button, Card, Input, Spacer } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { addToDatabase, fetchDocument } from '../../../myCodes/Database';
 import { initFollowing } from '../../../myCodes/DatabaseUtils';
+import { message } from 'antd';
 
 
 
@@ -57,8 +58,8 @@ function LoginCard({ }) {
           checkLoggedinUser()
           if (user?.uid) toggleLogin()
 
-        }).catch((e) => {
-          console.log(e)
+        }).catch((error) => {
+          message.success(error.message, [500])
         })
         break;
     }
