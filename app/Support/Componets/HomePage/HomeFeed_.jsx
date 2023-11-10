@@ -26,12 +26,13 @@ export const HomeFeed = () => {
 
     const getFollowingsPost = async () => {
         const userData = await fetchDocument('Users', UID)
-        console.log(userData)
         const following = userData.following
+
+        console.log(userData)
         following?.forEach(async (item) => {
-            console.log('first')
             const newPosts = await FetchThisDocs('Posts', 'creator', '==', Object.keys(item)[0], 'timeStamp')
             setFollowingPostData(oldPosts => {
+                console.log(oldPosts)
                 return (
                     [...oldPosts, ...newPosts].sort((a, b) => b.timeStamp - a.timeStamp)
                 )
@@ -52,26 +53,24 @@ export const HomeFeed = () => {
     const user = useAUTHListener()
     const UID = getUID(user)
 
-    console.log(postData, followingPostData)
 
 
 
     useEffect(() => {
         //router.refresh()
-        console.log(user?.email)
         if (user?.email) {
-            console.log('second')
             setPostData([])
             getFollowingsPost()
         } else {
+            console.log('first')
             getAllPosts()
         }
 
 
-    }, [state, user?.email])
+    }, [state, user, UID])
 
     useEffect(() => {
-        initFollowing()
+        //  initFollowing()
     }, [])
 
 
