@@ -17,7 +17,6 @@ export const HomeFeed = () => {
 
 
     const getAllPosts = async () => {
-        console.log('first')
         let FEED = await fetchInOrder('Posts', 'timeStamp')
         FEED = Object.values(FEED || {})
         setPostData(FEED)
@@ -28,9 +27,10 @@ export const HomeFeed = () => {
         const userData = await fetchDocument('Users', UID)
         const following = userData.following
         following?.forEach(async (item) => {
-
+            console.log('first')
             const newPosts = await FetchThisDocs('Posts', 'creator', '==', Object.keys(item)[0], 'timeStamp')
             setPostData(oldPosts => {
+                console.log(oldPosts)
                 return (
                     [...oldPosts, ...newPosts].sort((a, b) => b.timeStamp - a.timeStamp)
                 )
@@ -57,10 +57,10 @@ export const HomeFeed = () => {
 
     useEffect(() => {
         //router.refresh()
-        if (user?.gid) getAllPosts()
-        if (user?.uid) getFollowingsPost()
+        user?.email ? getFollowingsPost() : getAllPosts()
 
-    }, [state, UID, user])
+
+    }, [state])
 
     useEffect(() => {
         initFollowing()

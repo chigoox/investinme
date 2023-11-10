@@ -12,8 +12,9 @@ updateArrayDatabaseItem('Admin', 'Users', 'allUIDs', UID)
 
 
 export const initFollowing = async (user) => {
-    try {
-        const data = await fetchDocument('Users', user?.uid)
+  try {
+    const data = await fetchDocument('Users', user?.uid)
+    console.log(data)
 
          if (data?.uid == undefined) await addToDatabase('Users', user.uid, 'uid', user.uid)
             if (data?.uid == '' || undefined) await addToDatabase('Users', user.uid, 'displayName', user.displayName)
