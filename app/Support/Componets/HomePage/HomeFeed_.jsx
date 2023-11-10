@@ -11,6 +11,7 @@ import { getUID } from '../../myCodes/Auth'
 
 export const HomeFeed = () => {
     const [postData, setPostData] = useState([])
+    const [followingPostData, setFollowingPostData] = useState([])
     const { state, dispatch } = useGlobalContext()
 
     //sort postData b ID desc  .sort((a, b) => b.id - a.id)
@@ -29,8 +30,7 @@ export const HomeFeed = () => {
         following?.forEach(async (item) => {
             console.log('first')
             const newPosts = await FetchThisDocs('Posts', 'creator', '==', Object.keys(item)[0], 'timeStamp')
-            setPostData(oldPosts => {
-                console.log(oldPosts)
+            setFollowingPostData(oldPosts => {
                 return (
                     [...oldPosts, ...newPosts].sort((a, b) => b.timeStamp - a.timeStamp)
                 )
@@ -57,10 +57,16 @@ export const HomeFeed = () => {
 
     useEffect(() => {
         //router.refresh()
-        user?.email ? getFollowingsPost() : getAllPosts()
+        console.log(user?.email)
+        if (user?.email) {
+            setPostData([])
+            getFollowingsPost()
+        } else {
+            getAllPosts()
+        }
 
 
-    }, [state])
+    }, [state, user?.email])
 
     useEffect(() => {
         initFollowing()
@@ -73,7 +79,7 @@ export const HomeFeed = () => {
 
         <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12">
             {
-                postData?.map((postInfo) => {
+                (user.email ? followingPostData : postData)?.map((postInfo) => {
                     if (postInfo.id) return (
                         <Post
                             postINFO={postInfo}

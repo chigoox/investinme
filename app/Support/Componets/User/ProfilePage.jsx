@@ -186,18 +186,18 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
             </div>
 
-            <div className="grid mt-4 grid-cols-3 w-full md:w-[30rem] lg:w-[26rem] m-auto h-auto max-h-96 overflow-y-scroll hidescroll gap-1 p-1 ">
+            <div className="grid mt-4 grid-cols-3  w-fit m-auto h-auto max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
                 {postData?.map((post) => {
                     return (
-                        <Skeleton key={post.id} isLoaded={post?.link} className="h-[7.8rem] overflow-hidden rounded-lg relative m-auto w-[7.8rem]">
-                            <button className="h-[7.8rem] w-[7.8rem] bg-white">
+                        <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative m-auto ">
+                            <button className="h-full w-full  bg-white">
 
-                                {post?.type == 'img' && <img className="object-cover h-[7.8rem] w-[7.8em]" src={post.link} alt="" />}
+                                {post?.type == 'img' && <img className="object-cover h-full w-full" src={post.link} alt="" />}
                                 {post?.type == 'vid' &&
-                                    <video loop muted playsInline control={'true'} className="object-cover h-[7.8rem] w-[7.8em]" >
+                                    <video loop muted playsInline control={'true'} className="object-cover h-full w-full" >
                                         <source src={post?.link} type="video/mp4" />
                                     </video>}
-                                {post?.type == 'txt' && <div className="center bg-black-800 text-white h-[7.8rem] w-[7.8em]">
+                                {post?.type == 'txt' && <div className="center bg-black-800   text-white h-[12rem] p-2  w-full">
                                     <h1>{post.link}</h1>
                                 </div>}
                             </button>
