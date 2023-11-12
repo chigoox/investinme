@@ -104,6 +104,19 @@ export async function fetchDocument2(collection, document, setterfunction) {
         return data
     }
 
+    export const fetchIncludesArray = async (datacollection, key , array, orderby) => {
+        const ref = collection(DATABASE, `${datacollection}`)
+        const qry = query(ref, where(key, 'in', array));
+        const snapShot = await getDocs(qry)
+        let data = []
+        snapShot.forEach((doc) => {
+            data = [...data, doc.data()]
+        });
+        console.log(data)
+        return data
+ 
+    }
+
 
 
      export const fetchInOrder = async (datacollection, orderby, _limit) => {

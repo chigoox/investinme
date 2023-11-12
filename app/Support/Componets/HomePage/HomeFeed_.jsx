@@ -3,84 +3,75 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '../../../../StateManager/GlobalContext'
-import { FetchThisDocs, FetchThisDocs2, fetchDocument, fetchInOrder } from '../../myCodes/Database'
+import { FetchThisDocs2, fetchDocument, fetchInOrder, fetchIncludesArray } from '../../myCodes/Database'
 import Post from '../General/Post/Post'
 import { initFollowing } from '../../myCodes/DatabaseUtils'
 import { useAUTHListener } from '../../../../StateManager/AUTHListener'
-import { getUID } from '../../myCodes/Auth'
 
 export const HomeFeed = () => {
-    const [postData, setPostData] = useState([])
-    const [followingPostData, setFollowingPostData] = useState([])
+    const [data, setData] = useState([])
+    const [data2, setData2] = useState([])
+    const [userData, setUserData] = useState({})
     const { state, dispatch } = useGlobalContext()
 
-    //sort postData b ID desc  .sort((a, b) => b.id - a.id)
+    //sort data b ID desc  .sort((a, b) => b.id - a.id)
 
 
-    const getAllPosts = async () => {
+    const user = useAUTHListener()
+
+
+
+
+    const getData = async () => {
+
         let FEED = await fetchInOrder('Posts', 'timeStamp')
+
+
+        const following = userData.following?.map((user) => {
+            console.log(user)
+            return Object.keys(user)[0]
+        })
+        console.log(following)
+        const FEED2 = userData?.following ? await fetchIncludesArray('Posts', 'creator', following) : []
+        setData2(FEED2.sort((a, b) => b.timeStamp - a.timeStamp))
         FEED = Object.values(FEED || {})
-        setPostData(FEED)
+        setData(FEED)
+
         return FEED
     }
 
-    const getFollowingsPost = async () => {
-        const userData = await fetchDocument('Users', UID)
-        const following = userData.following
-
-        console.log(userData)
-        following?.forEach(async (item) => {
-            const newPosts = await FetchThisDocs('Posts', 'creator', '==', Object.keys(item)[0], 'timeStamp')
-            setFollowingPostData(oldPosts => {
-                console.log(oldPosts)
-                return (
-                    [...oldPosts, ...newPosts].sort((a, b) => b.timeStamp - a.timeStamp)
-                )
-            })
+    useEffect(() => {
+        const run2 = async () => {
+            if (user) await initFollowing(user, setUserData)
+        }
 
 
-
-
-
-
-
-
-
-
-        })
-    }
-
-    const user = useAUTHListener()
-    const UID = getUID(user)
-
-
+        run2()
+        console.log('second')
+    }, [user])
 
 
     useEffect(() => {
         //router.refresh()
-        if (user?.email) {
-            setPostData([])
-            getFollowingsPost()
-        } else {
-            console.log('first')
-            getAllPosts()
+
+        const run = async () => {
+            await getData()
         }
 
-
-    }, [state, user, UID])
-
-    useEffect(() => {
-        //  initFollowing()
-    }, [])
+        run()
+        console.log('first')
+    }, [state, userData])
 
 
 
+
+    console.log(userData)
     return (
 
 
         <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12">
             {
-                (user.email ? followingPostData : postData)?.map((postInfo) => {
+                ((user.email && data2) ? data2 : data)?.map((postInfo) => {
                     if (postInfo.id) return (
                         <Post
                             postINFO={postInfo}

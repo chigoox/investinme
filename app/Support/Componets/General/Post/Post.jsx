@@ -41,28 +41,28 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
 
 
     const likePost = async () => {
-
+        setPostLike(!postLike)
         if (postLike == false) {
-            updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
-            updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length + 1)
-            dispatch({ type: "NEW_POST", value: {} })
+            await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length + 1)
         } else {
-            updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
-            updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length - 1)
-
-
+            await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length - 1)
         }
 
 
         dispatch({ type: "NEW_POST", value: {} })
-        setPostLike(!postLike)
 
     }
-    const getCreatorData = () => {
-        fetchDocument('Users', creator, setCreatorData)
+    const getCreatorData = async () => {
+        await fetchDocument('Users', creator, setCreatorData)
     }
     useEffect(() => {
-        getCreatorData()
+        const run = async () => {
+            await getCreatorData()
+        }
+
+        run()
 
 
     }, [])

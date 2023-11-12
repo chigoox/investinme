@@ -18,7 +18,7 @@ function PostFeed({ allPosts, currentPost }) {
             behavior: "instant",
             block: "center"
         });
-    }, [refs])
+    }, [])
     return (
         <div className="grid grid-cols-1  gap-8 mt-10 last:mb-12 h-auto w-full">
             {
