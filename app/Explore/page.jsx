@@ -68,38 +68,38 @@ function page() {
     const Size2 = ({ postInfo, index, setCurrentPost }) => {
         const { type, link, creator } = postInfo
         return (
-            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow  bg-green-500 mx-auto mt-2 mb-2 lg:h-60 m-auto  md:h-48 h-32 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <button onClick={() => { setCurrentPost(index); setShowPostView(true) }} className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow  bg-green-500 mx-auto mt-2 mb-2 lg:h-60 m-auto  md:h-48 h-32 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside creator={creator} link={link} type={type} index={index} />
 
-            </div>
+            </button>
         )
     }
     const Size3 = ({ postInfo, index, setCurrentPost }) => {
         const { type, link, creator } = postInfo
         return (
-            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-blue-500 mx-auto my-auto overflow-hidden m-auto lg:h-52 md:h-40 h-36  lg:w-52 md:w-48 w-32 rounded-xl'>
+            <button onClick={() => { setCurrentPost(index); setShowPostView(true) }} className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-blue-500 mx-auto my-auto overflow-hidden m-auto lg:h-52 md:h-40 h-36  lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside creator={creator} link={link} type={type} index={index} />
 
-            </div>
+            </button>
         )
     }
 
     const Size4 = ({ postInfo, index, setCurrentPost }) => {
         const { type, link, creator } = postInfo
         return (
-            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-stone-600 mx-auto mt-2 mb-2 overflow-hidden m-auto lg:h-64 md:h-52 h-48 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <button onClick={() => { setCurrentPost(index); setShowPostView(true) }} className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-stone-600 mx-auto mt-2 mb-2 overflow-hidden m-auto lg:h-64 md:h-52 h-48 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside creator={creator} link={link} type={type} index={index} />
 
-            </div>
+            </button>
         )
     }
     const Size5 = ({ postInfo, index, setCurrentPost }) => {
         const { type, link, creator } = postInfo
         return (
-            <div className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-purple-700 mx-auto mt-1 mb-1 lg:h-72 md:h-64 h-52 lg:w-52 md:w-48 w-32 rounded-xl'>
+            <button onClick={() => { setCurrentPost(index); setShowPostView(true) }} className='flex-shrink-0 hover:scale-[1.1] scale-1 trans-slow bg-purple-700 mx-auto mt-1 mb-1 lg:h-72 md:h-64 h-52 lg:w-52 md:w-48 w-32 rounded-xl'>
                 <PostInside creator={creator} link={link} type={type} index={index} />
 
-            </div>
+            </button>
         )
     }
 
