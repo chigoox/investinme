@@ -60,7 +60,7 @@ export const HomeFeed = () => {
 
         run()
         console.log('first')
-    }, [state, userData])
+    }, [state.post, userData])
 
 
 

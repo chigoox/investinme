@@ -44,10 +44,10 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
         setPostLike(!postLike)
         if (postLike == false) {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length + 1)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length)
         } else {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length - 1)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length)
         }
 
 

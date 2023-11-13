@@ -28,9 +28,19 @@ export const GlobalReducer = (state, action) => {
             
          };
       }
+
+      case "NEW_POST2": {
+          
+         return {
+            ...state,
+            post: !state.post,
+            
+         };
+      }
       
        default:
         return state;
    }
+   
 };
 

@@ -9,6 +9,7 @@ import EditProfile from "../../../Support/Componets/General/User/EditProfile";
 import { Button, Skeleton, avatar } from "@nextui-org/react";
 import { initFollowing } from "../../../Support/myCodes/DatabaseUtils";
 import { useGlobalContext } from "../../../../StateManager/GlobalContext";
+import PostView from "../General/Post/PostView";
 
 
 
@@ -23,11 +24,13 @@ const getUID = (user) => {
 export default function ProfilePage({ forthis, otherUserData, getOtherUserData }) {
     const [followed, setFollowed] = useState(false)
     const [userData, setUserData] = useState()
-    const [postData, setPostData] = useState()
+    const [postData, setPostData] = useState([])
     const [editProfile, setEditProfile] = useState(false)
     const _userData = userData?.UserInfo
     const _otherUserData = otherUserData?.UserInfo
     const { state, dispatch } = useGlobalContext()
+    const [showPostView, setSetShowPostView] = useState(false)
+    const [currentPost, setCurrentPost] = useState(0)
 
 
 
@@ -86,7 +89,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     }
 
 
-
+    console.log(postData)
 
 
 
@@ -185,12 +188,12 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                 {(_otherUserData || _userData)?.bio}
 
             </div>
-
+            <PostView showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
             <div className="grid mt-4 grid-cols-3  w-fit m-auto h-auto max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
-                {postData?.map((post) => {
+                {postData?.map((post, index) => {
                     return (
                         <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative m-auto ">
-                            <button className="h-full w-full  bg-white">
+                            <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full  bg-white">
 
                                 {post?.type == 'img' && <img className="object-cover h-full w-full" src={post.link} alt="" />}
                                 {post?.type == 'vid' &&

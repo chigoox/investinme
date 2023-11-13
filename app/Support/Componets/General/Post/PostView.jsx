@@ -8,11 +8,12 @@ function PostView({ showPostView, setShowPostView, allPosts, currentPost }) {
 
 
 
+    console.log(showPostView)
     return (
 
-
-        <Modal isOpen={showPostView} backdrop={'opaque'} onOpenChange={() => { setShowPostView(false) }} placement='auto' scrollBehavior='inside' className={`h-[90%] w-full bg-black ${{
-            backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20 text-white"
+        < Modal isOpen={showPostView} backdrop={'blur'} onOpenChange={() => { setShowPostView(false) }
+        } placement='auto' scrollBehavior='inside' className={`h-[90%] w-full bg-black ${{
+            backdrop: "bg-black bg-opacity-100 text-white"
         }}`}>
             <ModalContent>
                 {() => (
@@ -30,7 +31,7 @@ function PostView({ showPostView, setShowPostView, allPosts, currentPost }) {
                     </>
                 )}
             </ModalContent>
-        </Modal>
+        </Modal >
     )
 }
 
