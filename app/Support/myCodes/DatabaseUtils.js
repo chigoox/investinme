@@ -15,14 +15,14 @@ export const initFollowing = async (user, set) => {
   try {
     console.log(user)
     const data = await fetchDocument('Users', user?.uid)
-    set(data)
+    if (set) set(data)
     console.log(data)
 
          if (data?.uid == undefined) await addToDatabase('Users', user.uid, 'uid', user.uid)
-            if (data?.uid == '' || undefined) await addToDatabase('Users', user.uid, 'displayName', user.displayName)
-            //if (data.followers == undefined) await addToDatabase('Users', user.uid, 'followers', [])
-            //if (data?.following == undefined) await  addToDatabase('Users', user.uid, 'following', [])
-            //if (data?.donations == undefined) await addToDatabase('Users', user.uid, 'donations', [])
+            if (data?.uid == '' || data?.uid ==  undefined) await addToDatabase('Users', user.uid, 'displayName', user.displayName)
+            if (!set) await addToDatabase('Users', user.uid, 'followers', [])
+            if (!set) await  addToDatabase('Users', user.uid, 'following', [])
+            if (!set) await addToDatabase('Users', user.uid, 'donations', [])
         if(data?.global){
             
            

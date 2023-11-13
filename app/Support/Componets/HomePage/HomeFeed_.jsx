@@ -32,7 +32,7 @@ export const HomeFeed = () => {
             return Object.keys(user)[0]
         })
         console.log(following)
-        const FEED2 = userData?.following ? await fetchIncludesArray('Posts', 'creator', following) : []
+        const FEED2 = userData?.following ? await fetchIncludesArray('Posts', 'creator', [...following, userData?.uid]) : []
         setData2(FEED2.sort((a, b) => b.timeStamp - a.timeStamp))
         FEED = Object.values(FEED || {})
         setData(FEED)
@@ -42,12 +42,11 @@ export const HomeFeed = () => {
 
     useEffect(() => {
         const run2 = async () => {
-            if (user) await initFollowing(user, setUserData)
+            if (user.uid) await initFollowing(user, setUserData)
         }
 
 
         run2()
-        console.log('second')
     }, [user])
 
 
@@ -59,13 +58,11 @@ export const HomeFeed = () => {
         }
 
         run()
-        console.log('first')
-    }, [state.post, userData])
+    }, [state, userData])
 
 
 
 
-    console.log(userData)
     return (
 
 
