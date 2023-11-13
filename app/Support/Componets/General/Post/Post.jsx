@@ -44,10 +44,10 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
         setPostLike(!postLike)
         if (postLike == false) {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length)
         } else {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes.length)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length)
         }
 
 
@@ -71,7 +71,7 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
-                <UserAvatar user={_creatorData} gustName={creator} />
+                <UserAvatar user={_creatorData} gustName={creator} creatorData={creatorData} />
             </div>
 
 

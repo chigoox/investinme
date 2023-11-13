@@ -104,7 +104,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
             await getData()
             await getPostData()
             console.log(user)
-            if (userData && userData?.followers == undefined) await initFollowing(user)
+            if (userData) await initFollowing(user, true)
         }
 
 
