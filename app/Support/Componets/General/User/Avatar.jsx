@@ -14,7 +14,7 @@ const UserAvatar = ({ user, size = 'sm', forthis, noLable, gustName, creatorData
                 <Avatar className={`${size == 'lg' ? 'h-32 w-32' : size == 'md' ? 'h-24 w-24' : 'w-14 h-14'}`} src={user?.avatarURL} />
 
             </Skeleton>
-            {!noLable && <Skeleton className={`rounded-full   ${forthis == 'comment' ? ' scale-[0.6]  absolute z-50 text-center -left-9 -bottom-3 w-32 h-8' : 'w-auto'}`} isLoaded={loadGust}>
+            {!noLable && <Skeleton className={`rounded-full   ${forthis == 'comment' ? ' scale-[0.6]  absolute z-50 rounded-full text-center -left-9 -bottom-3 w-32 h-8' : 'w-auto'}`} isLoaded={loadGust}>
                 <Card className={`${forthis == 'profile' ? 'w-32 text-sm' : 'w-auto'}  bg-black  center h-fit text-white bg-opacity-75 overflow-hidden p-1 px-3`}>
                     {true && <h1 className=''>${user?.displayName || creatorData?.displayName || gustName}</h1>}
 

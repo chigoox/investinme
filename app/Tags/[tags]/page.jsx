@@ -11,6 +11,7 @@ async function page() {
                 <div className='p-4'>
                     <HashTitle />
                 </div>
+
                 <div className='flex  flex-col   justify-evenly'>
                     <PostsGird forThis={'tags'} />
                 </div>

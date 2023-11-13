@@ -10,6 +10,7 @@ import { getUID } from "../../../myCodes/Auth";
 import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
 import { formatNumber, getRandTN } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
+import { serverTimestamp } from "firebase/firestore";
 
 const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
@@ -25,18 +26,32 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
     const postComment = async () => {
-        await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'comments', {
-            [UID]: {
+
+
+
+        const { commentID } = await fetchDocument('MetaData', 'postMeta')
+        const { comments } = await fetchDocument('Posts', `${postIDPrefix}-${id}`)
+
+        await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'comments', {
+            ...comments,
+            [commentID]: {
+                commentID: commentID,
                 user: UID,
                 comment: comment,
-                commentLikes: []
+                commentReply: [],
+                commentLikes: [],
+                likeCount: 0,
+                timeStamp: serverTimestamp()
             }
-        }
-        )
+        })
+
+        await updateDatabaseItem('MetaData', 'postMeta', 'commentID', commentID + 1)
+
         dispatch({ type: "NEW_POST", value: {} })
         setComment('')
 
     }
+
 
 
 
@@ -67,7 +82,6 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
     }, [])
 
-    console.log(tags)
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
@@ -131,11 +145,12 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
                         <>
                             <ModalHeader className="flex flex-col gap-1">comments</ModalHeader>
                             <ModalBody className="overflow-y-scroll hidescroll">
-                                {comments?.map((commentt) => {
-                                    const aComment = Object.values(commentt)[0]
+                                {Object.values(comments)?.sort((a, b) => b.likeCount - a.likeCount)?.map((commentt) => {
+
+                                    const aComment = commentt
 
                                     return (
-                                        <PostComment user={aComment.user} commentLikes={aComment.commentLikes} comment={aComment.comment} />
+                                        <PostComment post={`${postIDPrefix}-${id}`} user={aComment.user} likeCount={aComment.likeCount} commentLikes={aComment.commentLikes} commentID={aComment.commentID} commentReply={aComment.commentReply} comment={aComment.comment} />
                                     )
                                 })}
                             </ModalBody>
