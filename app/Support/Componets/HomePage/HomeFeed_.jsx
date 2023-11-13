@@ -28,10 +28,8 @@ export const HomeFeed = () => {
 
 
         const following = userData.following?.map((user) => {
-            console.log(user)
             return Object.keys(user)[0]
         })
-        console.log(following)
         const FEED2 = userData?.following ? await fetchIncludesArray('Posts', 'creator', [...following, userData?.uid]) : []
         setData2(FEED2.sort((a, b) => b.timeStamp - a.timeStamp))
         FEED = Object.values(FEED || {})

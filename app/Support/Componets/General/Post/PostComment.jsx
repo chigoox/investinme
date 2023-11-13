@@ -30,10 +30,8 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
         setLikedComment(!likedComment)
 
         const { comments } = await fetchDocument('Posts', post)
-        console.log(likeComment)
 
         if (!likedComment) {
-            console.log('first')
             await updateDatabaseItem('Posts', post, 'comments', {
                 ...comments,
                 [commentID]: {
@@ -46,7 +44,6 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
                 }
             })
         } else {
-            console.log('first')
             await updateDatabaseItem('Posts', post, 'comments', {
                 ...comments,
                 [commentID]: {
@@ -68,7 +65,6 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
 
     useEffect(() => {
-        console.log('first')
         setLikedComment(commentLikes.includes(UID))
 
 
@@ -77,7 +73,6 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
 
 
-    console.log(likedComment)
     return UID == user ? (
         <div className=" flex justify-end">
             <div className='flex between'>

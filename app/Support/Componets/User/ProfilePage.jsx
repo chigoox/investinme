@@ -89,7 +89,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     }
 
 
-    console.log(postData)
 
 
 
@@ -122,7 +121,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         otherUserData?.followers.forEach(follower => {
 
             if (followed == false && follower[userData?.uid]) {
-                console.log('first')
                 setFollowed(true)
             }
         })

@@ -103,7 +103,6 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
             <div className="text-white px-2 py-1  h-fit bg-black-900 max-h-10 overflow-y-scroll hidescroll">
                 {tags?.map((tag => {
-                    console.log(tag)
                     return (
                         <Link href={`/Tags/${tag.replace('#', '')}`}>{tag}</Link>
                     )

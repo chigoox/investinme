@@ -20,7 +20,6 @@ function ShippinInfo({ user, forCheckOut, event }) {
         addToDatabase('User', user?.uid ? user?.uid : user?.gid, 'ShippingInfo', shippingInfo)
         if (forCheckOut && Object.keys(shippingInfo).reduce((a, c) => a + 'email firstName lastName address zipcode phone img'.includes(c), 0) >= 7
         ) {
-            console.log('first')
             forCheckOut(shippingInfo, event)
         }
 
