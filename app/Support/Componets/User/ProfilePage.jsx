@@ -103,7 +103,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         const run = async () => {
             await getData()
             await getPostData()
-            console.log(user)
             if (userData) await initFollowing(user, true)
         }
 
@@ -188,7 +187,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                 {(_otherUserData || _userData)?.bio}
 
             </div>
-            <PostView showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
+            <PostView forThis={'My Posts'} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
             <div className="grid mt-4 grid-cols-3  w-fit m-auto h-auto max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
                 {postData?.map((post, index) => {
                     return (

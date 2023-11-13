@@ -1,5 +1,5 @@
 'use client'
-import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { postIDPrefix } from "../../../../META";
@@ -11,7 +11,7 @@ import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
 import { formatNumber, getRandTN } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
 
-const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donations, postINFO, creator }) => {
+const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
     const [postDoantion, setPostDonation] = useState(false)
     const [comment, setComment] = useState('')
@@ -67,7 +67,7 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
 
     }, [])
 
-
+    console.log(tags)
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
@@ -87,9 +87,20 @@ const Post = ({ id, type, likes, likesCount, link, text, comments, desc, donatio
                 <h1 className="w-auto break-words" >{link}</h1>
             </div>}
 
-            {type != 'txt' && <div className="p-2 overflow-x-scroll text-white  h-auto">
+            <div className="text-white px-2 py-1  h-fit bg-black-900 max-h-10 overflow-y-scroll hidescroll">
+                {tags?.map((tag => {
+                    console.log(tag)
+                    return (
+                        <Link href={`/Tags/${tag.replace('#', '')}`}>{tag}</Link>
+                    )
+                }))}
+            </div>
+
+            {type != 'txt' && <div className="px-2 py-1 overflow-x-scroll text-white  h-auto">
                 {desc}
             </div>}
+
+
 
             <div className="px-4 center ">
                 <Button onPress={() => { setShowComments(!showComments) }} className="px-2 w-fit m-auto rounded-none p-0 bg-none bg-opacity-0 text-white" >

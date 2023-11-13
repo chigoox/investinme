@@ -112,9 +112,19 @@ export async function fetchDocument2(collection, document, setterfunction) {
         snapShot.forEach((doc) => {
             data = [...data, doc.data()]
         });
-        console.log(data)
         return data
  
+    }
+
+    export const fetchArrayContains = async (datacollection, key , valueInArray) => {
+        const ref = collection(DATABASE, `${datacollection}`)
+        const qry = query(ref, where(key, "array-contains", valueInArray)); 
+        const snapShot = await getDocs(qry)
+        let data = []
+        snapShot.forEach((doc) => {
+            data = [...data, doc.data()]
+        });
+        return data
     }
 
 

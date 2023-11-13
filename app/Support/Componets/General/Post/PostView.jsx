@@ -2,13 +2,12 @@ import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from
 import PostFeed from './PostFeed'
 
 
-function PostView({ showPostView, setShowPostView, allPosts, currentPost }) {
+function PostView({ showPostView, setShowPostView, allPosts, currentPost, forThis }) {
 
 
 
 
 
-    console.log(showPostView)
     return (
 
         < Modal isOpen={showPostView} backdrop={'blur'} onOpenChange={() => { setShowPostView(false) }
@@ -18,7 +17,7 @@ function PostView({ showPostView, setShowPostView, allPosts, currentPost }) {
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1 text-white">Explore Feed</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1 text-white">{(forThis ? forThis : 'Explore Feed')}</ModalHeader>
                         <ModalBody className='hidescroll overflow-hidden overflow-y-scroll text-white  p-0 m-auto'>
                             <PostFeed allPosts={allPosts} currentPost={currentPost} />
                         </ModalBody>
