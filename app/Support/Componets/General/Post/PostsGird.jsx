@@ -34,7 +34,7 @@ function PostsGird({ }) {
 
     return (
         <div className='md:felx  md:items-start md:justify-evenly md:flex-wrap grid grid-cols-3 lg:grid-cols-4 gap-2  mb-12 trans md:pl-20 lg:pl-40 xl:pl-32 py-4 w-full   h-auto max-h-96     overflow-y-scroll overflow-hidden '>
-            < PostView forThis={'My Posts'} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
+            < PostView forThis={path} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
 
             {(postData ? postData : [1, 2, 3, 4, 5])?.map((post, index) => {
                 return (
