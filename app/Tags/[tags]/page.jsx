@@ -12,7 +12,7 @@ async function page() {
                     <HashTitle />
                 </div>
 
-                <div className='flex  flex-col   justify-evenly'>
+                <div className='flex  flex-col h-full  justify-evenly'>
                     <PostsGird forThis={'tags'} />
                 </div>
 
