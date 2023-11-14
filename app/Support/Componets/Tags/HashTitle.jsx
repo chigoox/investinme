@@ -6,7 +6,7 @@ import React from 'react'
 function HashTitle() {
     const path = usePathname()
     return (
-        <div className='text-5xl px-20'>{path.replace('/Tags/', '#')}</div>
+        <div className='text-5xl font-extrabold text-center'>{path.replace('/Tags/', '#')}</div>
     )
 }
 

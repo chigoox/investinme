@@ -8,7 +8,7 @@ async function page() {
     return (
         <main className="min-h-screen overflow-x-hidden  bg-black text-white">
             <div className='md:w-3/4 lg:w-3/4 m-auto  lg:mr-[10rem]'>
-                <div className='p-4'>
+                <div className='mt-4'>
                     <HashTitle />
                 </div>
 
