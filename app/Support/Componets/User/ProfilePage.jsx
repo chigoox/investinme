@@ -6,7 +6,7 @@ import UserAvatar from "../../../Support/Componets/General/User/Avatar";
 import { formatNumber } from "../../../Support/myCodes/Util";
 import { Edit, Edit2Icon, FileEditIcon } from "lucide-react";
 import EditProfile from "../../../Support/Componets/General/User/EditProfile";
-import { Button, Skeleton, avatar } from "@nextui-org/react";
+import { Button, Image, Skeleton, avatar } from "@nextui-org/react";
 import { initFollowing } from "../../../Support/myCodes/DatabaseUtils";
 import { useGlobalContext } from "../../../../StateManager/GlobalContext";
 import PostView from "../General/Post/PostView";
@@ -190,9 +190,9 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                 {postData?.map((post, index) => {
                     return (
                         <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative m-auto ">
-                            <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full  bg-white">
+                            <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full ">
 
-                                {post?.type == 'img' && <img className="object-cover h-full w-full" src={post.link} alt="" />}
+                                {post?.type == 'img' && <Image width={1920} height={1080} className="rounded-none object-cover h-full w-full" src={post.link} alt="" />}
                                 {post?.type == 'vid' &&
                                     <video loop muted playsInline control={'true'} className="object-cover h-full w-full" >
                                         <source src={post?.link} type="video/mp4" />

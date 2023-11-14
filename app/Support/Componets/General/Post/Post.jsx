@@ -1,5 +1,5 @@
 'use client'
-import { Button, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, Image, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { postIDPrefix } from "../../../../META";
@@ -92,7 +92,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
 
-            {type == 'img' && <img className="h-[75%] w-full object-cover md:rounded-lg" src={link} alt='' />}
+            {type == 'img' && <Image width={1920} height={1080} className="h-[75%] w-full object-cover md:rounded-lg" src={link} alt='' />}
             {type == 'vid' &&
                 <video autoPlay loop muted playsInline className="h-[75%] object-cover w-full md:rounded-lg" >
                     <source src={link} type="video/mp4" />
@@ -101,7 +101,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
                 <h1 className="w-auto break-words" >{link}</h1>
             </div>}
 
-            <div className="text-white px-2 py-1  h-fit bg-black-900 max-h-10 overflow-y-scroll hidescroll">
+            <div className="text-white px-2 py-1 flex gap-2 h-fit bg-black-900 max-h-10 overflow-y-scroll hidescroll">
                 {tags?.map((tag => {
                     return (
                         <Link href={`/Tags/${tag.replace('#', '')}`}>{tag}</Link>

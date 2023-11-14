@@ -1,5 +1,5 @@
 'use client'
-import { Skeleton } from '@nextui-org/react';
+import { Image, Skeleton } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { fetchArrayContains } from '../../../myCodes/Database';
@@ -39,9 +39,9 @@ function PostsGird({ }) {
             {(postData ? postData : [1, 2, 3, 4, 5])?.map((post, index) => {
                 return (
                     <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] flex-shrink-0 m-auto lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative">
-                        <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full  bg-white">
+                        <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full ">
 
-                            {post?.type == 'img' && <img className="object-cover h-full w-full" src={post.link} alt="" />}
+                            {post?.type == 'img' && <Image width={1920} height={1080} className="object-cover rounded-none h-full w-full" src={post.link} alt="" />}
                             {post?.type == 'vid' &&
                                 <video loop muted playsInline className="object-cover h-full w-full" >
                                     <source src={post?.link} type="video/mp4" />
