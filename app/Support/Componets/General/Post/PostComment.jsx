@@ -26,17 +26,17 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
     }, [user])
 
-    const likeComment = async () => {
+    const likeComment = async (noOverload) => {
+        console.log('first')
         setLikedComment(!likedComment)
 
         const { comments } = await fetchDocument('Posts', post)
-
         if (!likedComment) {
             await updateDatabaseItem('Posts', post, 'comments', {
                 ...comments,
                 [commentID]: {
                     commentID: commentID,
-                    user: UID,
+                    user: user,
                     comment: comment,
                     commentLikes: [...commentLikes, UID],
                     commentReply: [...commentReply],
@@ -65,7 +65,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
 
     useEffect(() => {
-        setLikedComment(commentLikes.includes(UID))
+        setLikedComment(commentLikes?.includes(UID))
 
 
     }, [UID, comment])
@@ -74,7 +74,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
 
     return UID == user ? (
-        <div className=" flex justify-end">
+        <div className=" flex justify-end z-20">
             <div className='flex between'>
                 <div className="flex gap-2 p-1">
                     <Button onPress={likeComment} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
@@ -93,7 +93,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
                 <div className='flex between  '>
                     <h1 className=" py-4 px-2 text-sm">{comment}</h1>
                     <div className="flex gap-2 p-1">
-                        <Button onPress={likedComment} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
+                        <Button onPress={() => { likeComment(true) }} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                             {likedComment ? <AiFillHeart size={20} /> : <AiOutlineHeart size={20} />}
                         </Button>
                         {formatNumber(commentLikes?.length)}

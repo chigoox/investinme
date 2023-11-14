@@ -9,6 +9,7 @@ import { useWindowSize } from '../../Hooks/useWindowSize'
 import { siteName } from '../../../META'
 import { Button } from '@nextui-org/react'
 import CreatePost from '../General/Post/CreatePost'
+import { logOut } from '../../myCodes/Auth'
 
 const font = Satisfy({
     weight: '400',
@@ -59,6 +60,9 @@ function NavBar() {
             </div>
 
 
+            <Button onPress={logOut} className='absolute h-fit text-xm lg:text-base md:p-2 w-full bg-black-800 rounded-none bottom-0 left-0 text-rose-700'>
+                LOGOUT
+            </Button>
 
 
 
@@ -117,7 +121,6 @@ function NavBar() {
                     )
                 })
                 }
-
 
 
             </nav>}
