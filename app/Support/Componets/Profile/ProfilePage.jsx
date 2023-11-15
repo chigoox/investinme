@@ -139,7 +139,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     return (
         <div className="w- min-h-screen bg-black text-white">
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
-            {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} clsetShowUserListose={setShowUserList} />}
+            {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">
                     <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />

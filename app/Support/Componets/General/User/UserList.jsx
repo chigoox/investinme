@@ -5,7 +5,8 @@ import { fetchDocument } from '../../../myCodes/Database'
 
 function UserList({ forThis, list, setShowUserList }) {
     const shownList = (list[`${forThis}`] || list)?.map(item => {
-        return typeof item == 'Object' ? Object.keys(item)[0] : item
+        console.log(typeof item)
+        return typeof item == 'object' ? Object.keys(item)[0] : item
 
     })
 
