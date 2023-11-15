@@ -1,10 +1,9 @@
 'use client'
-import { Button, Card, CardBody, CardFooter, CardHeader, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react'
-import React, { useState } from 'react'
-import { Uploader } from '../General/Uploader'
-import { addToDatabase } from '../../myCodes/Database'
-import { siteEmail, siteName } from '../../../META'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, useDisclosure } from '@nextui-org/react'
 import TextArea from 'antd/es/input/TextArea'
+import React, { useState } from 'react'
+import { addToDatabase } from '../../myCodes/Database'
+import { Uploader } from '../General/Uploader'
 
 function ShippinInfo({ user, forCheckOut, event }) {
     const [shippingInfo, setShippingInfo] = useState({})

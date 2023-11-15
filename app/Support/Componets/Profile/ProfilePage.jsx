@@ -1,15 +1,16 @@
 'use client'
+import { Button, Image, Skeleton } from "@nextui-org/react";
+import { FileEditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import AUTHListener, { useAUTHListener } from "../../../../StateManager/AUTHListener";
-import { FetchThisDocs, fetchDocument, fetchInOrder, updateArrayDatabaseItem } from "../../../Support/myCodes/Database";
-import UserAvatar from "../../../Support/Componets/General/User/Avatar";
-import { formatNumber } from "../../../Support/myCodes/Util";
-import { Edit, Edit2Icon, FileEditIcon } from "lucide-react";
-import EditProfile from "../../../Support/Componets/General/User/EditProfile";
-import { Button, Image, Skeleton, avatar } from "@nextui-org/react";
-import { initFollowing } from "../../../Support/myCodes/DatabaseUtils";
+import { useAUTHListener } from "../../../../StateManager/AUTHListener";
 import { useGlobalContext } from "../../../../StateManager/GlobalContext";
+import { FetchThisDocs, fetchDocument, updateArrayDatabaseItem } from "../../myCodes/Database";
+import { initFollowing } from "../../myCodes/DatabaseUtils";
+import { formatNumber } from "../../myCodes/Util";
 import PostView from "../General/Post/PostView";
+import UserAvatar from "../General/User/Avatar";
+import EditProfile from "../General/User/EditProfile";
+import UserList from "../General/User/UserList";
 
 
 
@@ -133,33 +134,34 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
 
 
-
+    const [showUserList, setShowUserList] = useState(false)
 
     return (
         <div className="w- min-h-screen bg-black text-white">
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
+            {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">
                     <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />
                     <div className="center-col gap-2">
-                        <div className="center gap-2">
+                        <div className="center gap-1">
                             <Skeleton className="h-12 mb-1 rounded" isLoaded={followers >= 0}>
-                                <div className=" center-col h-full text-white font-bold">
+                                <Button onPress={() => { setShowUserList('followers') }} className="bg-none bg-opacity-0 min-w-0 min-h-0 px-1 overflow-visible center-col h-full text-white font-bold">
                                     <h1>{formatNumber(followers)}</h1>
                                     <h1>Followers</h1>
-                                </div>
+                                </Button>
                             </Skeleton>
                             <Skeleton className="h-12 mb-1 rounded" isLoaded={following >= 0}>
-                                <div className=" center-col h-full text-white font-bold">
+                                <Button onPress={() => { setShowUserList('following') }} className="bg-none bg-opacity-0 min-w-0 min-h-0 px-1 overflow-visible center-col h-full text-white font-bold">
                                     <h1>{formatNumber(following)}</h1>
                                     <h1>Following</h1>
-                                </div>
+                                </Button>
                             </Skeleton>
                             <Skeleton className="h-12 mb-1 rounded" isLoaded={followers >= 0}>
-                                <div className=" center-col h-full text-white font-bold">
+                                <Button onPress={() => { setShowUserList('donations') }} className="bg-none bg-opacity-0 min-w-0 min-h-0 px-1 overflow-visible center-col h-full text-white font-bold">
                                     <h1>${formatNumber(donations)}</h1>
                                     <h1>Donations</h1>
-                                </div>
+                                </Button>
                             </Skeleton>
                         </div>
                         <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">

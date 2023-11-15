@@ -1,9 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import ProfilePage from '../Support/Componets/User/ProfilePage'
 import { usePathname } from 'next/navigation'
 import { FetchThisDocs } from '../Support/myCodes/Database'
 import { useAUTHListener } from '../../StateManager/AUTHListener'
+import ProfilePage from '../Support/Componets/Profile/ProfilePage'
 
 function UserPage() {
     const [otherUserData, setOtherUserData] = useState([{ followers: [], following: [], donations: [], UserInfo: { displayName: 'No User Found', bio: 'No user found!' } }])
