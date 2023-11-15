@@ -21,6 +21,9 @@ function RegisterCard({ toggleRegister }) {
                     await signUp(credentials.email, credentials.password).then((user) => {
                         addToDatabase('Users', user.uid, 'uid', user.uid)
                         addToDatabase('Users', user.uid, 'displayName', credentials?.displayName)
+                        addToDatabase('Users', user.uid, 'UserInfo', {
+                            displayName: credentials?.displayName,
+                        })
                         addToDatabase('Users', user.uid, 'followers', [])
                         addToDatabase('Users', user.uid, 'following', [])
                         addToDatabase('Users', user.uid, 'donations', [])

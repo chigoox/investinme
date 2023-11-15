@@ -1,12 +1,7 @@
 
 
-import { AUTH } from "../Firebase"
-import { useAUTHListener } from "../StateManager/AUTHListener"
-import { HomeFeed } from "./Support/Componets/HomePage/HomeFeed_"
-import { getUID } from "./Support/myCodes/Auth"
-import { fetchDocument } from "./Support/myCodes/Database"
+import { HomeFeed } from "./Support/Componets/HomePage/HomeFeed"
 
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 export default async function Home() {
 

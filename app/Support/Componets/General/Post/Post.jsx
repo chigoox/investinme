@@ -1,16 +1,18 @@
 'use client'
-import { Button, Image, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import { Button, Image, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { serverTimestamp } from "firebase/firestore";
+import { MoreHorizontal, Settings, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
-import { postIDPrefix } from "../../../../META";
-import { fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
-import PostComment from "./PostComment";
-import { useGlobalContext } from "../../../../../StateManager/GlobalContext";
-import { getUID } from "../../../myCodes/Auth";
 import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
-import { formatNumber, getRandTN } from "../../../myCodes/Util";
+import { useGlobalContext } from "../../../../../StateManager/GlobalContext";
+import { postIDPrefix } from "../../../../META";
+import { getUID } from "../../../myCodes/Auth";
+import { deleteDocument, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
+import { formatNumber } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
-import { serverTimestamp } from "firebase/firestore";
+import UserList from "../User/UserList";
+import PostComment from "./PostComment";
 
 const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
@@ -69,6 +71,18 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
         dispatch({ type: "NEW_POST", value: {} })
 
     }
+
+
+    const deletePost = async () => {
+        await deleteDocument('Posts', `${postIDPrefix}-${id}`)
+        dispatch({ type: "NEW_POST", value: {} })
+
+    }
+
+
+
+
+
     const getCreatorData = async () => {
         await fetchDocument('Users', creator, setCreatorData)
     }
@@ -82,6 +96,30 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
     }, [])
 
+    const CreatorPostOptions = () => {
+        return (
+            <div className="w-32 h-40">
+                <Button onPress={deletePost} className="center bg-black-900 text-rose-700">
+                    <TrashIcon />
+                    <h1>Delete post</h1>
+                </Button>
+
+            </div>
+        )
+    }
+
+    const UserPostOptions = () => {
+        return (
+            <div className="w-32 h-40">
+
+            </div>
+        )
+    }
+
+
+
+
+    const [showUserList, setShowUserList] = useState(false)
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
             <div className="absolute w-full  top-2 left-2 s">
@@ -89,6 +127,29 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
             </div>
 
 
+
+            <Popover placement="bottom" showArrow={true} className=" bg-black-800">
+                <PopoverTrigger>
+                    <Button className="absolute right-2 top-2 center gap-0 z-50 0  min-h-0  min-w-fit text-white bg-black  bg-opacity-50   h-fit w-fit m-0 bg-none">
+                        {
+                            UID == creator ?
+                                <Settings size={20} strokeWidth={1} absoluteStrokeWidth /> :
+                                <MoreHorizontal size={20} strokeWidth={1} absoluteStrokeWidth />
+                        }
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                    {
+                        UID == creator ?
+                            <CreatorPostOptions />
+                            :
+                            <UserPostOptions />
+
+                    }
+                </PopoverContent>
+            </Popover>
+
+            {showUserList && <UserList forThis={showUserList} list={likes} setShowUserList={setShowUserList} />}
 
 
 
@@ -126,13 +187,18 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
                     <Button onPress={likePost} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {likes.includes(UID) ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
                     </Button>
-                    {formatNumber(likes?.length)}
+                    <Button onPress={() => { setShowUserList('likes') }} className="min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
+
+                        {formatNumber(likes?.length)}
+                    </Button>
                 </div >
                 <div className="flex gap-2 p-1">
                     <Button onPress={() => { setPostDonation(!postDoantion) }} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {postDoantion ? <AiFillDollarCircle size={24} /> : <AiOutlineDollarCircle size={24} />}
                     </Button>
-                    {formatNumber(donations?.length)}
+                    <Button onPress={() => { setShowUserList('donations') }} className="min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
+                        {formatNumber(donations?.length)}
+                    </Button>
                 </div >
             </div>
 

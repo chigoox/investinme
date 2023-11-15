@@ -32,6 +32,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const { state, dispatch } = useGlobalContext()
     const [showPostView, setSetShowPostView] = useState(false)
     const [currentPost, setCurrentPost] = useState(0)
+    const [showUserList, setShowUserList] = useState(false)
 
 
 
@@ -134,12 +135,11 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
 
 
-    const [showUserList, setShowUserList] = useState(false)
 
     return (
         <div className="w- min-h-screen bg-black text-white">
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
-            {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
+            {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} clsetShowUserListose={setShowUserList} />}
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">
                     <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />

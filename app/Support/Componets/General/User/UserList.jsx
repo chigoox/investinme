@@ -4,10 +4,9 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextu
 import { fetchDocument } from '../../../myCodes/Database'
 
 function UserList({ forThis, list, setShowUserList }) {
-    const shownList = list[`${forThis}`]?.map(item => {
-        return (
-            Object.keys(item)[0]
-        )
+    const shownList = (list[`${forThis}`] || list)?.map(item => {
+        return typeof item == 'Object' ? Object.keys(item)[0] : item
+
     })
 
 
@@ -19,7 +18,7 @@ function UserList({ forThis, list, setShowUserList }) {
                         <ModalHeader className="flex flex-col gap-1">{forThis}</ModalHeader>
                         <ModalBody className="overflow-y-scroll hidescroll flex">
                             <div className='flex flex-wrap'>
-                                {shownList.map((UID) => {
+                                {shownList?.map((UID) => {
                                     const [userData, setUserData] = useState()
 
                                     fetchDocument('Users', UID).then(data => {

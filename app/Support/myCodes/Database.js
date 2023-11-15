@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, deleteField, doc, getDoc, setDoc,collection, where, updateDoc, query,orderBy, getDocs, limit } from "firebase/firestore";
+import { arrayRemove, arrayUnion, deleteField, doc, getDoc, setDoc,collection, where, updateDoc, query,orderBy, getDocs, limit, deleteDoc } from "firebase/firestore";
 import { DATABASE } from "../../../Firebase";
 
 
@@ -26,6 +26,16 @@ console.log(collection, Doc, data)
     console.log(error.message)
    }
    }
+
+}
+
+export async function deleteDocument(collection, Doc){
+    try {
+        await deleteDoc(doc(DATABASE, collection, Doc));
+    } catch (error) {
+    console.log(error.message)
+        
+    }
 
 }
 

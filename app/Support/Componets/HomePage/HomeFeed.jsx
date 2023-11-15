@@ -27,7 +27,7 @@ export const HomeFeed = () => {
         let FEED = await fetchInOrder('Posts', 'timeStamp')
 
 
-        const following = userData.following?.map((user) => {
+        const following = userData?.following?.map((user) => {
             return Object.keys(user)[0]
         })
         const FEED2 = userData?.following ? await fetchIncludesArray('Posts', 'creator', [...following, userData?.uid]) : []
