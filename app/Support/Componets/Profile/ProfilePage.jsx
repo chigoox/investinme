@@ -11,6 +11,8 @@ import PostView from "../General/Post/PostView";
 import UserAvatar from "../General/User/Avatar";
 import EditProfile from "../General/User/EditProfile";
 import UserList from "../General/User/UserList";
+import CashMenu from "../Money/CashMenu";
+import { useRouter } from "next/navigation";
 
 
 
@@ -132,14 +134,17 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
 
 
+    const { push } = useRouter()
 
 
 
-
+    const [showCashMenu, setShowCashMenu] = useState(false)
     return (
         <div className="w- min-h-screen bg-black text-white">
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
+            <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} />
+
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">
                     <UserAvatar user={(_otherUserData || _userData)} size={'lg'} noLable />
@@ -165,10 +170,10 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                             </Skeleton>
                         </div>
                         <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">
-                            <Button onPress={otherUserData ? follow : null} className={`${followed ? 'bg-green-600 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
+                            <Button onPress={otherUserData ? follow : () => { push('/Money') }} className={`${followed ? 'bg-green-600 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
                             <div className="flex w-full h-8 gap-2 flex-shrink-0">
-                                <Button className="w-full h-full">Send</Button>
-                                {otherUserData && <Button className="w-full h-full">Request</Button>}
+                                <Button onPress={() => { setShowCashMenu('send') }} className="w-full h-full">Send</Button>
+                                {otherUserData && <Button onPress={() => { setShowCashMenu('request') }} className="w-full h-full">Request</Button>}
 
                             </div>
                         </div>
