@@ -32,7 +32,7 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
 
     return (
         < Modal isOpen={forThis} backdrop={'blur'} onOpenChange={() => { setShow(false) }
-        } placement='auto' scrollBehavior='inside' className={`h-[30%] w-full bg-black ${{
+        } placement='auto' scrollBehavior='inside' className={`md:h-[30%] h-[40%] w-full bg-black ${{
             backdrop: "bg-black bg-opacity-100 text-white"
         }}`}>
             <ModalContent>
