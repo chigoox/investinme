@@ -1,4 +1,4 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
+import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
 import { message } from 'antd'
 import React, { useState } from 'react'
 
@@ -32,19 +32,21 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
 
     return (
         < Modal isOpen={forThis} backdrop={'blur'} onOpenChange={() => { setShow(false) }
-        } placement='auto' scrollBehavior='inside' className={`md:h-[30%] h-[40%] w-full bg-black ${{
+        } placement='auto' scrollBehavior='inside' className={`md:h-[30%] h-[50%] w-full bg-black ${{
             backdrop: "bg-black bg-opacity-100 text-white"
         }}`}>
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1 text-center font-bold text-3xl text-white">{(forThis ? forThis : 'Menu')}</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1 text-center font-bold text-3xl text-white">{(forThis ? forThis.charAt(0).toUpperCase() + forThis.slice(1) + ' Digits' : 'Menu')}</ModalHeader>
                         <ModalBody className='hidescroll overflow-hidden overflow-y-scroll text-white  p-0 m-auto'>
                             <div className='grid grid-cols-3 gap-4 '>
-                                {['$10', '$25', '$50', '$100', '$250'].map(option => {
-                                    return (
+                                {['$10', '$25', '$50', '$100', '$250', 'input'].map(option => {
+                                    if (option != 'input') return (
                                         <Button onPress={() => { setSelectedValue(Number(option.replace('$', ''))) }} className='m-auto p-4 h-14 w-24 font-bold bg-slate-800 text-white'>{option}</Button>
                                     )
+
+                                    return (<Input value={selectedValue} onValueChange={(v) => { setSelectedValue(Number(v)) }} className='m-auto h-14 w-24 font-bold text-2xl text skew-x-6 bg-slate-800 text-black rounded-xl p-2' />)
                                 })}
 
                             </div>

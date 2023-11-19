@@ -135,6 +135,13 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
 
     const { push } = useRouter()
+    const openAccount = async () => {
+        console.log(UID)
+        const { accountID } = await fetchDocument('Users', UID)
+        if (accountID) push('/Money')
+        push('/Application')
+
+    }
 
 
 
@@ -170,7 +177,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                             </Skeleton>
                         </div>
                         <div className=" h-12 w-72 center-col gap-1  flex-shrink-0">
-                            <Button onPress={otherUserData ? follow : () => { if (UID) push('/Money') }} className={`${followed ? 'bg-green-600 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
+                            <Button onPress={otherUserData ? follow : openAccount} className={`${followed ? 'bg-green-600 text-white font-extrabold text-lg' : 'text-base'}  w-full trans flex-shrink-0 h-8`}>{otherUserData ? (followed ? 'Following' : 'Follow') : 'Account'}</Button>
                             <div className="flex w-full h-8 gap-2 flex-shrink-0">
                                 <Button onPress={() => { setShowCashMenu('send') }} className="w-full h-full">Send</Button>
                                 {otherUserData && <Button onPress={() => { setShowCashMenu('request') }} className="w-full h-full">Request</Button>}

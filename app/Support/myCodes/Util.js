@@ -83,6 +83,10 @@ export const createArray = (length) => {
     return newArray
 }
 
+export const makeUniq = (array) => {
+    return [...new Set(array)]
+    
+}
 
 export const formatNumber = (num)=>{
     if (num < 1000) return num

@@ -6,6 +6,7 @@ import { Button, Card, CardBody, CardHeader } from '@nextui-org/react'
 import { formatNumber, getRand } from '../Support/myCodes/Util'
 import { ArrowRightFromLineIcon } from 'lucide-react'
 import CashMenu from '../Support/Componets/Money/CashMenu'
+import FormatNumber from '../Support/Componets/General/FormatNumber'
 
 
 const font = Kenia({ subsets: ['latin'], weight: ['400'] })
@@ -15,9 +16,22 @@ const font2 = Concert_One({ subsets: ['latin'], weight: ['400'] })
 function page() {
     const [digits, setDigits] = useState(100.5)
     const [showCashMenu, setShowCashMenu] = useState(false)
-    console.log(showCashMenu)
+    const test = async () => {
+        const response = await fetch("/api/unit/FetchAccount", {
+            method: "POST", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ accountID: 2223540 }),
+        });
+        const data = await response.json()
+        console.log(data)
+    }
     return (
         <div className={`flex min-h-screen overflow-x-hidden md:px-20 lg:px-40 xl:px-32 py-4 flex-col items-center justify-evenly bg-gradient-to-bl from-black via-black to-[#000e00] text-white ${font2.className}`}>
+            <Button onPress={() => {
+                test()
+            }} ></Button>
             <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} setCurrentDigits={setDigits} />
 
             <div className='w-full md:w-3/4 flex flex-col gap-8 h-auto p-4'>
@@ -27,7 +41,7 @@ function page() {
                         <div className='w-fit p-2 '>
                             <div className='center-col w-fit  m-auto'>
                                 <h1>Cash Balance</h1>
-                                <h1 className='text-purple-500 text-5xl   md:text-7xl font-extrabold'>${formatNumber(digits)}</h1>
+                                <div className='text-5xl   md:text-7xl font-extrabold'><FormatNumber number={digits} before={'$'} /></div>
                             </div>
                             <div className='w-fit flex gap-2 mt-12  m-auto'>
                                 <Button onPress={() => { setShowCashMenu('add') }} className='bg-slate-800 w-1/2 text-white '>Add Digits</Button>
