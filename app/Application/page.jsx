@@ -107,12 +107,14 @@ function page() {
                 body: JSON.stringify(realData),
             });
 
-            const { data } = await response?.json()
+            const { data, title, source } = await response?.json()
+            if (title || source) message.error(title + ' @ ' + source.pointer.replace('/data/attributes', '').replace('/', ''))
 
-            console.log(data)
-            await addToDatabase('Users', UID, 'customerID', data.relationships.customer.data.id)
+
+            await addToDatabase('Users', UID, 'customerID', data?.relationships.customer.data.id)
             await addToDatabase('Users', UID, 'address', data.attributes.address)
 
+            console.log(data)
 
 
             const openBank = await fetch('/api/unit/OpenBank', {
@@ -131,20 +133,18 @@ function page() {
                             customer: {
                                 data: {
                                     type: 'customer',
-                                    id: data.relationships.customer.data.id
+                                    id: data?.relationships.customer.data.id
                                 }
                             }
                         }
                     }
                 }),
             });
-
-
-
-            const { bank } = await openBank?.json()
+            console.log('first')
+            let bank = await openBank?.json()
+            bank = bank.data
             console.log(bank)
 
-            console.log(' from page')
             const createCard = await fetch('/api/unit/CreateCard', {
                 method: "POST",
                 headers: {
@@ -160,7 +160,7 @@ function page() {
                                 city: data.attributes.address.city,
                                 state: data.attributes.address.state,
                                 postalCode: data.attributes.address.postalCode,
-                                country: data.attributes.address.postalCode.country,
+                                country: data.attributes.address.country,
                             },
                             limits: {
                                 dailyWithdrawal: 50000,
@@ -190,7 +190,7 @@ function page() {
 
 
         } catch (error) {
-            message.error(error.message)
+            console.log(error.message)
         }
     }
 

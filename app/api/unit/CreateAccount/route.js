@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -14,9 +15,9 @@ export async function POST(request) {
     });
 
 
-    const data = await response.json();
-    if (data.errors) console.log(data.errors)
-    return NextResponse.json(data)
+    let data = await response.json();
+    if (data.errors) data = data.errors[0]
+    return NextResponse.json( data)
     
   
 
