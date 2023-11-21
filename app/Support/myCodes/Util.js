@@ -50,22 +50,22 @@ export function disableScroll(enable = true, name = "scroll-able") {
     console.log(enable)
 }
 
-export const getRand = (max=99999) => { return Math.floor(Math.random() * max) + 1; }
+export const getRand = (max = 99999) => { return Math.floor(Math.random() * max) + 1; }
 
 export function getRandTN(size = 7) {
-const result = Math.random().toString(36).substring(2,size < 7 ? 7 : size);
-return result;
+    const result = Math.random().toString(36).substring(2, size < 7 ? 7 : size);
+    return result;
 
 }
 
 export const filterObject = (obj, filterFunc) => {
-    Object.filter = (obj, predicate) => 
+    Object.filter = (obj, predicate) =>
         Object.keys(obj)
-              .filter( key => predicate(obj[key]) )
-              .reduce( (res, key) => Object.assign(res, { [key]: obj[key] }), {} );
-  
-    var filtered = Object.filter(obj, filterFunc); 
-    return(filtered);
+            .filter(key => predicate(obj[key]))
+            .reduce((res, key) => Object.assign(res, { [key]: obj[key] }), {});
+
+    var filtered = Object.filter(obj, filterFunc);
+    return (filtered);
 
 }
 
@@ -79,18 +79,34 @@ export const getBase64 = (file) =>
 
 export const createArray = (length) => {
     const newArray = Array.from({ length: length }, (value, index) => index)
-    
+
     return newArray
 }
 
 export const makeUniq = (array) => {
     return [...new Set(array)]
-    
+
 }
 
-export const formatNumber = (num)=>{
+export const formatNumber = (num) => {
     if (num < 1000) return num
-    if (num >= 1000000000) return String(num/1000000000).substring(0,5) + 'B'
-    if (num >= 1000000) return String(num/1000000).substring(0,5) + 'M'
-    if (num >= 1000) return (String(num/1000).substring(0,5) + 'K')
+    if (num >= 1000000000) return String(num / 1000000000).substring(0, 5) + 'B'
+    if (num >= 1000000) return String(num / 1000000).substring(0, 5) + 'M'
+    if (num >= 1000) return (String(num / 1000).substring(0, 5) + 'K')
+}
+
+
+export const clearTokens = () => {
+    const hours = 1;
+    const now = new Date().getTime();
+    const setupTime = localStorage?.getItem('TokenTimeStamp');
+    if (setupTime == null) {
+
+    } else {
+        if (now - setupTime > hours * 60 * 60 * 1000) {
+            localStorage?.removeItem('TokenTimeStamp');
+            localStorage?.removeItem('aToken');
+            localStorage?.removeItem('uToken');
+        }
+    }
 }

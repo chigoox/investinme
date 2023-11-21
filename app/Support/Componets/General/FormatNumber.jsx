@@ -3,7 +3,7 @@ import { formatNumber } from '../../myCodes/Util'
 
 function FormatNumber({ number, before }) {
   return (
-    <div className={`
+    <div className={` trans-slow
     ${(number < 1000) ? 'text-white' :
         (number < 10000) ? 'text-lime-500' :
           (number < 100000) ? 'text-blue-500' :

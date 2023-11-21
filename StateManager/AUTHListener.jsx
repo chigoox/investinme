@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react'
 import app, { AUTH } from '../Firebase'
 import { useGuest } from '../app/Support/Hooks/useGuest'
 import { fetchDocument } from '../app/Support/myCodes/Database'
+import { clearTokens } from '../app/Support/myCodes/Util'
 
 
 function AUTHListener({ add = false, set, protectedPage }) {
     const { push } = useRouter()
+    clearTokens()
 
     useEffect(() => {
         const auth = AUTH
@@ -38,6 +40,10 @@ export function useAUTHListener(add = false, set, protectedPage) {
     const GID = useGuest()
 
 
+    if (typeof window !== 'undefined') {
+        clearTokens()
+
+    }
 
 
 

@@ -140,10 +140,9 @@ function page() {
                     }
                 }),
             });
-            console.log('first')
             let bank = await openBank?.json()
             bank = bank.data
-            console.log(bank)
+
 
             const createCard = await fetch('/api/unit/CreateCard', {
                 method: "POST",
@@ -181,11 +180,13 @@ function page() {
                 }),
             });
 
-            const { card } = await createCard?.json()
-            console.log(card)
+            let { card } = await createCard?.json()
+            card = card.data
 
 
             await addToDatabase('Users', UID, 'bankID', bank.id)
+            await addToDatabase('Users', UID, 'vCardID', card.id)
+
             push('/Money')
 
 

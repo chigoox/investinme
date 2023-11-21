@@ -1,6 +1,6 @@
 
 
-export const siteName = 'Investa'
+export const siteName = 'Digits'
 export const siteTag = 'Follow. Share. Invest.'
 export const siteEmail = 'em.ed5productions@gmail.com'
 

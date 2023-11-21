@@ -1,5 +1,5 @@
 'use client'
-import { Button, Image, Skeleton } from "@nextui-org/react";
+import { Button, Card, Image, Skeleton } from "@nextui-org/react";
 import { FileEditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAUTHListener } from "../../../../StateManager/AUTHListener";
@@ -13,6 +13,7 @@ import EditProfile from "../General/User/EditProfile";
 import UserList from "../General/User/UserList";
 import CashMenu from "../Money/CashMenu";
 import { useRouter } from "next/navigation";
+import { createAuthTokens, createUnAuthTokens, verifiToken } from "../../myCodes/UnitUtils";
 
 
 
@@ -132,22 +133,96 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     }, [userData, otherUserData])
 
 
+    const [verificationToken, setVerificationToken] = useState()
+    const genToken = async () => {
+
+        const now = new Date().getTime()
+        const { customerID } = await fetchDocument('Users', UID)
+        const uToken = await createUnAuthTokens(customerID)
+        localStorage?.setItem('TokenTimeStamp', now);
+        localStorage.setItem("uToken", `${uToken}`)
+        const tokenVerification = await verifiToken(customerID)
+        setVerificationToken(tokenVerification)
+    }
+
+    const authAndSend = async (vCode, vToken) => {
+        const { customerID } = await fetchDocument('Users', UID)
+
+        if (typeof vCode == 'string' && vCode.length == 6) {
+            const aToken = await createAuthTokens(vToken, vCode, customerID)
+            localStorage.setItem("aToken", `${aToken}`)
+
+            if (localStorage.getItem("aToken").includes('v2')) return push('/Money')
+
+
+        }
+
+    }
+
+
 
 
     const { push } = useRouter()
     const openAccount = async () => {
-        console.log(UID)
-        const { accountID } = await fetchDocument('Users', UID)
-        if (accountID) push('/Money')
-        push('/Application')
+        const { bankID } = await fetchDocument('Users', UID)
+        if (localStorage.getItem("aToken")?.includes('v2')) return push('/Money')
+        if (bankID) return genToken()
+        if (!bankID) return push('/Application')
 
+    }
+
+
+    const [verificationCode, setVerificationCode] = useState([])
+    const TFAuthWindow = ({ setVerificationToken }) => {
+
+        const handleKeyPress = (event) => {
+            const { target, keyCode } = event
+            const { value, name } = target
+            const index = Number(name)
+            setVerificationCode(o => {
+                o[index] = value
+                return o
+            })
+            if (keyCode == 8) {
+
+                target.previousElementSibling?.focus()
+            } else {
+                // setVerificationCode(o => `${o}${value}`)
+                target.nextElementSibling?.focus()
+            }
+            if (verificationCode.length == 6) authAndSend(verificationCode.join(""), verificationToken)
+
+        }
+
+
+
+        return (
+            <div className="h-full w-full absolute center-col z-50 ">
+                <Card className="h-72 w-96 bottom-32 grid grid-cols-6 items-center p-2 text-7xl bg-gradient-to-br  from-gray-900 to-black border-purple-950 border ">
+                    <h1 className="text-xl w-full absolute top-10 p-2 text-center font-bold text-white">Verification Code sent via TEXT</h1>
+                    <input value={verificationCode[0]} onKeyUp={handleKeyPress} name="0" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+                    <input value={verificationCode[1]} onKeyUp={handleKeyPress} name="1" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+                    <input value={verificationCode[2]} onKeyUp={handleKeyPress} name="2" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+                    <input value={verificationCode[3]} onKeyUp={handleKeyPress} name="3" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+                    <input value={verificationCode[4]} onKeyUp={handleKeyPress} name="4" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+                    <input value={verificationCode[5]} onKeyUp={handleKeyPress} name="5" type="number" inputmode="numeric" max={'9'} min={'0'} className="border-2 bg-gradient-to-br from-slate-700 to-black  text-white rounded-xl h-24 m-auto w-14 text-center border-purple-900 " />
+
+                    <div className="absolute bottom-4 center gap-2 p-4 w-full">
+                        <Button onClick={() => { setVerificationCode([]) }} className="bg-black-800 w-1/2 text-lg text-white drop-shadow hover:text-lime-400 font-bold">Clear</Button>
+                        <Button onClick={() => { setVerificationToken(false) }} className="bg-black-800 text-lg w-1/2 text-white drop-shadow hover:text-rose-400 font-bold">Close</Button>
+
+                    </div>
+                </Card>
+            </div>
+        )
     }
 
 
 
     const [showCashMenu, setShowCashMenu] = useState(false)
     return (
-        <div className="w- min-h-screen bg-black text-white">
+        <div className="w- min-h-screen relative bg-black text-white">
+            {verificationToken && <TFAuthWindow setVerificationToken={setVerificationToken} />}
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
             <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} />

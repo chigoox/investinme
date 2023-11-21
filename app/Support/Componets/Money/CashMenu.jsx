@@ -25,14 +25,13 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
         setShow(false)
 
     }
-    console.log(forThis)
 
 
 
 
     return (
         < Modal isOpen={forThis} backdrop={'blur'} onOpenChange={() => { setShow(false) }
-        } placement='auto' scrollBehavior='inside' className={`md:h-[30%] h-[50%] w-full bg-black ${{
+        } placement='auto' scrollBehavior='inside' className={`h-auto mb-10 w-full bg-black ${{
             backdrop: "bg-black bg-opacity-100 text-white"
         }}`}>
             <ModalContent>
@@ -50,9 +49,7 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
                                 })}
 
                             </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button className='w-full h-12 text-lg font-extrabold  bottom-12' onPress={buttonPress} >
+                            <Button className='w-full h-12 text-lg font-extrabold ' onPress={buttonPress} >
                                 {forThis == 'request' ? `Request ${selectedValue} Digits` :
                                     forThis == 'add' ? `Add ${selectedValue} Digits` :
                                         forThis == 'send' ? `Send ${selectedValue} Digits` :
@@ -60,6 +57,9 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
                                                 forThis == 'cash' ? `Cashout ${selectedValue} Digits` : '???'
                                 }
                             </Button>
+                        </ModalBody>
+                        <ModalFooter>
+
 
                         </ModalFooter>
                     </>
