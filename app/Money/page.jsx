@@ -43,7 +43,6 @@ function page() {
         )
     })
 
-    console.log(transactions)
 
     useEffect(() => {
         const run = async () => {
@@ -67,9 +66,6 @@ function page() {
         <div className={`flex min-h-screen overflow-x-hidden md:px-20 lg:px-40 xl:px-32 py-4 flex-col items-center justify-evenly bg-gradient-to-bl from-black via-black to-[#000e00] text-white ${font2.className}`}>
 
 
-            <Button onPress={() => {
-                test()
-            }} ></Button>
             <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} setCurrentDigits={setDigits} />
             <div className='w-full md:w-3/4 flex flex-col gap-8 h-auto p-4'>
                 <h1 className='text-6xl'>Digits</h1>
@@ -102,7 +98,7 @@ function page() {
                         Transactions
                     </CardHeader>
                     <CardBody className='center-col gap-2 px-4 border-t  text-white h-96 overflow-hidden overflow-y-scroll hidescroll'>
-                        {Object.values(transactions || {})?.map((transaction) => {
+                        {Object.values(transactions || {})?.reverse().map((transaction) => {
                             return (
                                 <div className='h-auto flex-shrink-0 w-full bg-black-900 my-1 rounded-xl p-2 between'>
                                     <div className='center gap-2'>
