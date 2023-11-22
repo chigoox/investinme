@@ -89,6 +89,7 @@ function page() {
                         tags: {
                             userId: UID,
                         },
+                        idempotencyKey: localStorage.getItem('idempotencyKey')
                     },
                 },
             })
@@ -114,7 +115,7 @@ function page() {
             await addToDatabase('Users', UID, 'customerID', data?.relationships.customer.data.id)
             await addToDatabase('Users', UID, 'address', data.attributes.address)
 
-            console.log(data)
+
 
 
             const openBank = await fetch('/api/unit/OpenBank', {
@@ -127,7 +128,8 @@ function page() {
                         type: 'depositAccount',
                         attributes: {
                             depositProduct: 'checking',
-                            tags: { purpose: 'checking' }
+                            tags: { purpose: 'checking' },
+                            idempotencyKey: localStorage.getItem('idempotencyKey')
                         },
                         relationships: {
                             customer: {
@@ -166,7 +168,7 @@ function page() {
                                 dailyPurchase: 50000,
                                 monthlyWithdrawal: 500000,
                                 monthlyPurchase: 700000
-                            }
+                            },
                         },
                         relationships: {
                             account: {
@@ -180,14 +182,22 @@ function page() {
                 }),
             });
 
-            let { card } = await createCard?.json()
-            card = card.data
+            let { phisicalCard, virtualCard } = await createCard?.json()
+
+            phisicalCard = phisicalCard?.data
+            virtualCard = virtualCard?.data
+
+            console.log(virtualCard)
+            console.log(phisicalCard)
 
 
             await addToDatabase('Users', UID, 'bankID', bank.id)
-            await addToDatabase('Users', UID, 'vCardID', card.id)
 
-            push('/Money')
+            await addToDatabase('Users', UID, 'vCardID', virtualCard?.id)
+
+            await addToDatabase('Users', UID, 'pCardID', phisicalCard?.id)
+            message.success('Digits Account Opened')
+            push('/Profile')
 
 
         } catch (error) {

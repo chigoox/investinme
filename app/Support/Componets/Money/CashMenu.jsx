@@ -1,28 +1,43 @@
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
 import { message } from 'antd'
 import React, { useState } from 'react'
+import { sendPayment } from '../../myCodes/UnitUtils'
+import { FetchThisDocs, fetchDocument } from '../../myCodes/Database'
 
-function CashMenu({ forThis, setShow, setCurrentDigits }) {
+function CashMenu({ forThis, setShow, setCurrentDigits, UID }) {
     const [selectedValue, setSelectedValue] = useState('')
+    const [counterParty, setCounterParty] = useState('')
+    const [memo, setMemo] = useState('')
 
-    const addDigits = () => {
+    const addDigits = async () => {
         setCurrentDigits(o => (o + selectedValue))
     }
-    const cashOutDigits = () => {
+
+
+    const cashOutDigits = async () => {
         setCurrentDigits(o => {
             if (o - selectedValue < 0) message.error('Not enough digits')
             return (o - selectedValue < 0) ? o : (o - selectedValue)
         })
     }
 
-    const buttonPress = () => {
-        if (forThis == 'cash') cashOutDigits()
-        if (forThis == 'add') addDigits()
+    const sendDigits = async (myCustomerID, otherCustomerID) => {
+        sendPayment(selectedValue, memo, myCustomerID, otherCustomerID)
+    }
+
+    const buttonPress = async () => {
+
+        const { bankID } = await fetchDocument('Users', UID)
+        let otherBankID = await FetchThisDocs('Users', 'displayName', '==', counterParty)
+        otherBankID = otherBankID[0]?.bankID
+
+        if (forThis == 'cash') await cashOutDigits()
+        if (forThis == 'add') await addDigits()
+        if (forThis == 'send' && bankID && otherBankID) await sendDigits(bankID, otherBankID)
 
 
 
-
-        setShow(false)
+        //setShow(false)
 
     }
 
@@ -39,6 +54,8 @@ function CashMenu({ forThis, setShow, setCurrentDigits }) {
                     <>
                         <ModalHeader className="flex flex-col gap-1 text-center font-bold text-3xl text-white">{(forThis ? forThis.charAt(0).toUpperCase() + forThis.slice(1) + ' Digits' : 'Menu')}</ModalHeader>
                         <ModalBody className='hidescroll overflow-hidden overflow-y-scroll text-white  p-0 m-auto'>
+                            <Input onValueChange={v => { setCounterParty(v) }} className={`text-black`} label={`${forThis} ${forThis == 'request' ? 'from' : 'to'}...`} />
+                            <Input onValueChange={v => { setMemo(v) }} className={`text-black`} label={`Add notes`} />
                             <div className='grid grid-cols-3 gap-4 '>
                                 {['$10', '$25', '$50', '$100', '$250', 'input'].map(option => {
                                     if (option != 'input') return (

@@ -101,3 +101,39 @@ export const fetchBankAccount = async (accountID, customerID, vCardID, uToken) =
 
     return { account: { ...account.data }, history: { ...history.data }, vcardPK: { ...vcardPK.data }, transactions: { ...transactions.data } }
 }
+
+export const sendPayment = async (amount, description, myAccountID, OtherAccountID) => {
+    const payment = await fetch("/api/unit/Payments/SendPayment", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            data: {
+                type: "bookPayment",
+                attributes: {
+                    amount: amount,
+                    description: description || ''
+                },
+                relationships: {
+                    account: {
+                        data: {
+                            type: "depositAccount",
+                            id: myAccountID
+                        }
+                    },
+                    counterpartyAccount: {
+                        data: {
+                            type: "depositAccount",
+                            id: OtherAccountID
+                        }
+                    }
+                }
+            }
+        }),
+    });
+    const paymentConfirm = await payment?.json();
+    console.log(paymentConfirm)
+    return { payment: { ...paymentConfirm } }
+
+}

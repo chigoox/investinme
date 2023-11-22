@@ -225,7 +225,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
             {verificationToken && <TFAuthWindow setVerificationToken={setVerificationToken} />}
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
-            <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} />
+            <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} UID={UID} />
 
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">

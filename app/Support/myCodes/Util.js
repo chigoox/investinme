@@ -1,5 +1,6 @@
 
 import Toastify from 'toastify-js'
+import { v4 as uuidv4 } from 'uuid';
 
 export const isDev = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -105,6 +106,7 @@ export const clearTokens = () => {
 
     } else {
         if (now - setupTime > hours * 60 * 60 * 1000) {
+            localStorage.setItem('idempotencyKey', uuidv4())
             localStorage?.removeItem('TokenTimeStamp');
             localStorage?.removeItem('aToken');
             localStorage?.removeItem('uToken');

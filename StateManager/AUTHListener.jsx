@@ -7,11 +7,16 @@ import app, { AUTH } from '../Firebase'
 import { useGuest } from '../app/Support/Hooks/useGuest'
 import { fetchDocument } from '../app/Support/myCodes/Database'
 import { clearTokens } from '../app/Support/myCodes/Util'
-
+import { v4 as uuidv4 } from 'uuid';
 
 function AUTHListener({ add = false, set, protectedPage }) {
     const { push } = useRouter()
-    clearTokens()
+
+    if (typeof window !== 'undefined') {
+        if (!localStorage.getItem('idempotencyKey')) localStorage.setItem('idempotencyKey', uuidv4())
+        clearTokens()
+
+    }
 
     useEffect(() => {
         const auth = AUTH
@@ -41,6 +46,7 @@ export function useAUTHListener(add = false, set, protectedPage) {
 
 
     if (typeof window !== 'undefined') {
+        if (!localStorage.getItem('idempotencyKey')) localStorage.setItem('idempotencyKey', uuidv4())
         clearTokens()
 
     }

@@ -18,6 +18,6 @@ export async function POST(request) {
     );
 
     const tokenVerification = await response.json();
-    if (tokenVerification.errors) throw new Error(tokenVerification.errors);
+    if (tokenVerification.errors) return NextResponse.json(tokenVerification.errors[0]);
     return NextResponse.json(tokenVerification);
 }
