@@ -27,7 +27,7 @@ function page() {
 
     let UID = useAUTHListener(null, null, true); UID = UID.uid
     let uToken
-    if (typeof window != undefined) uToken = localStorage?.getItem('uToken')
+    if (typeof window !== 'undefined') uToken = localStorage?.getItem('uToken')
 
 
 

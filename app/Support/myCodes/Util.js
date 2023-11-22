@@ -97,10 +97,11 @@ export const formatNumber = (num) => {
 
 
 export const clearTokens = () => {
-    const hours = 1;
+    const hours = 0.25;
     const now = new Date().getTime();
     const setupTime = localStorage?.getItem('TokenTimeStamp');
     if (setupTime == null) {
+        if (localStorage?.getItem('aToken')) localStorage?.removeItem('aToken');
 
     } else {
         if (now - setupTime > hours * 60 * 60 * 1000) {

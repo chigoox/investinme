@@ -4,10 +4,10 @@ import React, { useState } from 'react'
 const UserAvatar = ({ user, size = 'sm', forthis, noLable, gustName, creatorData }) => {
     const [loadGust, setLoadGust] = useState(false)
     return (
-        <div className='relative'>
-            <div className='overflow-hidden'>
-                <Link href={`/${user?.displayName?.replace(/\s+/g, '') || gustName}`} className={`${forthis == 'profile' ? 'flex-col' : 'flex '} ${forthis == 'comment' ? 't' : 'flex '} h-full z-[50] w-fit relative rounded-full 
+        <div className={`${forthis == 'profile' ? 'flex-col' : 'flex '} ${forthis == 'comment' ? '' : 'flex '} h-full z-[50] w-fit relative rounded-full 
          items-center gap-2`}>
+            <div className='overflow-hidden rounded-full'>
+                <Link className='rounded-full overflow-clip' href={`/${user?.displayName?.replace(/\s+/g, '') || gustName}`} >
                     <Skeleton className='rounded-full w-fit' isLoaded={user?.avatarURL || (() => {
                         setTimeout(() => {
                             setLoadGust(true)
