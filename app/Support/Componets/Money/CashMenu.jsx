@@ -18,7 +18,7 @@ function CashMenu({ forThis, setShow, setCurrentDigits, UID, show, autofill = ''
         setMemo()
         setIdempotencyKey()
     }
-
+    console.log(autofill)
     const addDigits = async () => {
         setCurrentDigits(o => (o + selectedValue))
     }
@@ -86,6 +86,7 @@ function CashMenu({ forThis, setShow, setCurrentDigits, UID, show, autofill = ''
 
     useEffect(() => {
         setIdempotencyKey(getUUID())
+        setCounterParty(autofill)
     }, [show])
 
 
