@@ -33,7 +33,7 @@ function CashMenu({ forThis, setShow, setCurrentDigits, UID, show, autofill = ''
 
     const sendDigits = async (myCustomerID, otherCustomerID) => {
         setLoading(true)
-        const { payment } = await sendPayment(selectedValue, memo, myCustomerID, otherCustomerID, idempotencyKey)
+        const { payment } = await sendPayment(selectedValue * 100, memo, myCustomerID, otherCustomerID, idempotencyKey)
 
         if (payment.title) message.error(payment.title)
         if (payment?.data?.attributes?.status == 'Sent') {
