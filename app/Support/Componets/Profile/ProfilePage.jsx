@@ -143,6 +143,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         localStorage.setItem("uToken", `${uToken}`)
         const tokenVerification = await verifiToken(customerID)
         setVerificationToken(tokenVerification)
+        return tokenVerification
     }
 
     const authAndSend = async (vCode, vToken) => {
@@ -165,7 +166,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const { push } = useRouter()
     const openAccount = async () => {
         const { bankID } = await fetchDocument('Users', UID)
-        if (localStorage.getItem("aToken")?.includes('v2')) return push('/Money')
+        if (localStorage.getItem("aToken")?.includes('v2') || (localStorage.getItem("uToken") && localStorage.getItem("TokenTimeStamp2"))) return push('/Money')
         if (bankID) return genToken()
         if (!bankID) return push('/Application')
 
@@ -217,7 +218,8 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         )
     }
 
-
+    console.log(userData)
+    console.log(otherUserData)
 
     const [showCashMenu, setShowCashMenu] = useState(false)
     return (
@@ -225,7 +227,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
             {verificationToken && <TFAuthWindow setVerificationToken={setVerificationToken} />}
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
-            <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} UID={UID} />
+            <CashMenu autofill={_otherUserData?.displayName || _userData?.displayName} show={showCashMenu} forThis={showCashMenu} setShow={setShowCashMenu} UID={UID} />
 
             <div className="p-4  relative ">
                 <div className="flex-wrap center gap-2">

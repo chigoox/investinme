@@ -8,9 +8,12 @@ import LineChart from '../Support/Componets/Charts/LineChart'
 import FormatNumber from '../Support/Componets/General/FormatNumber'
 import CashMenu from '../Support/Componets/Money/CashMenu'
 import DCard from '../Support/Componets/Money/DCard'
-import { fetchDocument } from '../Support/myCodes/Database'
-import { fetchBankAccount } from '../Support/myCodes/UnitUtils'
-import { getRand } from '../Support/myCodes/Util'
+import { FetchThisDocs, fetchDocument, updateArrayDatabaseItem } from '../Support/myCodes/Database'
+import { fetchBankAccount, sendPayment } from '../Support/myCodes/UnitUtils'
+import { genToken, getRand, getUUID } from '../Support/myCodes/Util'
+import UserAvatar from '../Support/Componets/General/User/Avatar'
+import LoaddingMask from '../Support/Componets/General/LoadingMask'
+import { message } from 'antd'
 
 
 const font = Kenia({ subsets: ['latin'], weight: ['400'] })
@@ -25,11 +28,22 @@ function page() {
     const [vCardPK, setVCardPK] = useState({})
     const [transactions, setTransactions] = useState({})
 
-    let UID = useAUTHListener(null, null, true); UID = UID.uid
+    const [digitRequests, setDigitRequests] = useState()
+    const [digitResponse, setDigitResponse] = useState()
+
+    const [reRender, setReRender] = useState()
+
+    const [loading, setLoading] = useState(false)
+
+    const toggleRerender = () => setReRender(!reRender)
+
+
+    const user = useAUTHListener(null, null, true);
+    const UID = user.uid
     let uToken
     if (typeof window !== 'undefined') uToken = localStorage?.getItem('uToken')
 
-
+    if (localStorage.getItem('uToken') == null) genToken(UID)
 
     const historyDate = Object.values(history)?.map(day => {
         return (
@@ -46,30 +60,115 @@ function page() {
 
     useEffect(() => {
         const run = async () => {
-            const { bankID, customerID, vCardID } = await fetchDocument('Users', UID)
+            const { bankID, customerID, vCardID, DigitResponse, DigitRequest } = await fetchDocument('Users', UID)
             const { history, account, vcardPK, transactions } = await fetchBankAccount(bankID, customerID, vCardID, uToken)
             setHistory(history)
             setAccount(account)
             setVCardPK(vcardPK)
             setTransactions(transactions)
+            setDigitRequests(DigitRequest)
+            setDigitResponse(DigitResponse)
         }
 
         run()
 
 
-    }, [UID])
+    }, [UID, reRender])
+
+
+    const RequestPayment = ({ request }) => {
+        const [UserInfo, setUserInfo] = useState()
+        const getData = async () => {
+            const { UserInfo } = await fetchDocument('Users', (request.recivierUID || request.senderUID))
+            setUserInfo(UserInfo)
+            return UserInfo
+        }
+
+        useEffect(() => {
+            getData()
+        }, [])
+        console.log({ sender: request.sender, reciver: request.reciver, senderUID: UID, amount: request.amount, memo: request.memo })
+
+        const send = async () => {
+            setLoading(true)
+            localStorage.setItem('idempotencyKey', getUUID())
+            const payment = await sendPayment(request.amount, request.memo, request.sender, request.reciver)
+            await updateArrayDatabaseItem("Users", UID, 'DigitRequest', request, true)
+            await updateArrayDatabaseItem("Users", request.recivierUID, 'DigitResponse', { sender: request.sender, reciver: request.reciver, senderUID: UID, amount: request.amount, memo: request.memo }, true)
+            toggleRerender()
+            message.success('Payment Sent')
+            setLoading(false)
+        }
+
+
+
+        return (
+            <div className='h-auto my-2  flex-shrink-0 w-full bg-black-900 rounded-xl p-2 between'>
+                <div className='w-3/4'>
+                    <UserAvatar user={UserInfo} />
+                    <div>{request.memo}</div>
+                </div>
+                <div className='text-2xl font-extrabold'>
+                    <div className='flex items-center justify-center md:flex-row flex-col gap-2'>
+                        <h1 className={`${request.senderUID ? 'text-xl' : ''}`}>${request.amount / 100}</h1>
+                        {!request.senderUID && <Button onPress={send} className='bg-lime-500' >Pay</Button>}
+                        <Button className='bg-rose-500' >{request.senderUID ? 'cancel' : 'Reject'}</Button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
+
+    const CompletePayment = ({ transaction }) => {
+        console.log(transaction)
+        const [data, setData] = useState([])
+        console.log(data)
+
+        const getData = async () => {
+            setData(await FetchThisDocs('Users', 'bankID', '==', transaction.relationships.counterpartyAccount.data.id))
+        }
+        console.log()
+        useEffect(() => {
+            getData()
+        }, [])
+
+        return (
+            <div className='h-auto my-2  flex-shrink-0 w-full bg-black-900 rounded-xl p-2 between'>
+                <div className='center gap-2'>
+                    <div className='bg-white rounded-full h-12 w-12 overflow-hidden '>
+                        {data[0]?.UserInfo ? <UserAvatar noLable={true} user={data[0]?.UserInfo} /> : <img className='h-full w-full object-cover ' src={data[0]?.UserInfo.avatarURL || "https://images.unsplash.com/photo-1619881589928-a0c6516c074c?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} alt="" />}
+                    </div>
+                    <div className='w-40'>
+                        <h1 className='font-bold'>{transaction?.attributes?.companyName || data[0]?.displayName}</h1>
+                        <h1 className=' text-xs text-purple-600 realtive bottom-2'>{transaction?.type}</h1>
+                        <h1 className='text-gray-400 text-sm font-light realtive bottom-2'>{transaction?.attributes?.summary || transaction?.attributes?.description}</h1>
+                    </div>
+
+                </div>
+                <div className='text-2xl font-extrabold'>
+                    <div><h1 className={`${transaction?.attributes?.direction == 'Debit' ? 'text-rose-400' : 'text-lime-400'}`}>${transaction?.attributes?.amount / 100}</h1> </div>
+                </div>
+            </div>
+        )
+    }
 
 
 
 
+
+
+
+    const [pendingSelection, setPendingSelection] = useState('Pending Approval')
     return (
         <div className={`flex min-h-screen overflow-x-hidden md:px-20 lg:px-40 xl:px-32 py-4 flex-col items-center justify-evenly bg-gradient-to-bl from-black via-black to-[#000e00] text-white ${font2.className}`}>
 
-
+            {loading && <LoaddingMask />}
             <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} setCurrentDigits={setDigits} />
             <div className='w-full md:w-3/4 flex flex-col gap-8 h-auto p-4'>
                 <h1 className='text-6xl'>Digits</h1>
-                <LineChart data={historyBalance} lable={historyDate} />
+                <LineChart data={historyBalance.reverse()} lable={historyDate.reverse()} />
                 <Card className='h-auto border-black border p-4 relative text-white w-full m-auto bg-black-800'>
                     <div className='flex flex-col  '>
                         <div className='w-fit p-2 '>
@@ -92,30 +191,30 @@ function page() {
 
                     </div>
                 </Card>
+                <Card className='bg-black-800 mb-10'>
+                    <CardHeader className='text-white font-bold evenly text-2xl'>
+                        {['Pending Approval', 'Awaiting Payment'].map((selection) => {
+                            return (<Button onPress={() => { setPendingSelection(selection) }} className={`${(pendingSelection == 'Pending Approval' && pendingSelection == selection) ? 'text-rose-700' : (pendingSelection == 'Awaiting Payment' && pendingSelection == selection) ? 'text-lime-500' : 'text-gray-500'} bg-black-800 h-12   text-xl`}>
+                                {selection}
+                            </Button>)
+                        })}
+                    </CardHeader>
+                    <CardBody className='flex flex-col  px-4 border-t  text-white h-96 overflow-hidden overflow-y-scroll hidescroll'>
+                        {(pendingSelection == 'Pending Approval' ? digitRequests : digitResponse)?.reverse().map((request) => {
 
+                            return (<RequestPayment request={request} />)
+
+                        })}
+                    </CardBody>
+                </Card>
                 <Card className='bg-black-800 mb-10'>
                     <CardHeader className='text-white font-bold text-2xl'>
-                        Transactions
+                        Completed
                     </CardHeader>
-                    <CardBody className='center-col gap-2 px-4 border-t  text-white h-96 overflow-hidden overflow-y-scroll hidescroll'>
-                        {Object.values(transactions || {})?.reverse().map((transaction) => {
+                    <CardBody className='flex flex-col  px-4 border-t  text-white h-96 overflow-hidden overflow-y-scroll hidescroll'>
+                        {Object.values(transactions || {})?.reverse().map(request => {
                             return (
-                                <div className='h-auto flex-shrink-0 w-full bg-black-900 my-1 rounded-xl p-2 between'>
-                                    <div className='center gap-2'>
-                                        <div className='bg-white rounded-full h-12 w-12 overflow-hidden '>
-                                            <img className='h-full w-full object-cover ' src="https://images.unsplash.com/photo-1619881589928-a0c6516c074c?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
-                                        </div>
-                                        <div className='w-40'>
-                                            <h1 className='font-bold'>{transaction?.attributes?.companyName}</h1>
-                                            <h1 className=' text-xs text-purple-600 realtive bottom-2'>{transaction?.type}</h1>
-                                            <h1 className='text-gray-400 text-sm font-light realtive bottom-2'>{transaction?.attributes?.summary || transaction?.attributes?.description}</h1>
-                                        </div>
-
-                                    </div>
-                                    <div className='text-2xl font-extrabold'>
-                                        <div><h1 className={`${transaction?.attributes?.direction == 'Debit' ? 'text-rose-400' : 'text-lime-400'}`}>${transaction?.attributes?.amount / 100}</h1> </div>
-                                    </div>
-                                </div>
+                                <CompletePayment transaction={request} />
                             )
                         })}
                     </CardBody>

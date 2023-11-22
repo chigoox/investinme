@@ -1,6 +1,8 @@
 
 import Toastify from 'toastify-js'
 import { v4 as uuidv4 } from 'uuid';
+import { fetchDocument } from './Database';
+import { createUnAuthTokens, verifiToken } from './UnitUtils';
 
 export const isDev = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -96,8 +98,26 @@ export const formatNumber = (num) => {
     if (num >= 1000) return (String(num / 1000).substring(0, 5) + 'K')
 }
 
+export const getUUID = () => {
+    return uuidv4()
+}
 
-export const clearTokens = () => {
+export const genToken = async (UID, auth) => {
+    //generates untoken (saved to localstorage) if auth is passed 
+    //reset-time, and generates verification token to make auth token
+    const now = new Date().getTime()
+    localStorage?.setItem('TokenTimeStamp2', now);
+    const { customerID } = await fetchDocument('Users', UID)
+    const uToken = await createUnAuthTokens(customerID)
+    console.log(uToken)
+    localStorage.setItem("uToken", `${uToken}`)
+    if (auth) localStorage?.setItem('TokenTimeStamp', now);
+    const tokenVerification = (auth) ? await verifiToken(customerID) : null
+    if (auth) return tokenVerification
+    console.log('first')
+}
+
+export const clearTokens = (all) => {
     const hours = 0.25;
     const now = new Date().getTime();
     const setupTime = localStorage?.getItem('TokenTimeStamp');
@@ -106,10 +126,14 @@ export const clearTokens = () => {
 
     } else {
         if (now - setupTime > hours * 60 * 60 * 1000) {
-            localStorage.setItem('idempotencyKey', uuidv4())
             localStorage?.removeItem('TokenTimeStamp');
             localStorage?.removeItem('aToken');
-            localStorage?.removeItem('uToken');
+            if (localStorage?.getItem('TokenTimeStamp2') == 'null') localStorage?.removeItem('uToken');
+        }
+        if (now - setupTime > 24 * 60 * 60 * 1000) {
+            localStorage.setItem('idempotencyKey', uuidv4())
+            localStorage?.removeItem('TokenTimeStamp2');
+            if (all) localStorage?.removeItem('uToken');
         }
     }
 }

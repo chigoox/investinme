@@ -47,7 +47,7 @@ const LineChart = ({ data, lable }) => {
                 datasets: [
                     {
                         id: 1,
-                        data: data,
+                        data: data.map(i => i / 100),
                         label: 'Balance',
                         fill: false,
                         lineTension: 0.3,

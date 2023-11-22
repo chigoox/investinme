@@ -102,7 +102,7 @@ export const fetchBankAccount = async (accountID, customerID, vCardID, uToken) =
     return { account: { ...account.data }, history: { ...history.data }, vcardPK: { ...vcardPK.data }, transactions: { ...transactions.data } }
 }
 
-export const sendPayment = async (amount, description, myAccountID, OtherAccountID) => {
+export const sendPayment = async (amount, description, myAccountID, OtherAccountID, idempotencyKey) => {
     const payment = await fetch("/api/unit/Payments/SendPayment", {
         method: "POST",
         headers: {
@@ -113,7 +113,8 @@ export const sendPayment = async (amount, description, myAccountID, OtherAccount
                 type: "bookPayment",
                 attributes: {
                     amount: amount,
-                    description: description || ''
+                    description: description || '',
+                    idempotencyKey: idempotencyKey
                 },
                 relationships: {
                     account: {
@@ -133,7 +134,6 @@ export const sendPayment = async (amount, description, myAccountID, OtherAccount
         }),
     });
     const paymentConfirm = await payment?.json();
-    console.log(paymentConfirm)
     return { payment: { ...paymentConfirm } }
 
 }
