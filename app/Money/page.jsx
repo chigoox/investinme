@@ -41,9 +41,12 @@ function page() {
     const user = useAUTHListener(null, null, true);
     const UID = user.uid
     let uToken
-    if (typeof window !== 'undefined') uToken = localStorage?.getItem('uToken')
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('uToken') == null) genToken(UID)
+        uToken = localStorage?.getItem('uToken')
 
-    if (localStorage.getItem('uToken') == null) genToken(UID)
+    }
+
 
     const historyDate = Object.values(history)?.map(day => {
         return (
