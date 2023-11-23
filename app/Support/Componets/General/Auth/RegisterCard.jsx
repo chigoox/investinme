@@ -7,6 +7,7 @@ import { signUp } from '../../../myCodes/Auth';
 import { useRouter } from 'next/navigation';
 import { addToDatabase } from '../../../myCodes/Database';
 import { message } from 'antd';
+import { clearTokensAtLogin } from '../../../myCodes/Util';
 
 
 function RegisterCard({ toggleRegister }) {
@@ -30,6 +31,7 @@ function RegisterCard({ toggleRegister }) {
                         message.success('Account Created!', [500])
 
                         push(`/Profile`)
+                        clearTokensAtLogin()
                         toggleRegister()
 
 

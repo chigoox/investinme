@@ -137,3 +137,15 @@ export const clearTokens = (all) => {
         }
     }
 }
+
+export const clearTokensAtLogin = (all) => {
+
+    localStorage.removeItem('idempotencyKey')
+    localStorage?.removeItem('TokenTimeStamp2');
+    localStorage?.removeItem('TokenTimeStamp');
+    localStorage?.removeItem('uToken');
+    localStorage?.removeItem('aToken');
+
+}
+
+

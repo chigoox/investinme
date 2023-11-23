@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { addToDatabase, fetchDocument } from '../../../myCodes/Database';
 import { initFollowing } from '../../../myCodes/DatabaseUtils';
 import { message } from 'antd';
+import { clearTokensAtLogin } from '../../../myCodes/Util';
 
 
 
@@ -21,9 +22,11 @@ function LoginCard({ }) {
   const toggleRegister = () => setOpenRegister(!openRegister)
   const [credentials, setCredentials] = useState({ password: '', email: '' })
   const { push } = useRouter()
+
   const signIn = async (provider) => {
     const toggleLogin = () => {
       initFollowing()
+      clearTokensAtLogin()
       push('/')
     }
 
