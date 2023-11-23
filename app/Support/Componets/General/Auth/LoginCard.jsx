@@ -24,6 +24,7 @@ function LoginCard({ }) {
   const { push } = useRouter()
 
   const signIn = async (provider) => {
+
     const toggleLogin = () => {
       initFollowing()
       clearTokensAtLogin()
@@ -57,9 +58,10 @@ function LoginCard({ }) {
       default:
         await logOut()
         await logIn(credentials.email, credentials.password).then((user) => {
-
           checkLoggedinUser()
-          if (user?.uid) toggleLogin()
+          const _user = user.user
+          if (_user?.uid) toggleLogin()
+
 
         }).catch((error) => {
           message.success(error.message, [500])
@@ -67,6 +69,7 @@ function LoginCard({ }) {
         break;
     }
   }
+
 
 
 
