@@ -5,61 +5,40 @@ import React, { useEffect, useState } from 'react'
 import { getUID } from '../Support/myCodes/Auth'
 import { useAUTHListener } from '../../StateManager/AUTHListener'
 import { COUNTRIES } from '../CountriesDATA.JS'
-import { getRand, makeUniq } from '../Support/myCodes/Util'
+import { getRand, getUUID, makeUniq } from '../Support/myCodes/Util'
 import { Income, Occupations } from '../Occupations'
 import { message } from 'antd'
-import { addToDatabase, addToDoc, updateDatabaseItem } from '../Support/myCodes/Database'
+import { addToDatabase, addToDoc, fetchDocument, updateDatabaseItem } from '../Support/myCodes/Database'
 import { useRouter } from 'next/navigation'
+import { USStates } from '../CountriesDATA.JS'
+import LoaddingMask from '../Support/Componets/General/LoadingMask'
 const font2 = Concert_One({ subsets: ['latin'], weight: ['400'] })
 
 function page() {
     const [formData, setFormData] = useState({})
     const [realData, setRealData] = useState({})
-    const [countryData, setCountryData] = useState([])
+    const [sendingApp, setSendingApp] = useState()
+
+    useEffect(() => { localStorage.setItem('idempotencyKey', getUUID()) }, [])
 
 
-
-
-    const user = useAUTHListener()
+    const user = useAUTHListener(null, null)
     const UID = getUID(user)
+
 
     const getIp = async () => {
         const res = await fetch('https://api.ipify.org?format=json')
         const { ip } = await res.json()
         return ip
     }
-    const getCData = async () => {
-        const res = await fetch('https://restcountries.com/v3.1/all')
-        const data = await res.json()
+    const { push } = useRouter()
 
-        return data
-    }
-
-    useEffect(() => {
-        const run = async () => {
-            const data = await getCData()
-
-
-            const countryFlag = data?.map(data => {
-                return (data.flag)
-            })
-            const countryName = data?.map(data => {
-                return (data.name.common)
-            })
-
-            setCountryData([countryFlag, countryName])
-
-            return data
-
-        }
-        run()
-
-
-    }, [])
 
 
     useEffect(() => {
         const run = async () => {
+            const { bankID } = await fetchDocument('Users', UID)
+            if (bankID) (push('/Money'))
             setRealData({
                 data: {
                     type: 'individualApplication',
@@ -79,7 +58,7 @@ function page() {
                         },
                         email: formData.email,
                         phone: {
-                            countryCode: formData.countryCode?.replace('+', '') || 1,
+                            countryCode: formData.countryCode?.replace('+', '') || '1',
                             number: formData.phone,
                         },
                         ip: await getIp(),
@@ -95,10 +74,10 @@ function page() {
             })
         }
         run()
-    }, [formData])
-    const { push } = useRouter()
+    }, [formData, UID])
 
     const submit = async () => {
+        setSendingApp(true)
         try {
             const response = await fetch("/api/unit/CreateAccount", {
                 method: "POST", // or 'PUT'
@@ -201,30 +180,50 @@ function page() {
 
 
         } catch (error) {
-            console.log(error.message)
         }
+
+        setSendingApp(false)
+
     }
 
 
     return (
         <div className={`min-h-screen bg-black text-white ${font2.className}`}>
+            {sendingApp && <LoaddingMask lable='Applying' />}
             <div className='trans md:px-20 lg:px-40 xl:px-32 py-4 w-full hidescroll  p-4 h-full  lg:ml-60 overflow-y-scroll overflow-hidden'>
                 <h1 className='text-5xl px-4 mb-10'>Application</h1>
 
                 <Card className='bg-black-800   gap-4 overflow-y-scroll hidescroll h-auto p-4 center-col md:w-3/4 m-auto'>
-                    <div className=' center-col gap-1 w-full m-auto'>
-                        <Input label={'First Name'} onValueChange={(v) => setFormData(o => ({ ...o, firstName: v }))} />
-                        <Input label={'Last Name'} onValueChange={(v) => setFormData(o => ({ ...o, lastName: v }))} />
-                        <Input label={'SSN'} onValueChange={(v) => setFormData(o => ({ ...o, ssn: v }))} />
-                        <Input label={'Date of Birth'} type='date' onValueChange={(v) => setFormData(o => ({ ...o, dob: v }))} />
+                    <div className=' center-col gap-2 w-full m-auto'>
+                        <div className='center w-full gap-2'>
+                            <Input label={'First Name'} onValueChange={(v) => setFormData(o => ({ ...o, firstName: v }))} />
+                            <Input label={'Last Name'} onValueChange={(v) => setFormData(o => ({ ...o, lastName: v }))} />
+                        </div>
+                        <div className='evenly gap-4 w-full '>
+                            <Input label={'SSN'} onValueChange={(v) => setFormData(o => ({ ...o, ssn: v }))} />
+                            <Input label={'Date of Birth'} type='date' onValueChange={(v) => setFormData(o => ({ ...o, dob: v }))} />
+                        </div>
                     </div>
 
-                    <div className='center-col gap-1 w-full  m-auto'>
-                        <Input label={'Street'} onValueChange={(v) => setFormData(o => ({ ...o, street: v }))} />
+                    <Input label={'Street'} onValueChange={(v) => setFormData(o => ({ ...o, street: v }))} />
+                    <div className='center gap-1 w-full  m-auto'>
                         <Input label={'City'} onValueChange={(v) => setFormData(o => ({ ...o, city: v }))} />
-                        <Input label={'State'} onValueChange={(v) => setFormData(o => ({ ...o, state: v }))} />
-                        <Input label={'Zip'} onValueChange={(v) => setFormData(o => ({ ...o, zip: v }))} />
                         <Select
+                            label="Select State"
+                            className="w-full text-black  m-auto"
+                            onChange={({ target }) => {
+                                setFormData(o => ({ ...o, state: target.value }))
+                            }}
+                        >
+
+                            {USStates.map((state) => (
+                                <SelectItem key={state} value={state}>
+                                    {state}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                        <Input label={'Zip'} onValueChange={(v) => setFormData(o => ({ ...o, zip: v }))} />
+                        {/* <Select
                             label="Select country"
                             className="max-w-xs text-black m-auto"
                             onChange={({ target }) => {
@@ -237,14 +236,14 @@ function page() {
                                     {country.code}
                                 </SelectItem>
                             ))}
-                        </Select>
+                        </Select> */}
                     </div>
 
                     <div className='w-full m-auto center-col gap-1'>
                         <Input type='email' label={'Email'} onValueChange={(v) => setFormData(o => ({ ...o, email: v }))} />
                         <div className='flex gap-2 w-full'>
 
-                            <Select
+                            {/*  <Select
                                 label="C. Code"
                                 className="max-w-xs text-black m-auto w-64"
                                 onChange={({ target }) => {
@@ -263,62 +262,64 @@ function page() {
                                     }
 
                                 })}
-                            </Select>
+                            </Select> */}
                             <Input type='tel' className='w-full flex' label={'Phone'} onValueChange={(v) => setFormData(o => ({ ...o, phone: v }))} />
                         </div>
 
                     </div>
 
 
-                    <Select
-                        label="Select an income"
-                        className="max-w-xs text-black m-auto"
-                        onChange={({ target }) => {
-                            setFormData(o => ({
-                                ...o,
-                                annualIncome:
-                                    target.value == 0 ? Income[0] :
-                                        target.value == 1 ? Income[1] :
-                                            target.value == 2 ? Income[2] :
-                                                target.value == 3 ? Income[3] :
-                                                    target.value == 4 ? Income[4] : Income[5]
+                    <div className='center w-full gap-4'>
+                        <Select
+                            label="Select an income"
+                            className="w-1/2 flex-shrink-0 text-black m-auto"
+                            onChange={({ target }) => {
+                                setFormData(o => ({
+                                    ...o,
+                                    annualIncome:
+                                        target.value == 0 ? Income[0] :
+                                            target.value == 1 ? Income[1] :
+                                                target.value == 2 ? Income[2] :
+                                                    target.value == 3 ? Income[3] :
+                                                        target.value == 4 ? Income[4] : Income[5]
 
 
 
-                            }))
-                        }}
-                    >
-                        {['$10k', '$10k-$25k', '$25k-$50k', '$50k-$100k', '$100k-$250k', '$250k+'].map((income, index) => (
-                            <SelectItem key={
-                                index
-
-                            }
-
-
-                                value={
+                                }))
+                            }}
+                        >
+                            {['$10k', '$10k-$25k', '$25k-$50k', '$50k-$100k', '$100k-$250k', '$250k+'].map((income, index) => (
+                                <SelectItem key={
                                     index
-                                }>
-                                {income}
-                            </SelectItem>
-                        ))}
-                    </Select>
+
+                                }
 
 
-                    <Select
-                        label="Select occupation"
-                        className="max-w-xs text-black m-auto"
-                        onChange={({ target }) => {
-                            setFormData(o => ({ ...o, Occupation: target.value }))
-                        }}
-                    >
-                        {Occupations.map((occupation, index) => (
-                            <SelectItem key={occupation}>
-                                {occupation}
-                            </SelectItem>
-                        ))}
-                    </Select>
+                                    value={
+                                        index
+                                    }>
+                                    {income}
+                                </SelectItem>
+                            ))}
+                        </Select>
 
-                    <Button onPress={submit} className='mb-20'>
+
+                        <Select
+                            label="Select occupation"
+                            className="w-1/2 flex-grow-0  text-black m-auto"
+                            onChange={({ target }) => {
+                                setFormData(o => ({ ...o, Occupation: target.value }))
+                            }}
+                        >
+                            {Occupations.map((occupation, index) => (
+                                <SelectItem key={occupation}>
+                                    {occupation}
+                                </SelectItem>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <Button onPress={submit} className='mb-20 bg-lime-500 text-white w-3/4'>
                         Submit
                     </Button>
 

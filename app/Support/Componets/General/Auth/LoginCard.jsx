@@ -11,6 +11,7 @@ import { addToDatabase, fetchDocument } from '../../../myCodes/Database';
 import { initFollowing } from '../../../myCodes/DatabaseUtils';
 import { message } from 'antd';
 import { clearTokensAtLogin } from '../../../myCodes/Util';
+import LoaddingMask from '../LoadingMask';
 
 
 
@@ -22,8 +23,10 @@ function LoginCard({ }) {
   const toggleRegister = () => setOpenRegister(!openRegister)
   const [credentials, setCredentials] = useState({ password: '', email: '' })
   const { push } = useRouter()
+  const [loading, setLoading] = useState()
 
   const signIn = async (provider) => {
+    setLoading(true)
 
     const toggleLogin = () => {
       initFollowing()
@@ -64,10 +67,12 @@ function LoginCard({ }) {
 
 
         }).catch((error) => {
-          message.success(error.message, [500])
+          message.success('Email and password does not match', 3)
         })
         break;
     }
+    setLoading(false)
+
   }
 
 
@@ -76,8 +81,10 @@ function LoginCard({ }) {
 
 
   return (
-    <div className='fixed z-[99999]  top-20  md:scale-100 scale-110 m-auto'>
-      <Card className='w-64  bg-gradient-to-t from-[#1d8c1d] to-[#82f182] h-auto p-4 fadeInUp' variant="bordered">
+    <div className='fixed z-[99] w-screen h-screen  top-0 left-0  md:scale-100 scale-110 '>
+      {loading && <LoaddingMask lable='logging in' />}
+
+      <Card className='w-64 top-40 m-auto bg-gradient-to-t from-[#1d8c1d] to-[#82f182] h-auto p-4 fadeInUp' variant="bordered">
         <div className='gap-1 mb-4 w-full center'>
           <Button onClick={() => {
             signIn("google")
@@ -127,7 +134,10 @@ function LoginCard({ }) {
         </div>
       </Card>
 
-      {openRegister && <RegisterCard toggleRegister={toggleRegister} />}
+      <div className='center-col'>
+
+        {openRegister && <RegisterCard setLoading={setLoading} toggleRegister={toggleRegister} />}
+      </div>
 
     </div>
   )

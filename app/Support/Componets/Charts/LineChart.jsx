@@ -27,9 +27,9 @@ const LineChart = ({ data, lable }) => {
             options={{
                 animations: {
                     tension: {
-                        duration: 1000,
-                        easing: 'easeInOutBounce',
-                        from: 0.5,
+                        duration: 3000,
+                        easing: 'easIn',
+                        from: 0.35,
                         to: 0.3,
                         loop: true
                     },
@@ -37,7 +37,7 @@ const LineChart = ({ data, lable }) => {
                         duration: 1000,
                         easing: 'easeInOutBounce',
                         from: true,
-                        to: 0,
+                        to: false,
                         loop: true
                     }
                 }

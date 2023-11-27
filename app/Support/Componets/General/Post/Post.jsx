@@ -13,6 +13,7 @@ import { formatNumber } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
 import UserList from "../User/UserList";
 import PostComment from "./PostComment";
+import FormatNumber from "../FormatNumber";
 
 const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
@@ -182,14 +183,13 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
                 </Button>
             </div>
 
-            <div className="evenly">
+            <div className="evenly ">
                 <div className="flex gap-2 p-1">
                     <Button onPress={likePost} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
                         {likes.includes(UID) ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
                     </Button>
-                    <Button onPress={() => { setShowUserList('likes') }} className="min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
-
-                        {formatNumber(likes?.length)}
+                    <Button onPress={() => { setShowUserList('likes') }} className="min-h-0 h-fit  min-w-fit text-white px-2  bg-opacity-0 m-0 bg-none">
+                        <FormatNumber number={likes?.length} />
                     </Button>
                 </div >
                 <div className="flex gap-2 p-1">
