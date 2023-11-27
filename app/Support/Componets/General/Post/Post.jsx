@@ -62,10 +62,11 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
         setPostLike(!postLike)
         if (postLike == false) {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length + 1)
         } else {
+            console.log(likes?.length - 1)
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', (likes?.length - 1 < 0 ? 0 : likes?.length - 5))
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length)
         }
 
 
@@ -179,7 +180,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
             <div className="px-4 center ">
                 <Button onPress={() => { setShowComments(!showComments) }} className="px-2 w-fit m-auto rounded-none p-0 bg-none bg-opacity-0 text-white" >
-                    Show all {formatNumber(Object.keys(comments || {}).length)} comments
+                    Show all {formatNumber(Object.keys(comments || {})?.length)} comments
                 </Button>
             </div>
 

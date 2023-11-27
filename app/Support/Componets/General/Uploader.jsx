@@ -5,6 +5,7 @@ import { AiOutlinePlusSquare, AiOutlineQuestion } from "react-icons/ai";
 import { useUploader } from '../../Hooks/useUploader';
 import { Button, Skeleton, Textarea } from '@nextui-org/react';
 import { Image, Text, Video } from 'lucide-react';
+import LoaddingMask from './LoadingMask';
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -23,6 +24,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
     const handleCancel = () => setPreviewOpen(false);
     const [showPreview, setShowPreview] = useState(false)
     const [FileType, setFileType] = useState('')
+    const [loading, setLoading] = useState(false)
 
 
 
@@ -36,6 +38,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
     };
 
     const handleChange = async ({ file, fileList }) => {
+        setLoading(true)
         if (file.status === 'done') {
             setFileType(file.type)
             setter(old => { return ({ ...old, postType: file.type }) })
@@ -50,7 +53,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
             if (fileURL) setFileListURL(old => [...old, fileURL])
         }
-
+        setLoading(false)
 
 
         setFileList(fileList)
@@ -102,6 +105,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
     return (
         <div className=' flex flex-col text-black items-center'>
+            {loading && <LoaddingMask lable='uploading' />}
             <div className='relative w-full center '>
                 <div className='center absolute w-full m-auto top-4 gap-2'>
                     {forthis == 'post' && postType.map((type, index) => {

@@ -218,8 +218,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
         )
     }
 
-    console.log(userData)
-    console.log(otherUserData)
 
     const [showCashMenu, setShowCashMenu] = useState(false)
     return (

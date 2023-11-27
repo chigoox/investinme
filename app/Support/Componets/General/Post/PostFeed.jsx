@@ -3,6 +3,8 @@ import Post from './Post'
 
 function PostFeed({ allPosts, currentPost }) {
 
+    const [postsToShow, setPostsToShow] = useState([])
+
     const refs = allPosts?.reduce((acc, value) => {
         acc[value.id] = useRef();
 
@@ -32,12 +34,12 @@ function PostFeed({ allPosts, currentPost }) {
                                 PostId={postInfo.id}
                                 type={postInfo.type}
                                 link={postInfo?.post?.img[0]}
-                                likes={postInfo.likes}
-                                likesCount={postInfo.likesCount}
-                                donations={postInfo.donations}
-                                desc={postInfo.caption}
-                                tags={postInfo.tags}
-                                comments={postInfo.comments}
+                                likes={postInfo?.likes}
+                                likesCount={postInfo?.likesCount ?? 0}
+                                donations={postInfo?.donations}
+                                desc={postInfo?.caption}
+                                tags={postInfo?.tags}
+                                comments={postInfo?.comments}
                                 creator={postInfo?.creator}
                             />
                         </div>
