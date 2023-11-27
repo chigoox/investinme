@@ -158,9 +158,9 @@ function page() {
 
 
     const getData = async () => {
-        let FEED = await fetchInOrder('Posts', 'likesCount', 100)
+        let FEED = await fetchInOrder('Posts', 'likes', 100)
         FEED = Object.values(FEED || {})
-        setData(FEED)
+        setData(FEED.sort((a, b) => b.likes?.length - a.likes.length))
         return FEED
     }
 

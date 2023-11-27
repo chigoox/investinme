@@ -65,7 +65,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
             await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', likes?.length + 1)
         } else {
             console.log(likes?.length - 1)
-            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', (likes?.length - 1 < 0 ? 0 : likes?.length - 5))
+            await updateDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likesCount', (likes?.length - 1 < 0 ? -1 : likes?.length - 1))
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID, true)
         }
 
