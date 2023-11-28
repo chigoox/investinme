@@ -121,7 +121,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                 </div>
 
                 {selectedPostType == 'Image' &&
-                    <ImgCrop beforeCrop={checkFileType} showGrid aspectSlider showReset aspect rotationSlider
+                    <ImgCrop beforeCrop={checkFileType} showGrid showReset rotationSlider
                         modalClassName={`text-black z-[999999999] `}
                         fillColor='black'
                         modalOk={'OK'}

@@ -14,6 +14,7 @@ import UserAvatar from "../User/Avatar";
 import UserList from "../User/UserList";
 import PostComment from "./PostComment";
 import FormatNumber from "../FormatNumber";
+import LoaddingMask from "../LoadingMask";
 
 const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, donations, postINFO, creator }) => {
     const [showComments, setShowComments] = useState(false)
@@ -24,13 +25,15 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
     const UID = getUID(user)
     const [postLike, setPostLike] = useState(likes.includes(UID))
     const [creatorData, setCreatorData] = useState({})
+    const [loading, setLoading] = useState(false)
+    const [commentLoading, setCommentLoading] = useState(false)
 
     const _creatorData = creatorData?.UserInfo
 
 
     const postComment = async () => {
 
-
+        setCommentLoading(true)
 
         const { commentID } = await fetchDocument('MetaData', 'postMeta')
         const { comments } = await fetchDocument('Posts', `${postIDPrefix}-${id}`)
@@ -50,8 +53,9 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
         await updateDatabaseItem('MetaData', 'postMeta', 'commentID', commentID + 1)
 
-        dispatch({ type: "NEW_POST", value: {} })
         setComment('')
+        dispatch({ type: "NEW_POST", value: {} })
+        setCommentLoading(false)
 
     }
 
@@ -59,6 +63,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
     const likePost = async () => {
+        setLoading(true)
         setPostLike(!postLike)
         if (postLike == false) {
             await updateArrayDatabaseItem('Posts', `${postIDPrefix}-${id}`, 'likes', UID)
@@ -71,14 +76,16 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
         dispatch({ type: "NEW_POST", value: {} })
+        setLoading(false)
 
     }
 
 
     const deletePost = async () => {
+        setLoading(true)
         await deleteDocument('Posts', `${postIDPrefix}-${id}`)
         dispatch({ type: "NEW_POST", value: {} })
-
+        setLoading(false)
     }
 
 
@@ -124,6 +131,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
     const [showUserList, setShowUserList] = useState(false)
     return (
         <div className={`${type == 'txt' ? 'h-fit' : ' h-[40rem]'} overflow-hidden  rounded-lg relative  w-96`}>
+            {loading && <LoaddingMask forThis={'contain'} />}
             <div className="absolute w-full  top-2 left-2 s">
                 <UserAvatar user={_creatorData} gustName={creator} creatorData={creatorData} />
             </div>
@@ -205,7 +213,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
 
-            <Modal placement="auto" isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96 text-white bottom-12 ">
+            <Modal placement="auto" isOpen={showComments} onClose={() => { setShowComments(!showComments) }} className="bg-black-800 h-96  text-white bottom-12 ">
                 <ModalContent>
                     {() => (
                         <>
@@ -216,7 +224,15 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
                                     const aComment = commentt
 
                                     return (
-                                        <PostComment post={`${postIDPrefix}-${id}`} user={aComment.user} likeCount={aComment.likeCount} commentLikes={aComment.commentLikes} commentID={aComment.commentID} commentReply={aComment.commentReply} comment={aComment.comment} />
+                                        <PostComment
+                                            post={`${postIDPrefix}-${id}`}
+                                            user={aComment.user}
+                                            likeCount={aComment.likeCount}
+                                            commentLikes={aComment.commentLikes}
+                                            commentID={aComment.commentID}
+                                            commentReply={aComment.commentReply}
+                                            comment={aComment.comment}
+                                            commentLoading={commentLoading} />
                                     )
                                 })}
                             </ModalBody>

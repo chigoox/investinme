@@ -7,10 +7,12 @@ import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
 import { addToDatabase, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from '../../../myCodes/Database'
 import { getUID } from '../../../myCodes/Auth'
 import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
+import LoaddingMask from '../LoadingMask'
 
-const PostComment = ({ user, comment, commentLikes, commentReply, commentID, post, likeCount }) => {
+const PostComment = ({ user, comment, commentLikes, commentReply, commentID, post, likeCount, commentLoading }) => {
     const [commenter, setCommenter] = useState({})
     const [likedComment, setLikedComment] = useState(false)
+    const [loading, setLoading] = useState(false)
     const getData = async () => {
         const _user = await fetchDocument('Users', user)
         setCommenter(_user)
@@ -27,7 +29,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
     }, [user])
 
     const likeComment = async (noOverload) => {
-        console.log('first')
+        setLoading(true)
         setLikedComment(!likedComment)
 
         const { comments } = await fetchDocument('Posts', post)
@@ -57,6 +59,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
             })
 
         }
+        setLoading(false)
 
         dispatch({ type: "NEW_POST", value: {} })
 
@@ -75,6 +78,7 @@ const PostComment = ({ user, comment, commentLikes, commentReply, commentID, pos
 
     return UID == user ? (
         <div className=" flex justify-end z-20">
+            {(loading || commentLoading) && <LoaddingMask forThis={'contain'} />}
             <div className='flex between'>
                 <div className="flex gap-2 p-1">
                     <Button onPress={likeComment} className=" min-h-0 h-fit  min-w-fit text-white p-0  bg-opacity-0 m-0 bg-none">
