@@ -73,7 +73,6 @@ const RequestPayment = ({ request, setLoading, toggleRerender, UID }) => {
 }
 
 
-
 const CompletePayment = ({ transaction, setShowTransactionView }) => {
     const [data, setData] = useState([])
 
@@ -110,28 +109,36 @@ const CompletePayment = ({ transaction, setShowTransactionView }) => {
 }
 
 
-const TransactionView = (showTransactionView, setShowTransactionView) => {
-    < Modal isOpen={showTransactionView} backdrop={'blur'} onOpenChange={() => { setShowTransactionView(false) }
-    } placement='auto' scrollBehavior='inside' className={`h-[90%] w-full bg-black ${{
-        backdrop: "bg-black bg-opacity-100 text-white"
-    }}`}>
-        <ModalContent>
-            {() => (
-                <>
-                    <ModalHeader className="flex flex-col gap-1 text-white">{(forThis ? forThis : 'Explore Feed')}</ModalHeader>
-                    <ModalBody className='hidescroll overflow-hidden overflow-y-scroll text-white  p-0 m-auto'>
+const TransactionView = ({ transaction, setShowTransactionView }) => {
+    const { amount, balance, counterparty, direction, createdAt, summary } = transaction?.attributes || { amount: null, balance: null, counterparty: null, direction: null, createdAt: null, summary: null }
 
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button className='w-full' onPress={() => { setShowTransactionView(false) }} color="danger" variant="light">
-                            Close
-                        </Button>
+    return (
+        < Modal isOpen={transaction} backdrop={'blur'} onOpenChange={() => { setShowTransactionView(false) }
+        } placement='auto' scrollBehavior='inside' className={`h-auto w-full bg-black ${{
+            backdrop: "bg-black bg-opacity-100 text-white"
+        }}`}>
+            <ModalContent>
+                {() => (
+                    <>
+                        <ModalHeader className="flex flex-col gap-1 text-white">Transaction {transaction?.id}</ModalHeader>
+                        <ModalBody className='hidescroll overflow-hidden overflow-y-scroll text-white   p-0 m-auto'>
+                            <h1> You {direction == 'Credit' ? 'recived' : 'paid'} ${amount / 100}</h1>
+                            <h1>{summary}</h1>
+                            <h1>balanace: ${balance / 100}</h1>
+                            <h1>{createdAt}</h1>
 
-                    </ModalFooter>
-                </>
-            )}
-        </ModalContent>
-    </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button className='w-full' onPress={() => { setShowTransactionView(false) }} color="danger" variant="light">
+                                Close
+                            </Button>
+
+                        </ModalFooter>
+                    </>
+                )}
+            </ModalContent>
+        </Modal >
+    )
 }
 function page() {
     const [digits, setDigits] = useState(999999999.5)
@@ -150,6 +157,7 @@ function page() {
 
     const toggleRerender = () => setReRender(!reRender)
 
+    console.log(showTransactionView)
 
     const user = useAUTHListener(null, null, true);
     const UID = user.uid
@@ -204,7 +212,7 @@ function page() {
     const [pendingSelection, setPendingSelection] = useState('Pending Approval')
     return (
         <div className={`flex min-h-screen overflow-x-hidden md:px-20 lg:px-40 xl:px-32 py-4 flex-col items-center justify-evenly bg-gradient-to-bl from-black via-black to-[#000e00] text-white ${font2.className}`}>
-            <TransactionView showTransactionView={showTransactionView} setShowTransactionView={setShowTransactionView} />
+            <TransactionView transaction={showTransactionView} setShowTransactionView={setShowTransactionView} />
             {loading && <LoaddingMask />}
             <CashMenu forThis={showCashMenu} setShow={setShowCashMenu} setCurrentDigits={setDigits} />
             <div className='w-full md:w-3/4 flex flex-col gap-8 h-auto mb-20 p-4'>
@@ -255,7 +263,7 @@ function page() {
                     <CardBody className='flex flex-col  px-4 border-t  text-white max-h-96 overflow-hidden overflow-y-scroll hidescroll'>
                         {Object.values(transactions || {})?.reverse().map(request => {
                             return (
-                                <CompletePayment setShowTransactionView transaction={request} />
+                                <CompletePayment setShowTransactionView={setShowTransactionView} transaction={request} />
                             )
                         })}
                     </CardBody>

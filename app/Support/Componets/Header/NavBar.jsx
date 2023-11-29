@@ -9,7 +9,7 @@ import { useWindowSize } from '../../Hooks/useWindowSize'
 import { siteName } from '../../../META'
 import { Button } from '@nextui-org/react'
 import CreatePost from '../General/Post/CreatePost'
-import { logOut } from '../../myCodes/Auth'
+import { getUID, logOut } from '../../myCodes/Auth'
 
 const font = Satisfy({
     weight: '400',
@@ -24,6 +24,7 @@ function NavBar() {
         setShowNewPost(!showNewPost)
     }
     const user = useAUTHListener()
+    const UID = getUID(user)
     const path = usePathname()
     const onLogin = !path.includes('login')
 
@@ -48,7 +49,7 @@ function NavBar() {
 
     return (
         <div className={`md:h-screen h-10 bottom-0 md:top-0 w-screen z-[99999] fixed  p-4 pt-10 text-white x  ${!onLogin ? ' opacity-0' : 'opacity-100'} md:w-[3rem] lg:w-[15rem]  bg-black border-gray-700 md:border-r border-t flex flex-col overflow-hidden`}>
-            <CreatePost showCreatePost={showNewPost} setShowCreatePost={setShowNewPost} />
+            <CreatePost showCreatePost={showNewPost} setShowCreatePost={setShowNewPost} UID={UID} />
 
 
 

@@ -1,11 +1,12 @@
 import { Upload } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import { useEffect, useState } from "react";
-import { AiOutlinePlusSquare, AiOutlineQuestion } from "react-icons/ai";
+import { AiFillMoneyCollect, AiOutlinePlusSquare, AiOutlineQuestion } from "react-icons/ai";
 import { useUploader } from '../../Hooks/useUploader';
 import { Button, Skeleton, Textarea } from '@nextui-org/react';
 import { Image, Text, Video } from 'lucide-react';
 import LoaddingMask from './LoadingMask';
+import { BsBagPlusFill } from "react-icons/bs";
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -15,16 +16,19 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricle, forthis, submitPost, handleCaption }) => {
+export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricle, forthis, submitPost, handleCaption, setForProduct, setterArray }) => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
     const [fileListURL, setFileListURL] = useState([])
     const handleCancel = () => setPreviewOpen(false);
-    const [showPreview, setShowPreview] = useState(false)
+    const [showPreview, setShowPreview] = useState([])
     const [FileType, setFileType] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const postType = ['Video', 'Image', 'Text', 'Product']
+    const [selectedPostType, setSelectedPostType] = useState('Image')
 
 
 
@@ -44,19 +48,26 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
             setter(old => { return ({ ...old, postType: file.type }) })
             const fileURL = await useUploader(file.originFileObj, folderName)
             if (fileURL) setFileListURL(old => [...old, fileURL])
+            if (setterArray && selectedPostType == 'Product') setterArray(old => { return ({ ...old, media: [...old?.media, { url: fileURL, type: file.type }] }) })
 
         } else if (file.status === 'error') {
             file.status = 'done'
             setter(old => { return ({ ...old, postType: file.type }) })
             setFileType(file.type)
             const fileURL = await useUploader(file.originFileObj, folderName)
+            if (setterArray && selectedPostType == 'Product') setterArray(old => { return ({ ...old, media: [...old?.media, { url: fileURL, type: file.type }] }) })
 
             if (fileURL) setFileListURL(old => [...old, fileURL])
         }
+
+
         setLoading(false)
 
 
         setFileList(fileList)
+
+
+
     }
 
     useEffect(() => {
@@ -67,17 +78,28 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
     useEffect(() => {
         setter(old => { return ({ ...old, post: { img: fileListURL } }) })
+        //if (setterArray && selectedPostType == 'Product') setterArray(old => { return ({ ...old, media: showPreview }) })
 
     }, [fileList, fileListURL])
 
 
+    useEffect(() => {
+        if (selectedPostType == 'Product') {
+            setForProduct(postType)
+        } else {
+            setForProduct(false)
+        }
+    }, [selectedPostType])
 
 
     useEffect(() => {
 
         setFileType(fileList[0]?.type)
         if (setPostType) setPostType(fileList[0]?.type)
-        setShowPreview(fileListURL[0])
+        setShowPreview((selectedPostType == 'Product') ? fileListURL.map((item, index) => {
+            return ({ url: item, type: fileList[index].type })
+
+        }) : fileListURL[0])
 
 
 
@@ -100,18 +122,17 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
     const checkFileType = (file) => { return file?.type.includes('video') ? false : true }
 
 
-    const postType = ['Video', 'Image', 'Text']
-    const [selectedPostType, setSelectedPostType] = useState('Image')
+
 
     return (
-        <div className=' flex flex-col text-black items-center'>
+        <div className=' flex flex-col text-black items-center '>
             {loading && <LoaddingMask lable='uploading' />}
             <div className='relative w-full center '>
-                <div className='center absolute w-full m-auto top-4 gap-2'>
+                <div className='grid grid-cols-3  absolute w-full   m-auto top-4 gap-2'>
                     {forthis == 'post' && postType.map((type, index) => {
                         return (
-                            <Button onPress={() => { setSelectedPostType(type) }} className={`${selectedPostType == type ? 'bg-green-400' : 'bg-white'}  center min-w-fit z-10 rounded-full w-12 h-8 `}>
-                                {type == 'Video' ? (<Video />) : type == 'Image' ? (<Image />) : type == 'Text' ? (<Text />) : <AiOutlineQuestion />}
+                            <Button onPress={() => { setSelectedPostType(type) }} className={`${selectedPostType == type ? 'bg-green-400' : 'bg-white'} m-auto  center min-w-fit z-10 rounded-full w-12 h-8 `}>
+                                {type == 'Video' ? (<Video />) : type == 'Image' ? (<Image />) : type == 'Text' ? (<Text />) : type == 'Product' ? <BsBagPlusFill size={24} /> : <AiOutlineQuestion />}
                             </Button>
 
 
@@ -120,7 +141,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
                 </div>
 
-                {selectedPostType == 'Image' &&
+                {(selectedPostType == 'Image') &&
                     <ImgCrop beforeCrop={checkFileType} showGrid showReset rotationSlider
                         modalClassName={`text-black z-[999999999] `}
                         fillColor='black'
@@ -141,7 +162,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                             onChange={handleChange}
                             accept="image/*"
                             maxCount={limit ? limit : 8}
-                            multiple
+                            multiple={limit > 1}
 
 
                         >
@@ -161,7 +182,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                         onChange={handleChange}
                         accept="video/*"
                         maxCount={limit ? limit : 8}
-                        multiple
+                        multiple={limit > 1}
 
 
                     >
@@ -169,9 +190,40 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                     </Upload>
 
                 }
+                {selectedPostType == 'Product' &&
+
+                    <ImgCrop beforeCrop={checkFileType} showGrid showReset rotationSlider
+                        modalClassName={`text-black z-[999999999] `}
+                        fillColor='black'
+                        modalOk={'OK'}
+                        modalTitle='Crop post'
+                        cropShape={inCricle ? 'round' : 'rect'}
+
+
+                    >
+                        <Upload
+                            className='relative center scale-50'
+                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            fileList={fileList}
+                            showUploadList={false}
+                            onPreview={''}
+                            onChange={handleChange}
+                            accept="image/*"
+                            maxCount={8}
+
+
+
+
+                        >
+                            {fileList.length >= 8 ? null : uploadButton}
+                        </Upload>
+                    </ImgCrop>
+
+
+                }
 
                 {selectedPostType == 'Text' &&
-                    <div className='mt-12 center-col'>
+                    <div className='mt-24 center-col'>
                         <Textarea rows={3} className='h-auto max-h-40 w-72 ' onValueChange={(text) => {
                             handleCaption(text)
                             setter(old => { return ({ ...old, post: { img: [text] } }) })
@@ -198,15 +250,31 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                 }
 
             </div>
-            {
-                FileType && <div className={`${inCricle ? 'rounded-full h-32 w-32' : 'rounded-3xl w-96 h-72'} z-50 overflow-y-scroll hidescroll    text-white  `}>
-                    <Skeleton className='w-full border-2 h-full' isLoaded={showPreview}>
-                        {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
-                        {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
 
-                    </Skeleton>
-                </div>
-            }
+            {(FileType && selectedPostType != 'Product') && <div className={`${inCricle ? 'rounded-full h-32 w-32' : selectedPostType == 'Product' ? 'rounded-3xl h-20 w-20' : 'rounded-3xl w-96 h-72'} z-50 overflow-y-scroll hidescroll    text-white  `}>
+                <Skeleton className='w-full border-2 h-full' isLoaded={showPreview}>
+                    {FileType?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={showPreview} alt="" />}
+                    {FileType?.includes('image') && <img className='w-full  object-cover' src={showPreview} alt="" />}
+
+                </Skeleton>
+            </div>}
+
+            {selectedPostType == 'Product' && <div className={`${showPreview?.length >= 8 ? ' mt-24 ' : ''} grid grid-cols-4 gap-2 trans z-50 overflow-y-scroll hidescroll mb-4`}>
+                {showPreview?.map(img => {
+                    return (
+                        <div className={`${showPreview.length >= 8 ? ' first-line:mt-20' : selectedPostType == 'Product' ? 'rounded-3xl h-20 w-20' : 'rounded-3xl w-96 h-72'}    text-white  `}>
+                            <Skeleton className='w-full border-2 h-full' isLoaded={showPreview}>
+                                {img?.type?.includes('video') && <video autoPlay muted playsInline loop className='w-full  object-cover' src={img.url} alt="" />}
+                                {img?.type?.includes('image') && <img className='w-full  object-cover' src={img.url} alt="" />}
+
+                            </Skeleton>
+                        </div>
+                    )
+                })}
+            </div>}
+
+
+
 
 
 

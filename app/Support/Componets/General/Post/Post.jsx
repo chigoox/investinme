@@ -1,14 +1,14 @@
 'use client'
 import { Button, Image, Input, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
 import { serverTimestamp } from "firebase/firestore";
-import { MoreHorizontal, Settings, TrashIcon } from "lucide-react";
+import { MoreHorizontal, PinIcon, Settings, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AiFillDollarCircle, AiFillHeart, AiOutlineDollarCircle, AiOutlineHeart, AiOutlineSend } from "react-icons/ai";
 import { useAUTHListener } from "../../../../../StateManager/AUTHListener";
 import { useGlobalContext } from "../../../../../StateManager/GlobalContext";
 import { postIDPrefix } from "../../../../META";
 import { getUID } from "../../../myCodes/Auth";
-import { deleteDocument, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
+import { addToDatabase, deleteDocument, fetchDocument, updateArrayDatabaseItem, updateDatabaseItem } from "../../../myCodes/Database";
 import { formatNumber } from "../../../myCodes/Util";
 import UserAvatar from "../User/Avatar";
 import UserList from "../User/UserList";
@@ -27,6 +27,9 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
     const [creatorData, setCreatorData] = useState({})
     const [loading, setLoading] = useState(false)
     const [commentLoading, setCommentLoading] = useState(false)
+    const [pins, setPins] = useState({})
+    const [reload, setReload] = useState(false)
+
 
     const _creatorData = creatorData?.UserInfo
 
@@ -59,7 +62,7 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
     }
 
-
+    console.log(pins)
 
 
     const likePost = async () => {
@@ -91,13 +94,13 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
 
 
-
     const getCreatorData = async () => {
         await fetchDocument('Users', creator, setCreatorData)
     }
     useEffect(() => {
         const run = async () => {
             await getCreatorData()
+
         }
 
         run()
@@ -105,13 +108,49 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
     }, [])
 
+    useEffect(() => { (async () => { const { pins } = await fetchDocument('Users', UID); setPins(pins) })() }, [UID, reload])
+
+    const pinPost = async (slot) => {
+        await addToDatabase('Users', UID, 'pins', {
+
+            [`slot${slot}`]: `${postIDPrefix}-${id}`
+        })
+        setReload(!reload)
+
+    }
+
+    const PinPost = () => {
+        return (
+
+            <Popover placement="bottom" showArrow={true} className=" bg-black-800">
+                <PopoverTrigger>
+                    <Button className="center bg-black-900 w-full text-emerald-700">
+                        <PinIcon />
+                        <h1>Pin Post</h1>
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="center-col gap-2">
+                    <Button onPress={() => { pinPost(0) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 1</Button>
+                    <Button onPress={() => { pinPost(1) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 2</Button>
+                    <Button onPress={() => { pinPost(2) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 3</Button>
+                    <Button onPress={() => { pinPost(3) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 4</Button>
+                    <Button onPress={() => { pinPost(4) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 5</Button>
+                    <Button onPress={() => { pinPost(5) }} className="min-h-0 min-w-0 p-0 h-10 w-14 bg-black-800 text-white font-bold">Pin 6</Button>
+
+                </PopoverContent>
+            </Popover>
+
+        )
+    }
+
     const CreatorPostOptions = () => {
         return (
-            <div className="w-32 h-40">
-                <Button onPress={deletePost} className="center bg-black-900 text-rose-700">
+            <div className="w-32 h-40 flex items-center pt-2 flex-col gap-2">
+                <Button onPress={deletePost} className="center w-full bg-black-900 text-rose-700">
                     <TrashIcon />
                     <h1>Delete post</h1>
                 </Button>
+                <PinPost />
 
             </div>
         )
@@ -119,7 +158,8 @@ const Post = ({ id, type, likes, likesCount, tags, link, text, comments, desc, d
 
     const UserPostOptions = () => {
         return (
-            <div className="w-32 h-40">
+            <div className="w-32 h-40 flex items-center pt-2 flex-col gap-2">
+                <PinPost />
 
             </div>
         )
