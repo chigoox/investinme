@@ -287,7 +287,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
             </div>
             <PostView forThis={'My Posts'} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
-            <PictureWall UID={UID} />
+            <PictureWall UID={otherUserData ? otherUserData?.uid : UID} />
 
             <Card className="bg-black-800 text-white w-full md:w-[40rem] m-auto h-auto rounded-3xl ">
                 <CardHeader><h1 className="w-full text-3xl font-extrabold p-4">Posts</h1></CardHeader>

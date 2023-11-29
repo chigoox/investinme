@@ -81,7 +81,7 @@ function LoginCard({ }) {
 
 
   return (
-    <div className='fixed z-[99] w-screen h-screen  top-0 left-0  md:scale-100 scale-110 '>
+    <div className='fixed z-[999] w-screen h-screen  top-0 left-0  md:scale-100 scale-110 '>
       {loading && <LoaddingMask lable='logging in' />}
 
       <Card className='w-64 top-40 m-auto bg-gradient-to-t from-[#1d8c1d] to-[#82f182] h-auto p-4 fadeInUp' variant="bordered">
