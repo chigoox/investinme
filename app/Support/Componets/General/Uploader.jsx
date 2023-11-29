@@ -131,7 +131,7 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
                 <div className='grid grid-cols-3  absolute w-full   m-auto top-4 gap-2'>
                     {forthis == 'post' && postType.map((type, index) => {
                         return (
-                            <Button onPress={() => { setSelectedPostType(type) }} className={`${selectedPostType == type ? 'bg-green-400' : 'bg-white'} m-auto  center min-w-fit z-10 rounded-full w-12 h-8 `}>
+                            <Button key={index} onPress={() => { setFileList([]); setSelectedPostType(type); setShowPreview([]) }} className={`${selectedPostType == type ? 'bg-green-400' : 'bg-white'} m-auto  center min-w-fit z-10 rounded-full w-12 h-8 `}>
                                 {type == 'Video' ? (<Video />) : type == 'Image' ? (<Image />) : type == 'Text' ? (<Text />) : type == 'Product' ? <BsBagPlusFill size={24} /> : <AiOutlineQuestion />}
                             </Button>
 

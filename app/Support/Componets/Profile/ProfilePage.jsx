@@ -33,6 +33,8 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const [userData, setUserData] = useState()
     const [postData, setPostData] = useState([])
     const [shopData, setShopData] = useState([])
+    const [shopCategoriesData, setShopCategoriesData] = useState([])
+    const [selectedShopCategory, setSelectedShopCategory] = useState(false)
     const [editProfile, setEditProfile] = useState(false)
     const _userData = userData?.UserInfo
     const _otherUserData = otherUserData?.UserInfo
@@ -49,6 +51,11 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const getPostData = async () => {
         if (otherUserData?.uid || UID) setPostData(await FetchThisDocs('Posts', 'creator', '==', (otherUserData?.uid || (otherUserData ? null : UID)), 'id'))
         if (otherUserData?.uid || UID) setShopData(await FetchThisDocs('Products', 'creator', '==', (otherUserData?.uid || (otherUserData ? null : UID)), 'id'))
+        if (otherUserData?.uid || UID) {
+            const { shopCategories } = await fetchDocument('Users', (otherUserData?.uid || UID))
+            setShopCategoriesData(shopCategories)
+        }
+
     }
     const toggleEdit = (fetch) => {
         setEditProfile(!editProfile)
@@ -314,32 +321,32 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                     <h1 className="text-center">Store</h1>
                 </CardHeader>
                 <CardBody className="p-1">
-                    <div className="center gap-4  h-12 w-full p-2">
-                        {['Cat1', 'Cat2', 'Cat3'].map((item) => {
+                    <div className="evenly gap-4  overflow-y-scroll hidescroll h-12 w-full p-2">
+                        {shopCategoriesData?.map((item) => {
                             return (
-                                <Button className="">
+                                <Button onPress={() => { setSelectedShopCategory(selectedShopCategory == item ? false : item) }} className={`${selectedShopCategory == item ? 'bg-rose-700' : 'bg-obacity-0'} text-lg font-semibold text-white w-32`}>
                                     {item}
                                 </Button>
                             )
                         })}
                     </div>
                     <div className="grid mt-4 md:grid-cols-4 grid-cols-3 w-full m-auto h-auto mb-4  overflow-clip max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
-                        {shopData.map((item, index) => {
-                            return (
+                        {shopData.map((product, index) => {
+                            if (selectedShopCategory == product.category || !selectedShopCategory) return (
                                 <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
                                     <CardBody className="overflow-visible p-0">
                                         <Image
                                             shadow="sm"
                                             radius="lg"
                                             width="100%"
-                                            alt={item}
+                                            alt={product?.name}
                                             className="w-full object-cover h-[140px]"
-                                            src={'https://images.unsplash.com/photo-1700448170710-df7b4dcd756e?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+                                            src={product?.media[0]?.url}
                                         />
                                     </CardBody>
                                     <CardFooter className="text-small justify-between">
-                                        <b>{'test'}</b>
-                                        <p className="text-default-500">{'$29.99'}</p>
+                                        <b>{product?.name}</b>
+                                        <p className="text-default-500">${product?.price}</p>
                                     </CardFooter>
                                 </Card>
 

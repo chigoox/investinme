@@ -274,7 +274,7 @@ const CreatePost = ({ showCreatePost, setShowCreatePost, UID }) => {
         }
 
         run()
-    }, [UID])
+    }, [UID, pagePosition])
 
     return (
         <Modal isDismissable={false} placement="auto" isOpen={showCreatePost} onClose={() => { setShowCreatePost(false) }} className="bg-black-800 w-auto overflow-hidden trans h-auto text-white bottom-12 ">
