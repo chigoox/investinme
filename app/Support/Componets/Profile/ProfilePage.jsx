@@ -18,6 +18,7 @@ import PictureWall from "./PictureWall";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Transactions from "../Money/Transactions";
 import { changeEmail } from "../../myCodes/Auth";
+import ProductView from "../Shop/ProductView";
 
 
 
@@ -43,6 +44,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const [showPostView, setSetShowPostView] = useState(false)
     const [currentPost, setCurrentPost] = useState(0)
     const [showUserList, setShowUserList] = useState(false)
+    const [showShopView, setShowShopView] = useState(false)
 
 
 
@@ -334,9 +336,11 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                     </div>
                     <div className="grid mt-4 md:grid-cols-4 grid-cols-3 w-full m-auto h-auto mb-4  overflow-clip max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
                         {shopData.map((product, index) => {
+                            console.log(product)
                             if (selectedShopCategory == product.category || !selectedShopCategory) return (
-                                <Card shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
+                                <Card shadow="sm" key={index} isPressable onPress={() => setShowShopView(product.id)}>
                                     <CardBody className="overflow-visible p-0">
+                                        <ProductView product={product} setShowShopView={setShowShopView} showShopView={showShopView} />
                                         <Image
                                             shadow="sm"
                                             radius="lg"

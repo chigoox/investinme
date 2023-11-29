@@ -47,6 +47,10 @@ export function handleInput5(key, value, stateSetter) {
 
 }
 
+export const filterNullFromArray = (array) => {
+    return array.filter(x => !!x)
+}
+
 export function disableScroll(enable = true, name = "scroll-able") {
     if (enable) document.querySelector(`.${name}`).classList.add('disablScroll');
     if (!enable) document.querySelector(`.${name}`).classList.remove('disablScroll');
