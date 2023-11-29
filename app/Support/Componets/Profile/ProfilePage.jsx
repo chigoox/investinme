@@ -17,6 +17,7 @@ import { createAuthTokens, createUnAuthTokens, verifiToken } from "../../myCodes
 import PictureWall from "./PictureWall";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Transactions from "../Money/Transactions";
+import { changeEmail } from "../../myCodes/Auth";
 
 
 
@@ -234,6 +235,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const [showCashMenu, setShowCashMenu] = useState(false)
     return (
         <div className="w- min-h-screen h-auto relative bg-black text-white">
+
             {verificationToken && <TFAuthWindow setVerificationToken={setVerificationToken} />}
             {editProfile && <EditProfile toggleEdit={toggleEdit} userData={userData} />}
             {showUserList && <UserList forThis={showUserList} list={(otherUserData || userData)} setShowUserList={setShowUserList} />}
