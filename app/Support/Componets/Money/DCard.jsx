@@ -72,7 +72,6 @@ function DCard({ last4, exp = '06/26', name = 'your fullName', UID }) {
 
 
         }, [])
-        console.log(localStorage.getItem('aToken'))
         return (
             <Card className='h-full w-full p-2'>
                 <unit-elements-card
