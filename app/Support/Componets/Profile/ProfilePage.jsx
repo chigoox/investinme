@@ -291,78 +291,100 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
             </div>
             <PostView forThis={'My Posts'} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
-            <PictureWall UID={otherUserData ? otherUserData?.uid : UID} />
+            {otherUserData ? otherUserData?.pageSections?.pins : userData?.pageSections?.pins && <PictureWall UID={otherUserData ? otherUserData?.uid : UID} />}
 
-            <Card className="bg-black-800 text-white w-full md:w-[40rem] m-auto h-auto rounded-3xl ">
-                <CardHeader><h1 className="w-full text-3xl font-extrabold p-4">Posts</h1></CardHeader>
-                <CardBody className="p-0">
-                    <div className="grid grid-cols-3 mb-4 w-fit m-auto h-auto max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
-                        {postData?.map((post, index) => {
-                            return (
-                                <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative m-auto ">
-                                    <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full ">
+            {otherUserData ? otherUserData?.pageSections?.posts : userData?.pageSections?.posts &&
+                <Card className="bg-black-800 text-white w-full md:w-[40rem] m-auto h-auto rounded-3xl ">
+                    <CardHeader><h1 className="w-full text-3xl font-extrabold p-4">Posts</h1></CardHeader>
+                    <CardBody className="p-0">
+                        <div className="grid grid-cols-3 mb-4 w-fit m-auto h-auto max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
+                            {postData?.map((post, index) => {
+                                return (
+                                    <Skeleton key={post.id} isLoaded={post?.link} className="lg:h-[12rem] lg:w-[12rem] md:w-[10rem] md:h-[10rem] w-[7.3rem] h-[7.3rem] border border-[#1f1f1f] overflow-hidden rounded-lg relative m-auto ">
+                                        <button onClick={() => { setCurrentPost(index); setSetShowPostView(true) }} className="h-full w-full ">
 
-                                        {post?.type == 'img' && <Image width={1920} height={1080} className="rounded-lg object-cover h-full w-full" src={post.link} alt="" />}
-                                        {post?.type == 'vid' &&
-                                            <video loop muted playsInline control={'true'} className="object-cover h-[12rem] w-full" >
-                                                <source src={post?.link} type="video/mp4" />
-                                            </video>}
-                                        {post?.type == 'txt' && <div className="center bg-black-800   text-white h-[12rem] p-2  w-full">
-                                            <h1>{post.link}</h1>
-                                        </div>}
-                                    </button>
-                                </Skeleton>
-                            )
-                        })}
+                                            {post?.type == 'img' && <Image width={1920} height={1080} className="rounded-lg object-cover h-full w-full" src={post.link} alt="" />}
+                                            {post?.type == 'vid' &&
+                                                <video loop muted playsInline control={'true'} className="object-cover h-[12rem] w-full" >
+                                                    <source src={post?.link} type="video/mp4" />
+                                                </video>}
+                                            {post?.type == 'txt' && <div className="center bg-black-800   text-white h-[12rem] p-2  w-full">
+                                                <h1>{post.link}</h1>
+                                            </div>}
+                                        </button>
+                                    </Skeleton>
+                                )
+                            })}
 
-                    </div>
-                </CardBody>
-            </Card>
+                        </div>
+                    </CardBody>
+                </Card>}
 
 
-            <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
-                <CardHeader className="  text-center text-white font-extrabold text-3xl ">
-                    <h1 className="text-center">Store</h1>
-                </CardHeader>
-                <CardBody className="p-1">
-                    <div className="evenly gap-4  overflow-y-scroll hidescroll h-12 w-full p-2">
-                        {shopCategoriesData?.map((item) => {
-                            return (
-                                <Button onPress={() => { setSelectedShopCategory(selectedShopCategory == item ? false : item) }} className={`${selectedShopCategory == item ? 'bg-rose-700' : 'bg-obacity-0'} text-lg font-semibold text-white w-32`}>
-                                    {item}
-                                </Button>
-                            )
-                        })}
-                    </div>
-                    <div className="grid mt-4 md:grid-cols-4 grid-cols-3 w-full m-auto h-auto mb-4  overflow-clip max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
-                        {shopData.map((product, index) => {
-                            console.log(product)
-                            if (selectedShopCategory == product.category || !selectedShopCategory) return (
-                                <Card shadow="sm" key={index} isPressable onPress={() => setShowShopView(product.id)}>
-                                    <CardBody className="overflow-visible p-0">
-                                        <ProductView product={product} setShowShopView={setShowShopView} showShopView={showShopView} />
-                                        <Image
-                                            shadow="sm"
-                                            radius="lg"
-                                            width="100%"
-                                            alt={product?.name}
-                                            className="w-full object-cover h-[140px]"
-                                            src={product?.media[0]?.url}
-                                        />
-                                    </CardBody>
-                                    <CardFooter className="text-small justify-between">
-                                        <b>{product?.name}</b>
-                                        <p className="text-default-500">${product?.price}</p>
-                                    </CardFooter>
-                                </Card>
+            {otherUserData ? otherUserData?.pageSections?.store : userData?.pageSections?.store &&
+                <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
+                    <CardHeader className="  text-center text-white font-extrabold text-3xl ">
+                        <h1 className="text-center">Store</h1>
+                    </CardHeader>
+                    <CardBody className="p-1">
+                        <div className="evenly gap-4  overflow-y-scroll hidescroll h-12 w-full p-2">
+                            {shopCategoriesData?.map((item) => {
+                                return (
+                                    <Button onPress={() => { setSelectedShopCategory(selectedShopCategory == item ? false : item) }} className={`${selectedShopCategory == item ? 'bg-rose-700' : 'bg-obacity-0'} text-lg font-semibold text-white w-32`}>
+                                        {item}
+                                    </Button>
+                                )
+                            })}
+                        </div>
+                        <div className="grid mt-4 md:grid-cols-4 grid-cols-3 w-full m-auto h-auto mb-4  overflow-clip max-h-[26rem] md:max-h-[34rem]  lg:max-h-[37rem] overflow-y-scroll hidescroll gap-2 p-1 ">
+                            {shopData.map((product, index) => {
+                                if (selectedShopCategory == product.category || !selectedShopCategory) return (
+                                    <Card shadow="sm" key={index} isPressable onPress={() => setShowShopView(product.id)}>
+                                        <CardBody className="overflow-visible p-0">
+                                            <ProductView product={product} setShowShopView={setShowShopView} showShopView={showShopView} />
+                                            <Image
+                                                shadow="sm"
+                                                radius="lg"
+                                                width="100%"
+                                                alt={product?.name}
+                                                className="w-full object-cover h-[140px]"
+                                                src={product?.media[0]?.url}
+                                            />
+                                        </CardBody>
+                                        <CardFooter className="text-small justify-between">
+                                            <b>{product?.name}</b>
+                                            <p className="text-default-500">${product?.price}</p>
+                                        </CardFooter>
+                                    </Card>
 
-                            )
-                        })}
-                    </div>
-                </CardBody>
+                                )
+                            })}
+                        </div>
+                    </CardBody>
 
-            </Card>
+                </Card>}
 
+            {otherUserData ? otherUserData?.pageSections?.blogs : userData?.pageSections?.blogs &&
+                <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
+                    <CardHeader className="  text-center text-white font-extrabold text-3xl ">
+                        <h1 className="text-center">Blog</h1>
+                    </CardHeader>
+                    <CardBody className="p-1">
+
+                    </CardBody>
+
+                </Card>}
+
+            {otherUserData ? otherUserData?.pageSections?.bookings : userData?.pageSections?.bookings &&
+                <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
+                    <CardHeader className="  text-center text-white font-extrabold text-3xl ">
+                        <h1 className="text-center">Booking</h1>
+                    </CardHeader>
+                    <CardBody className="p-1">
+
+                    </CardBody>
+
+                </Card>}
 
             <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
                 <CardHeader className="  text-center text-white font-extrabold text-3xl ">
@@ -375,25 +397,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
             </Card>
 
 
-            <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
-                <CardHeader className="  text-center text-white font-extrabold text-3xl ">
-                    <h1 className="text-center">Blog</h1>
-                </CardHeader>
-                <CardBody className="p-1">
-
-                </CardBody>
-
-            </Card>
-
-            <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
-                <CardHeader className="  text-center text-white font-extrabold text-3xl ">
-                    <h1 className="text-center">Booking</h1>
-                </CardHeader>
-                <CardBody className="p-1">
-
-                </CardBody>
-
-            </Card>
 
             <div className="h-32">
 

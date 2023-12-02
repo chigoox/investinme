@@ -1,39 +1,42 @@
 'use client'
-import { Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem, useDisclosure } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Select, SelectItem, Switch, useDisclosure } from '@nextui-org/react'
 import TextArea from 'antd/es/input/TextArea'
 import React, { useEffect, useState } from 'react'
 import { addToDatabase, fetchDocument, updateArrayDatabaseItem } from '../../../myCodes/Database'
 import { Uploader } from '../Uploader'
 import { useAUTHListener } from '../../../../../StateManager/AUTHListener'
-import { UpdateUser } from '../../../myCodes/Auth'
+import { UpdateUser, getUID } from '../../../myCodes/Auth'
 import { useGlobalContext } from '../../../../../StateManager/GlobalContext'
 import { getRandTN } from '../../../myCodes/Util'
-import { SaveIcon } from 'lucide-react'
+import { Book, Clock, Edit2, EditIcon, SaveIcon, ShoppingBagIcon } from 'lucide-react'
 import { message } from 'antd'
 import LoaddingMask from '../LoadingMask'
+import { IoIosCloseCircle } from 'react-icons/io'
 
 function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
     const user = useAUTHListener()
+    const UID = getUID(user)
     const { displayName, gender, address, avatarURL } = userData?.UserInfo || { displayName: `User${getRandTN(5)}`, avatarURL: 'none' }
     const [profileInfo, setProfileInfo] = useState({ displayName: user.displayName, avatarURL: user.photoURL })
     const [usedDisplayNames, setUsedDisplayNames] = useState([])
     const [lodding, setLodding] = useState(false)
+    const [pageSections, setPageSections] = useState({ store: false, blogs: false, posts: false, bookings: false, pins: false })
 
     const getUsers = async () => {
         const { displayNames } = await fetchDocument('MetaData', 'Users')
+        const { pageSections } = await fetchDocument('Users', UID)
         setUsedDisplayNames(displayNames)
+        setPageSections({ ...pageSections })
     }
 
     const updateprofile = async ({ target }) => {
         setProfileInfo(oldState => ({ ...oldState, [target.name]: target.value }))
     }
-    console.log()
     const updateDatabase = (async () => {
-        console.log(profileInfo?.displayName != user?.displayName)
         if (usedDisplayNames?.includes(profileInfo?.displayName) && (profileInfo?.displayName != user?.displayName)) return message.error('Username taken!')
         setLodding(true)
-        await addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'UserInfo', { ...profileInfo, displayName: profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), avatarURL: profileInfo.post.img[0] || user.photoURL })
-        await addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'displayName', profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'))
+        await addToDatabase('Users', UID, 'UserInfo', { ...profileInfo, displayName: profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), avatarURL: profileInfo.post.img[0] || user.photoURL })
+        await addToDatabase('Users', UID, 'displayName', profileInfo?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'))
         if (profileInfo?.displayName != user?.displayName) await updateArrayDatabaseItem('MetaData', 'Users', 'displayNames', user?.displayName, true)
         await updateArrayDatabaseItem('MetaData', 'Users', 'displayNames', profileInfo?.displayName)
 
@@ -50,11 +53,23 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
 
     })
 
+    const updatePageOptions = (async () => {
+        setLodding(true)
+        await addToDatabase('Users', user?.uid ? user?.uid : user?.gid, 'pageSections', { ...pageSections })
+        setLodding(false)
+
+
+    })
+
 
     useEffect(() => {
         getUsers()
         setProfileInfo(o => ({ ...o, displayName: user?.displayName?.replace(/[^\w ]/g, '').replace(/\s+/g, '_'), avatarURL: user.photoURL }))
     }, [user])
+
+    useEffect(() => {
+        updatePageOptions()
+    }, [pageSections])
 
 
 
@@ -84,9 +99,109 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
                         className="w-full placeholder:text-white  mt-2 text-white bg-black-900 flex-shrink-0 hidescroll  "
                     />
 
+                    <div className='grid grid-cols-1 gap-4 '>
+                        <div className='center gap-4'>
+                            <Switch
+                                defaultSelected
+                                isSelected={pageSections.pins}
+                                onValueChange={(value) => {
+                                    setPageSections(old => { return ({ ...old, pins: value }) })
+                                }}
+                                size="lg"
+                                color="secondary"
+                                thumbIcon={({ isSelected, className }) =>
+                                    isSelected ? (
+                                        <ShoppingBagIcon className={'text-black'} size={16} />
+                                    ) : (
+                                        <IoIosCloseCircle className={'text-xs'} />
+                                    )
+                                }>
+                                <h1 className='text-white'>Pins</h1>
+                            </Switch>
 
-                    <div className='center'> <Button className="w-3/4 m-auto mb-4 font-bold bg-blue-500 text-white" onPress={updateDatabase}>Update<SaveIcon /></Button>
-                        <Button className="w-12 m-auto mb-4 bg-rose-500" onPress={toggleEdit}>close</Button></div>
+                            <Switch
+                                defaultSelected
+                                isSelected={pageSections.posts}
+                                onValueChange={(value) => {
+                                    setPageSections(old => { return ({ ...old, posts: value }) })
+                                }}
+                                size="lg"
+                                color="secondary"
+                                thumbIcon={({ isSelected, className }) =>
+                                    isSelected ? (
+                                        <EditIcon className={'text-black'} size={16} />
+                                    ) : (
+                                        <IoIosCloseCircle className={''} />
+                                    )
+                                }>
+                                <h1 className='text-white'>posts</h1>
+                            </Switch>
+
+                            <Switch
+                                defaultSelected
+                                isSelected={pageSections.blogs}
+                                onValueChange={(value) => {
+                                    setPageSections(old => { return ({ ...old, blogs: value }) })
+                                }}
+                                size="lg"
+                                color="secondary"
+                                thumbIcon={({ isSelected, className }) =>
+                                    isSelected ? (
+                                        <Book className={'text-black'} size={16} />
+                                    ) : (
+                                        <IoIosCloseCircle className={''} />
+                                    )
+                                }>
+                                <h1 className='text-white'>Blog</h1>
+                            </Switch>
+                        </div>
+
+
+
+
+                        <div className='center gap-4'>
+                            <Switch
+                                defaultSelected
+                                isSelected={pageSections.store}
+                                onValueChange={(value) => {
+                                    setPageSections(old => { return ({ ...old, store: value }) })
+                                }}
+                                size="lg"
+                                color="secondary"
+                                thumbIcon={({ isSelected, className }) =>
+                                    isSelected ? (
+                                        <ShoppingBagIcon className={'text-black'} size={16} />
+                                    ) : (
+                                        <IoIosCloseCircle className={'text-xs'} />
+                                    )
+                                }>
+                                <h1 className='text-white'>Storefront</h1>
+                            </Switch>
+                            <Switch
+                                defaultSelected
+                                isSelected={pageSections.bookings}
+                                onValueChange={(value) => {
+                                    setPageSections(old => { return ({ ...old, bookings: value }) })
+                                }}
+                                size="lg"
+                                color="secondary"
+                                thumbIcon={({ isSelected, className }) =>
+                                    isSelected ? (
+                                        <Clock className={'text-black'} size={16} />
+                                    ) : (
+                                        <IoIosCloseCircle className={''} />
+                                    )
+                                }>
+                                <h1 className='text-white'>bookings</h1>
+                            </Switch>
+                        </div>
+                    </div>
+
+
+                    <div className='center'>
+                        <Button className="w-3/4 m-auto mb-4 font-bold bg-blue-500 text-white" onPress={updateDatabase}>Update<SaveIcon /></Button>
+                        <Button className="w-12 m-auto mb-4 bg-rose-500" onPress={toggleEdit}>close</Button>
+                    </div>
 
                 </CardBody>
                 <CardFooter className='p-2  bg-black-800'>

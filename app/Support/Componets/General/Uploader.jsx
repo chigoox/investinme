@@ -85,9 +85,9 @@ export const Uploader = ({ setter, folderName, limit, setPostType, post, inCricl
 
     useEffect(() => {
         if (selectedPostType == 'Product') {
-            setForProduct(postType)
+            if (setForProduct) setForProduct(postType)
         } else {
-            setForProduct(false)
+            if (setForProduct) setForProduct(false)
         }
     }, [selectedPostType])
 

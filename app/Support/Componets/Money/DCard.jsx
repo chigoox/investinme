@@ -14,6 +14,7 @@ function DCard({ last4, exp = '06/26', name = 'your fullName', UID }) {
     const [seeCardInfo, setSeeCardInfo] = useState(false)
     const toggleCardInfo = () => setSeeCardInfo(!seeCardInfo)
     const [number, setNumber] = useState()
+    const [vCard, setVCard] = useState(false)
 
     const showCardInfo = async () => {
         const show = window.VGSShow?.create('tntazhyknp1');
@@ -22,6 +23,7 @@ function DCard({ last4, exp = '06/26', name = 'your fullName', UID }) {
 
         const customerToken = "<CUSTOMER TOKEN>";
         const { vCardID } = await fetchDocument('Users', UID)
+        setVCard(vCardID)
 
 
         const cvv2iframe = show?.request({
@@ -60,17 +62,29 @@ function DCard({ last4, exp = '06/26', name = 'your fullName', UID }) {
 
     const Cardd = ({ forthis }) => {
 
+        useEffect(() => {
+
+            document.querySelector("#custom-button")?.addEventListener("click", () => {
+                document
+                    .querySelector("unit-elements-card")
+                    .dispatchEvent(new CustomEvent("unitRequestOpenActionsMenu"));
+            });
+
+
+        }, [])
+        console.log(localStorage.getItem('aToken'))
         return (
             <Card className='h-full w-full p-2'>
-                <Skeleton loading={!last4}>
-                    <h1 className={`${forthis == 'cardView' ? 'mt-12' : ''} text-xl my-5 text-center`}>{number || `**** **** **** ${last4}`}</h1><span id='cardNumber'></span>
-                    <h1>{name}</h1>
-                    <div className={`center gap-2 w-fit`}>
-                        <h1 className='text-sm'>CVV</h1><span id='cvv2'></span>
-                        <h1 className=''>EXP {exp}</h1>
-                    </div>
-                    <img className='h-12 w-12 object-cover absolute right-3 bottom-1' src='https://usa.visa.com/dam/VCOM/regional/ve/romania/blogs/hero-image/visa-logo-800x450.jpg' />
-                </Skeleton>
+                <unit-elements-card
+                    hide-actions-menu-button="false"
+                    hide-card-title="false"
+                    hide-sensitive-data-button="false"
+                    card-id={vCard}
+                    customer-token={process.env.UNITTOKEN}
+                >
+                </unit-elements-card>
+                <button id="#custom-button">Manage Card</button>
+
             </Card>
         )
     }

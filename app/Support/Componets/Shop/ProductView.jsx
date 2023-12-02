@@ -10,11 +10,8 @@ function ProductView({ showShopView, setShowShopView, product, forThis, category
 
 
 
-    console.log(product.id)
-    console.log(showShopView)
 
-    const thisProduct = {}
-    const filteredPrice = 0
+
     const price = product.price
     const name = product?.name
     const slides = product?.media.map(item => (item.url))
@@ -22,7 +19,6 @@ function ProductView({ showShopView, setShowShopView, product, forThis, category
     const likes = product.likes
     const variants = filterNullFromArray(product?.variants)
 
-    const [prices, setPrices] = useState({})
     const [itemToCheckOut, setItemToCheckOut] = useState({ priceID: 0, Qty: 0, images: [] })
     const addToCart = () => {
         //if (itemToCheckOut.priceID && itemToCheckOut.Qty > 0) dispatch({ type: "ADD_TO_CART", value: itemToCheckOut })
@@ -68,7 +64,7 @@ function ProductView({ showShopView, setShowShopView, product, forThis, category
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="between gap-1 text-white px-10">
+                        <ModalHeader className="between gap-1 text-white md:scroll-px-20 lg:px-40">
                             {product.name}
                             <div>
                                 <span className='font-thin'>from</span>
@@ -92,7 +88,7 @@ function ProductView({ showShopView, setShowShopView, product, forThis, category
 
                                         <PayOptions price={price} />
                                         <div className='center flex-wrap md:w-3/4 m-auto mt-2 gap-2'>
-                                            <Select
+                                            {variants?.length > 0 && <Select
                                                 onChange={({ target }) => { setItemToCheckOut(prev => ({ ...prev, price: Number(target.value.split(',', 3)[2]?.replace('$', '')), priceID: target.value.split(',', 2)[0], variant: target.value.split(',', 2)[1] })) }}
                                                 labelPlacement={'outside'}
                                                 label="Select Variant"
@@ -105,7 +101,7 @@ function ProductView({ showShopView, setShowShopView, product, forThis, category
                                                         </SelectItem>
                                                     )
                                                 })}
-                                            </Select>
+                                            </Select>}
 
                                         </div>
                                         <div className='mt-2 '>
