@@ -23,8 +23,13 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
     const [pageSections, setPageSections] = useState({ store: false, blogs: false, posts: false, bookings: false, pins: false })
 
     const getUsers = async () => {
-        const { displayNames } = await fetchDocument('MetaData', 'Users')
-        const { pageSections } = await fetchDocument('Users', UID)
+        try {
+            const { displayNames } = await fetchDocument('MetaData', 'Users')
+            const { pageSections } = await fetchDocument('Users', UID)
+        } catch (error) {
+            console.log(error.message)
+
+        }
         setUsedDisplayNames(displayNames)
         setPageSections({ ...pageSections })
     }
