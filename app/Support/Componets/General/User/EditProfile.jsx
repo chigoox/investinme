@@ -26,12 +26,12 @@ function EditProfile({ forCheckOut, event, toggleEdit, userData }) {
         try {
             const { displayNames } = await fetchDocument('MetaData', 'Users')
             const { pageSections } = await fetchDocument('Users', UID)
+            setUsedDisplayNames(displayNames)
+            setPageSections({ ...pageSections })
         } catch (error) {
             console.log(error.message)
 
         }
-        setUsedDisplayNames(displayNames)
-        setPageSections({ ...pageSections })
     }
 
     const updateprofile = async ({ target }) => {
