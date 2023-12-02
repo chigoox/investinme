@@ -35,7 +35,7 @@ const RequestPayment = ({ request, setLoading, toggleRerender, UID }) => {
 
     const send = async () => {
         setLoading(true)
-        localStorage.setItem('idempotencyKey', getUUID())
+        localStorage?.setItem('idempotencyKey', getUUID())
         const payment = await sendPayment(request.amount, request.memo, request.sender, request.reciver)
         await updateArrayDatabaseItem("Users", UID, 'DigitRequest', request, true)
         await updateArrayDatabaseItem("Users", request.recivierUID, 'DigitResponse', { sender: request.sender, reciver: request.reciver, senderUID: UID, amount: request.amount, memo: request.memo }, true)
@@ -163,7 +163,7 @@ function page() {
     const UID = user.uid
     let uToken
     if (typeof window !== 'undefined') {
-        if (localStorage.getItem('uToken') == null) genToken(UID)
+        if (localStorage?.getItem('uToken') == null) genToken(UID)
         uToken = localStorage?.getItem('uToken')
 
     }
