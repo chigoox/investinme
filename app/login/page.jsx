@@ -8,7 +8,6 @@ import LoaddingMask from '../Support/Componets/General/LoadingMask'
 const font = Kenia({ subsets: ['latin'], weight: ['400'] })
 const font2 = Concert_One({ subsets: ['latin'], weight: ['400'] })
 
-
 function page() {
     return (
         <div className={`flex min-h-screen z-[999999] fixed w-screen h-screen  overflow-x-hidden flex-col items-center justify-evenly bg-gradient-to-b from-[#6af86a] via-[#69b969] to-[#074507] text-white  ${font2.className}`}>
