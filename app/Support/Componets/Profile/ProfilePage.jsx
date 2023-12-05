@@ -321,6 +321,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
                 </Card>}
 
 
+
             {otherUserData ? otherUserData?.pageSections?.store : userData?.pageSections?.store &&
                 <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
                     <CardHeader className="  text-center text-white font-extrabold text-3xl ">
