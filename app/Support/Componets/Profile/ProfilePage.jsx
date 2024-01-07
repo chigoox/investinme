@@ -47,7 +47,6 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     const [showShopView, setShowShopView] = useState(false)
 
 
-
     const getData = async () => {
         if (UID) await fetchDocument('Users', UID, setUserData)
     }
@@ -234,6 +233,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
     }
 
 
+
     const [showCashMenu, setShowCashMenu] = useState(false)
     return (
         <div className="w- min-h-screen h-auto relative bg-black text-white">
@@ -291,9 +291,9 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
             </div>
             <PostView forThis={'My Posts'} showPostView={showPostView} setShowPostView={setSetShowPostView} allPosts={postData} currentPost={postData[currentPost]?.id} />
-            {otherUserData ? otherUserData?.pageSections?.pins : userData?.pageSections?.pins && <PictureWall UID={otherUserData ? otherUserData?.uid : UID} />}
+            {(otherUserData ? (otherUserData.pageSections.pins) : userData?.pageSections?.pins) && <PictureWall UID={otherUserData ? otherUserData?.uid : UID} />}
 
-            {otherUserData ? otherUserData?.pageSections?.posts : userData?.pageSections?.posts &&
+            {(otherUserData ? (otherUserData.pageSections.posts) : (userData?.pageSections?.posts)) &&
                 <Card className="bg-black-800 text-white w-full md:w-[40rem] m-auto h-auto rounded-3xl ">
                     <CardHeader><h1 className="w-full text-3xl font-extrabold p-4">Posts</h1></CardHeader>
                     <CardBody className="p-0">
@@ -322,7 +322,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
 
 
-            {otherUserData ? otherUserData?.pageSections?.store : userData?.pageSections?.store &&
+            {(otherUserData ? (otherUserData.pageSections.store) : userData?.pageSections?.store) &&
                 <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
                     <CardHeader className="  text-center text-white font-extrabold text-3xl ">
                         <h1 className="text-center">Store</h1>
@@ -365,7 +365,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
                 </Card>}
 
-            {otherUserData ? otherUserData?.pageSections?.blogs : userData?.pageSections?.blogs &&
+            {(otherUserData ? (otherUserData.pageSections.blogs) : userData?.pageSections?.blogs) &&
                 <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
                     <CardHeader className="  text-center text-white font-extrabold text-3xl ">
                         <h1 className="text-center">Blog</h1>
@@ -376,7 +376,7 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
                 </Card>}
 
-            {otherUserData ? otherUserData?.pageSections?.bookings : userData?.pageSections?.bookings &&
+            {(otherUserData ? (otherUserData.pageSections.bookings) : userData?.pageSections?.bookings) &&
                 <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
                     <CardHeader className="  text-center text-white font-extrabold text-3xl ">
                         <h1 className="text-center">Booking</h1>
@@ -387,15 +387,16 @@ export default function ProfilePage({ forthis, otherUserData, getOtherUserData }
 
                 </Card>}
 
-            <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
-                <CardHeader className="  text-center text-white font-extrabold text-3xl ">
-                    <h1 className="text-center">Public Transactions</h1>
-                </CardHeader>
-                <CardBody className="p-1">
-                    <Transactions />
-                </CardBody>
+            {false &&
+                <Card className="w-full md:w-[40rem] m-auto bg-black-800 h-auto rounded-3xl mt-8">
+                    <CardHeader className="  text-center text-white font-extrabold text-3xl ">
+                        <h1 className="text-center">Public Transactions</h1>
+                    </CardHeader>
+                    <CardBody className="p-1">
+                        <Transactions />
+                    </CardBody>
 
-            </Card>
+                </Card>}
 
 
 
